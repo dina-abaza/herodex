@@ -22,6 +22,13 @@ export function Navbar() {
   }, []);
 
   const cartItemsCount = cartData?.data?.items?.reduce((acc: number, item: any) => acc + item.quantity, 0) || 0;
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+  const backendOrigin = apiUrl.replace(/\/api\/?$/, '');
+  const googleAuthUrl = `${backendOrigin}/api/auth/google`;
+
+  const handleGoogleLogin = () => {
+    window.location.href = googleAuthUrl;
+  };
 
   return (
     <nav className="bg-white border-b border-gray-100 sticky top-0 z-50">
@@ -57,7 +64,7 @@ export function Navbar() {
             {mounted && user ? (
               <div className="flex items-center space-x-4 space-x-reverse">
                 <Link 
-                  href={user.role === 'admin' ? '/admin/dashboard' : '/profile'} 
+                  href={user.role === 'admin' ? '/admin/dashboard' : '/'} 
                   className="flex items-center text-gray-600 hover:text-rose-600"
                 >
                   <User size={22} className="ml-1" />
@@ -71,9 +78,14 @@ export function Navbar() {
                 </button>
               </div>
             ) : mounted ? (
-              <Link href="/admin/login">
-                <Button size="sm">دخول</Button>
-              </Link>
+              <div className="flex items-center space-x-3 space-x-reverse">
+                <Button size="sm" variant="outline" onClick={handleGoogleLogin}>
+                  دخول بجوجل
+                </Button>
+                <Link href="/admin/login">
+                  <Button size="sm">دخول</Button>
+                </Link>
+              </div>
             ) : (
               <div className="w-16 h-8" /> // Placeholder to prevent jump
             )}
@@ -104,7 +116,10 @@ export function Navbar() {
           {mounted && user ? (
             <button onClick={() => dispatch(logout())} className="text-red-500">خروج</button>
           ) : mounted ? (
-            <Link href="/admin/login" className="text-rose-600 font-medium">تسجيل الدخول</Link>
+            <div className="flex items-center space-x-4 space-x-reverse">
+              <button onClick={handleGoogleLogin} className="text-gray-600 font-medium">دخول بجوجل</button>
+              <Link href="/admin/login" className="text-rose-600 font-medium">دخول</Link>
+            </div>
           ) : null}
         </div>
       </div>

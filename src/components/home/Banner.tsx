@@ -1,64 +1,104 @@
 'use client';
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/Button';
+import Image from 'next/image';
+import { ChevronRight, ChevronLeft } from 'lucide-react';
+
+const bannerImages = [
+  {
+    desktop: '/banars/panars [219]/first panar 1776084748544.jpg',
+    mobile: '/banars/panar16 9/first panar 1776086532329.jpg'
+  },
+  {
+    desktop: '/banars/panars [219]/1776084757590.jpg',
+    mobile: '/banars/panar16 9/1776086526115.jpg'
+  },
+  {
+    desktop: '/banars/panars [219]/1776084769058.jpg',
+    mobile: '/banars/panar16 9/1776086717551.png'
+  },
+  {
+    desktop: '/banars/panars [219]/1776084775534.jpg',
+    mobile: '/banars/panar16 9/1776086743742.png'
+  }
+];
 
 export function Banner() {
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev === bannerImages.length - 1 ? 0 : prev + 1));
+    }, 6000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const next = () => setCurrent((prev) => (prev === bannerImages.length - 1 ? 0 : prev + 1));
+  const prev = () => setCurrent((prev) => (prev === 0 ? bannerImages.length - 1 : prev - 1));
+
   return (
-    <div className="relative bg-rose-50 h-[400px] md:h-[500px] flex items-center overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-        <div className="max-w-xl space-y-8">
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="text-rose-600 font-bold tracking-wider text-sm uppercase">تشكيلة الربيع الجديدة</span>
-            <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 mt-4 leading-tight">
-              أبرزي جمالك الطبيعي <br /> 
-              <span className="text-rose-600">بأفضل المنتجات</span>
-            </h1>
-            <p className="text-gray-500 text-lg mt-6 leading-relaxed">
-              اكتشفي تشكيلتنا الواسعة من منتجات التجميل والعناية بالبشرة المختارة بعناية لأجلك. شحن سريع وضمان جودة.
-            </p>
-          </motion.div>
+    <div className="relative w-full lg:object-cover h-[95%] lg:h-[100%] overflow-hidden bg-white group aspect-[16/9] md:aspect-[25/9] lg:aspect-[21/9]">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={current}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
+          className="absolute inset-0 w-full h-full cursor-pointer"
+        >
+          {/* Desktop Image */}
+          <div className="hidden md:block relative w-full h-full">
+            <Image
+              src={bannerImages[current].desktop}
+              alt={`Banner ${current + 1} Desktop`}
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
+          {/* Mobile Image */}
+          <div className="block md:hidden relative w-full h-full">
+            <Image
+              src={bannerImages[current].mobile}
+              alt={`Banner ${current + 1} Mobile`}
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
+        </motion.div>
+      </AnimatePresence>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex space-x-4 space-x-reverse"
-          >
-            <Button size="lg" className="px-10">تسوقي الآن</Button>
-            <Button variant="outline" size="lg" className="px-10">اكتشفي المزيد</Button>
-          </motion.div>
-        </div>
-      </div>
+      {/* Navigation Arrows */}
+      <button 
+        onClick={prev}
+        className="absolute left-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-rose-600 hover:border-rose-600 transition-all opacity-0 group-hover:opacity-100 hidden md:block"
+      >
+        <ChevronLeft size={24} />
+      </button>
+      <button 
+        onClick={next}
+        className="absolute right-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-rose-600 hover:border-rose-600 transition-all opacity-0 group-hover:opacity-100 hidden md:block"
+      >
+        <ChevronRight size={24} />
+      </button>
 
-      {/* Background Decor */}
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
-        <motion.div 
-          animate={{ scale: [1, 1.1, 1], rotate: [0, 5, 0] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="absolute -top-24 -left-24 w-[400px] h-[400px] bg-rose-200/20 rounded-full blur-3xl" 
-        />
-        <motion.div 
-          animate={{ scale: [1, 1.2, 1], rotate: [0, -10, 0] }}
-          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-          className="absolute top-1/2 right-1/4 w-[300px] h-[300px] bg-rose-300/10 rounded-full blur-3xl" 
-        />
-        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-rose-100/30 rounded-full blur-3xl" />
-      </div>
-      
-      {/* Visual Image Replacement - Placeholder for actual banner image */}
-      <div className="hidden lg:block absolute bottom-0 left-0 w-[40%] h-[90%] z-0">
-        <div className="w-full h-full bg-rose-100 rounded-tr-[100px] relative overflow-hidden">
-           <div className="absolute inset-0 flex items-center justify-center text-rose-300 text-sm font-medium">
-             (صورة بانر توضيحية)
-           </div>
-        </div>
+      {/* Indicators */}
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex space-x-3 space-x-reverse">
+        {bannerImages.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrent(i)}
+            className={`h-2 transition-all duration-300 rounded-full ${
+              current === i ? 'w-10 bg-rose-600' : 'w-2 bg-white/50 hover:bg-white'
+            }`}
+          />
+        ))}
       </div>
     </div>
   );
 }
+
