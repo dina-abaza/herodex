@@ -16,8 +16,12 @@ const tajawal = Tajawal({
 });
 
 export const metadata: Metadata = {
-  title: "جمالك | لوحة التحكم",
-  description: "لوحة تحكم إدارة متجر مستحضرات التجميل",
+  title: "جمالك | وجهتك للجمال",
+  description: "متجر جمالك لأفضل منتجات التجميل والعناية بالبشرة",
+  icons: {
+    icon: "/logo/logo.jpeg",
+    apple: "/logo/logo.jpeg",
+  },
 };
 
 export default function RootLayout({

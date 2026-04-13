@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { logout } from '@/store/slices/authSlice';
@@ -14,7 +15,8 @@ import {
   LogOut, 
   Menu, 
   X,
-  Sparkles
+  Sparkles,
+  ChevronLeft
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
@@ -50,13 +52,19 @@ export function Sidebar() {
       >
         <div className="flex flex-col h-full">
           {/* Logo Area */}
-          <div className="flex items-center px-8 h-24 border-b border-gray-50">
-            <div className="w-12 h-12 bg-rose-600 rounded-2xl flex items-center justify-center ml-4 shadow-lg shadow-rose-200 rotate-3">
-              <Sparkles className="text-white" size={24} />
+          <div className="flex items-center px-6 h-24 border-b border-gray-50">
+            <div className="relative w-12 h-12 overflow-hidden rounded-2xl border-2 border-rose-100 shadow-lg shadow-rose-100 rotate-3 ml-4">
+              <Image 
+                src="/logo/logo.jpeg" 
+                alt="Logo" 
+                fill 
+                className="object-cover"
+                sizes="48px"
+              />
             </div>
             <div>
-              <h1 className="text-2xl font-black text-gray-900 tracking-tight leading-none">جمالك</h1>
-              <span className="text-rose-600 text-xs font-bold uppercase tracking-widest mt-1 block">لوحة التحكم</span>
+              <h1 className="text-xl font-black text-gray-900 tracking-tight leading-none">جمالك</h1>
+              <span className="text-rose-600 text-[10px] font-bold uppercase tracking-widest mt-1 block">لوحة التحكم</span>
             </div>
           </div>
 

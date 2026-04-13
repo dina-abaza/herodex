@@ -56,6 +56,7 @@ export function Banner() {
               alt={`Banner ${current + 1} Desktop`}
               fill
               className="object-cover"
+              sizes="100vw"
               priority
             />
           </div>
@@ -66,6 +67,7 @@ export function Banner() {
               alt={`Banner ${current + 1} Mobile`}
               fill
               className="object-cover"
+              sizes="100vw"
               priority
             />
           </div>

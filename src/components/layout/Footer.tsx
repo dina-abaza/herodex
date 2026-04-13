@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import { Mail, Phone, MapPin, Globe, MessageCircle, Send } from 'lucide-react';
+import Image from 'next/image';
+import { Mail, Phone, MapPin, Globe, MessageCircle, Send, Share2 } from 'lucide-react';
 
 export function Footer() {
   return (
@@ -9,19 +10,36 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 gap-y-12 mb-16">
           {/* Brand */}
           <div className="space-y-6">
-            <Link href="/" className="text-2xl font-bold text-rose-600">جمالك</Link>
-            <p className="text-gray-500 leading-relaxed text-sm">
+            <Link href="/" className="flex items-center group">
+              <div className="relative w-12 h-12 overflow-hidden rounded-full border-2 border-rose-100 group-hover:border-rose-300 transition-colors shadow-sm">
+                <Image 
+                  src="/logo/logo.jpeg" 
+                  alt="Logo" 
+                  fill 
+                  className="object-cover"
+                  sizes="48px"
+                />
+              </div>
+              <div className="mr-3 flex flex-col">
+                <span className="text-2xl font-black text-rose-600 tracking-tight leading-none">جمالك</span>
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1 block">للجمال عنوان</span>
+              </div>
+            </Link>
+            <p className="text-gray-500 leading-relaxed text-sm font-medium">
               وجهتك الأولى لأفضل منتجات التجميل والعناية بالبشرة. نهتم بجمالك ونوفر لك أفضل الماركات العالمية والمحلية بجودة مضمونة.
             </p>
             <div className="flex space-x-4 space-x-reverse">
-              <a href="#" className="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center text-rose-600 hover:bg-rose-600 hover:text-white transition-all">
-                <Globe size={20} />
+              <a href="#" className="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center text-rose-600 hover:bg-rose-600 hover:text-white transition-all shadow-sm">
+                <Globe size={18} />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center text-rose-600 hover:bg-rose-600 hover:text-white transition-all">
-                <MessageCircle size={20} />
+              <a href="#" className="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center text-rose-600 hover:bg-rose-600 hover:text-white transition-all shadow-sm">
+                <MessageCircle size={18} />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center text-rose-600 hover:bg-rose-600 hover:text-white transition-all">
-                <Send size={20} />
+              <a href="#" className="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center text-rose-600 hover:bg-rose-600 hover:text-white transition-all shadow-sm">
+                <Send size={18} />
+              </a>
+              <a href="#" className="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center text-rose-600 hover:bg-rose-600 hover:text-white transition-all shadow-sm">
+                <Share2 size={18} />
               </a>
             </div>
           </div>
@@ -31,8 +49,9 @@ export function Footer() {
             <h3 className="text-lg font-bold text-gray-900 mb-6">روابط سريعة</h3>
             <ul className="space-y-4">
               <li><Link href="/" className="text-gray-500 hover:text-rose-600 text-sm">الرئيسية</Link></li>
-              <li><Link href="/products" className="text-gray-500 hover:text-rose-600 text-sm">كل المنتجات</Link></li>
-              <li><Link href="/categories" className="text-gray-500 hover:text-rose-600 text-sm">الأقسام</Link></li>
+              <li><Link href="/#products" className="text-gray-500 hover:text-rose-600 text-sm">كل المنتجات</Link></li>
+              <li><Link href="/#categories" className="text-gray-500 hover:text-rose-600 text-sm">الأقسام</Link></li>
+              <li><Link href="/#reviews" className="text-gray-500 hover:text-rose-600 text-sm">المراجعات</Link></li>
               <li><Link href="/about" className="text-gray-500 hover:text-rose-600 text-sm">عن المتجر</Link></li>
             </ul>
           </div>
