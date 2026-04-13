@@ -18,6 +18,13 @@ const tajawal = Tajawal({
 export const metadata: Metadata = {
   title: "جمالك | وجهتك للجمال",
   description: "متجر جمالك لأفضل منتجات التجميل والعناية بالبشرة",
+  themeColor: "#e11d48",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "جمالك",
+  },
   icons: {
     icon: "/logo/logo.jpeg",
     apple: "/logo/logo.jpeg",
