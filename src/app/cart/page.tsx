@@ -41,7 +41,7 @@ export default function CartPage() {
       <div className="min-h-screen flex flex-col bg-white">
         <Navbar />
         <div className="flex-1 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-rose-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-store"></div>
         </div>
         <Footer />
       </div>
@@ -49,12 +49,12 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50/50">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-50/90 via-store-muted/20 to-gray-50/90">
       <Navbar />
 
       <main className="flex-1 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-extrabold text-gray-900 mb-8">سلة المشتريات</h1>
+          <h1 className="text-3xl font-extrabold text-store-black mb-8">سلة المشتريات</h1>
 
           {cart.items.length > 0 ? (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -108,7 +108,7 @@ export default function CartPage() {
                               <Plus size={16} />
                             </button>
                           </div>
-                          <span className="font-extrabold text-rose-600">{(item.product?.price * item.quantity).toFixed(2)} ر.س</span>
+                          <span className="font-extrabold text-store">{(item.product?.price * item.quantity).toFixed(2)} ر.س</span>
                         </div>
                       </div>
                     </motion.div>
@@ -131,21 +131,21 @@ export default function CartPage() {
                       <span>{shipping === 0 ? 'مجاني' : `${shipping.toFixed(2)} ر.س`}</span>
                     </div>
                     {shipping > 0 && (
-                      <p className="text-[10px] text-amber-600 bg-amber-50 p-2 rounded-lg">
+                      <p className="text-[10px] text-store-dark bg-store-gold-muted p-2 rounded-lg border border-store-gold/20">
                         أضيفي {(500 - subtotal).toFixed(2)} ر.س إضافية للحصول على شحن مجاني!
                       </p>
                     )}
-                    <div className="border-t border-gray-50 pt-4 flex justify-between text-xl font-extrabold text-gray-900">
+                    <div className="border-t border-gray-50 pt-4 flex justify-between text-xl font-extrabold text-store-black">
                       <span>الإجمالي</span>
-                      <span className="text-rose-600">{total.toFixed(2)} ر.س</span>
+                      <span className="text-store">{total.toFixed(2)} ر.س</span>
                     </div>
                   </div>
 
-                  <Button className="w-full py-4 rounded-2xl text-lg font-bold shadow-lg shadow-rose-200">
+                  <Button className="w-full py-4 rounded-2xl text-lg font-bold bg-store hover:bg-store-dark text-white border-0 shadow-lg">
                     إتمام الشراء
                   </Button>
                   
-                  <Link href="/" className="mt-4 flex items-center justify-center text-gray-400 text-sm hover:text-rose-600 transition-colors">
+                  <Link href="/" className="mt-4 flex items-center justify-center text-gray-400 text-sm hover:text-store transition-colors">
                     <ArrowRight size={16} className="ml-2" />
                     مواصلة التسوق
                   </Link>
@@ -153,14 +153,14 @@ export default function CartPage() {
               </div>
             </div>
           ) : (
-            <div className="text-center py-24 bg-white rounded-3xl border border-dashed border-gray-200">
-              <div className="mx-auto w-24 h-24 bg-rose-50 rounded-full flex items-center justify-center mb-6 text-rose-300">
+            <div className="text-center py-24 bg-white rounded-3xl border border-dashed border-store/15">
+              <div className="mx-auto w-24 h-24 bg-store-muted rounded-full flex items-center justify-center mb-6 text-store/40 ring-1 ring-store/10">
                 <ShoppingBag size={48} />
               </div>
               <h2 className="text-2xl font-bold text-gray-900">سلتك فارغة</h2>
               <p className="text-gray-500 mt-2 mb-10 text-lg">يبدو أنك لم تضيفي أي منتجات للسلة بعد</p>
               <Link href="/">
-                <Button size="lg" className="rounded-2xl px-12">تسوقي الآن</Button>
+                <Button size="lg" className="rounded-2xl px-12 bg-store hover:bg-store-dark text-white border-0 shadow-lg">تسوقي الآن</Button>
               </Link>
             </div>
           )}

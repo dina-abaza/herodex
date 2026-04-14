@@ -1,10 +1,17 @@
 import { apiSlice } from './apiSlice';
+import type { GetProductsArg, GetProductsResponse } from '@/types/productsApi';
 
 export const productApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getProducts: builder.query({
-      query: ({ page = 1, limit = 10, category = '' }) => 
-        `/products?pageNumber=${page}&limit=${limit}&category=${category}`,
+    getProducts: builder.query<GetProductsResponse, GetProductsArg | void>({
+      queryFn: async (arg, _api, _extra, baseQuery) => {
+        const { page = 1, limit = 10, category = '' } = arg || {};
+        const result = await baseQuery(
+          `/products?pageNumber=${page}&limit=${limit}&category=${category}`
+        );
+        if (result.error) return { error: result.error };
+        return { data: result.data as GetProductsResponse };
+      },
       providesTags: ['Product'],
     }),
     createProduct: builder.mutation({

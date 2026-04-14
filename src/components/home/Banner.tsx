@@ -77,13 +77,13 @@ export function Banner() {
       {/* Navigation Arrows */}
       <button 
         onClick={prev}
-        className="absolute left-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-rose-600 hover:border-rose-600 transition-all opacity-0 group-hover:opacity-100 hidden md:block"
+        className="absolute left-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-store hover:border-store-gold/60 transition-all opacity-0 group-hover:opacity-100 hidden md:block"
       >
         <ChevronLeft size={24} />
       </button>
       <button 
         onClick={next}
-        className="absolute right-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-rose-600 hover:border-rose-600 transition-all opacity-0 group-hover:opacity-100 hidden md:block"
+        className="absolute right-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-store hover:border-store-gold/60 transition-all opacity-0 group-hover:opacity-100 hidden md:block"
       >
         <ChevronRight size={24} />
       </button>
@@ -95,7 +95,7 @@ export function Banner() {
             key={i}
             onClick={() => setCurrent(i)}
             className={`h-2 transition-all duration-300 rounded-full ${
-              current === i ? 'w-10 bg-rose-600' : 'w-2 bg-white/50 hover:bg-white'
+              current === i ? 'w-10 bg-store-gold' : 'w-2 bg-white/50 hover:bg-store-gold-light'
             }`}
           />
         ))}

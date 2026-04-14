@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Provider, useDispatch } from 'react-redux';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { store } from './store';
@@ -47,7 +47,9 @@ function AuthCallbackHandler() {
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <Provider store={store}>
-      <AuthCallbackHandler />
+      <Suspense fallback={null}>
+        <AuthCallbackHandler />
+      </Suspense>
       {children}
     </Provider>
   );

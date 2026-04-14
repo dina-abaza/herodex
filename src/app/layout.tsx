@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import { Suspense } from "react";
 import { Cairo, Tajawal } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/providers";
@@ -18,8 +19,6 @@ const tajawal = Tajawal({
 export const metadata: Metadata = {
   title: "جمالك | وجهتك للجمال",
   description: "متجر جمالك لأفضل منتجات التجميل والعناية بالبشرة",
-  themeColor: "#e11d48",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -29,6 +28,13 @@ export const metadata: Metadata = {
     icon: "/logo/logo.jpeg",
     apple: "/logo/logo.jpeg",
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: "#117a5c",
 };
 
 export default function RootLayout({
@@ -43,9 +49,9 @@ export default function RootLayout({
       className={`${cairo.variable} ${tajawal.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-cairo text-[115%] leading-[1.6]">
-        <Providers>
-          {children}
-        </Providers>
+        <Suspense fallback={null}>
+          <Providers>{children}</Providers>
+        </Suspense>
       </body>
     </html>
   );
