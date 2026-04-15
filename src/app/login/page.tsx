@@ -8,6 +8,7 @@ import * as z from 'zod';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { useLoginMutation } from '@/store/api/authApiSlice';
+import { apiSlice } from '@/store/api/apiSlice';
 import { setCredentials } from '@/store/slices/authSlice';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -39,6 +40,9 @@ export default function LoginPage() {
 
   const onSubmit = async (values: LoginFormValues) => {
     try {
+      // مسح الكاش القديم قبل تسجيل الدخول لضمان عدم بقاء بيانات سلة مستخدم سابق
+      dispatch(apiSlice.util.resetApiState());
+      
       const res = await login(values).unwrap();
       if (res?.success) {
         if (res?.data?.token) {

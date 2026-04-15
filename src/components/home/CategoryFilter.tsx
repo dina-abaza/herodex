@@ -22,7 +22,7 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
           <div className="w-24 h-1.5 bg-gradient-to-l from-store-gold to-store mx-auto mt-6 rounded-full shadow-sm shadow-store/20"></div>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-6 md:gap-10">
+        <div className="flex flex-wrap justify-center gap-8 md:gap-14">
           {/* "All" Category */}
           <button
             onClick={() => onSelectCategory('')}
@@ -30,19 +30,19 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
           >
             <div 
               className={cn(
-                "w-24 h-24 md:w-32 md:h-32 rounded-full border-4 flex items-center justify-center transition-all duration-500 shadow-md",
+                "w-28 h-28 md:w-44 md:h-44 rounded-full border-4 flex items-center justify-center transition-all duration-500 shadow-md",
                 selectedCategory === '' 
                   ? "bg-store border-store-gold/40 scale-110 shadow-lg shadow-store/30" 
                   : "bg-gray-50 border-white hover:border-store/25 hover:bg-store-muted"
               )}
             >
               <span className={cn(
-                "text-lg font-black",
+                "text-xl md:text-2xl font-black",
                 selectedCategory === '' ? "text-white" : "text-gray-400 group-hover:text-store"
               )}>الكل</span>
             </div>
             <span className={cn(
-              "mt-4 font-bold text-sm transition-colors",
+              "mt-4 font-black text-sm md:text-base transition-colors",
               selectedCategory === '' ? "text-store" : "text-gray-500 group-hover:text-store"
             )}>جميع المنتجات</span>
           </button>
@@ -50,7 +50,7 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
           {isLoading ? (
             [1, 2, 3, 4].map((i) => (
               <div key={i} className="flex flex-col items-center animate-pulse">
-                <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-gray-100"></div>
+                <div className="w-28 h-28 md:w-44 md:h-44 rounded-full bg-gray-100"></div>
                 <div className="w-16 h-4 bg-gray-100 mt-4 rounded"></div>
               </div>
             ))
@@ -63,7 +63,7 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
               >
                 <div 
                   className={cn(
-                    "w-24 h-24 md:w-32 md:h-32 rounded-full border-4 overflow-hidden transition-all duration-500 shadow-md relative",
+                    "w-28 h-28 md:w-44 md:h-44 rounded-full border-4 overflow-hidden transition-all duration-500 shadow-md relative bg-white",
                     selectedCategory === category._id 
                       ? "border-store-gold/50 scale-110 shadow-lg shadow-store/20 ring-2 ring-store-gold/30" 
                       : "border-white hover:border-store/20 group-hover:shadow-store/10"
@@ -74,8 +74,8 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
                       src={category.image} 
                       alt={category.name} 
                       className={cn(
-                        "w-full h-full object-cover transition-transform duration-700 group-hover:scale-110",
-                        selectedCategory === category._id ? "brightness-110" : "brightness-95 group-hover:brightness-105"
+                        "w-full h-full object-contain p-1 transition-transform duration-700 group-hover:scale-110",
+                        selectedCategory === category._id ? "brightness-110" : "brightness-100"
                       )}
                     />
                   ) : (
@@ -84,11 +84,11 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
                     </div>
                   )}
                   {selectedCategory === category._id && (
-                    <div className="absolute inset-0 bg-store/15 ring-4 ring-store-gold/35 inset-1 rounded-full pointer-events-none"></div>
+                    <div className="absolute inset-0 bg-store/5 ring-4 ring-store-gold/20 inset-1 rounded-full pointer-events-none"></div>
                   )}
                 </div>
                 <span className={cn(
-                  "mt-4 font-bold text-sm transition-colors",
+                  "mt-4 font-black text-sm md:text-base transition-colors",
                   selectedCategory === category._id ? "text-store" : "text-gray-500 group-hover:text-store"
                 )}>{category.name}</span>
               </button>

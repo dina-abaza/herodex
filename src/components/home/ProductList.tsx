@@ -19,11 +19,16 @@ export function ProductList({ selectedCategory, onCategoryChange }: ProductListP
     setPage(1);
   }, [selectedCategory]);
 
-  const { data, isLoading } = useGetProductsQuery({ 
+  const { data, isLoading, isFetching, refetch } = useGetProductsQuery({ 
     page, 
     limit: 8, 
     category: selectedCategory 
   });
+
+  // Force refetch on mount to ensure fresh data
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   const products = data?.data?.products || [];
   const totalPages = data?.data?.pages || 1;
@@ -44,7 +49,7 @@ export function ProductList({ selectedCategory, onCategoryChange }: ProductListP
           </button>
         </div>
 
-        {isLoading ? (
+        {isLoading || isFetching ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
               <div key={i} className="h-[400px] bg-white animate-pulse rounded-2xl border border-gray-100"></div>

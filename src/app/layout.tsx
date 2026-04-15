@@ -16,18 +16,29 @@ const tajawal = Tajawal({
   weight: ["300", "400", "500", "700", "800", "900"],
 });
 
+// التعديل هنا فقط في الـ Metadata لتحسين الـ SEO
 export const metadata: Metadata = {
-  title: "جمالك | وجهتك للجمال",
-  description: "متجر جمالك لأفضل منتجات التجميل والعناية بالبشرة",
+  title: "Herodex Pharma | أفضل علاج لتساقط الشعر الشديد وفراغات الشعر",
+  description: "اكتشفي مجموعة FortaHair من Herodex Pharma. منتجات طبية 100% لعلاج تساقط الشعر للنساء طبيعي، تكثيف الشعر، وعلاج الفراغات. أفضل منتج لمنع تساقط الشعر في مصر بتركيبة هندية.",
+  keywords: [
+    "علاج تساقط الشعر", "أفضل علاج لتساقط الشعر الشديد", "Herodex Pharma", "FortaHair", 
+    "منتج يمنع تساقط الشعر ويكثفه", "حل نهائي لتساقط الشعر", "علاج الفراغات في الشعر", 
+    "سعر علاج تساقط الشعر", "شراء منتج تكثيف الشعر", "منتجات طبية 100%", "كورس علاج تساقط الشعر"
+  ],
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "جمالك",
+    title: "Herodex",
   },
   icons: {
     icon: "/logo/logo.jpeg",
     apple: "/logo/logo.jpeg",
   },
+  openGraph: {
+    title: "Herodex Pharma | حل نهائي لتساقط الشعر وتكثيفه",
+    description: "مجموعة فورتا هير (FortaHair) لعلاج فراغات الشعر وتساقطه. منتجات طبيعية 100% لنتائج سريعة.",
+    images: ["/logo/logo.jpeg"],
+  }
 };
 
 export const viewport: Viewport = {

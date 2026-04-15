@@ -54,18 +54,18 @@ export default function CategoriesPage() {
   const categories = data?.data || [];
 
   return (
-    <div className="space-y-12">
-      <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+    <div className="space-y-8 md:space-y-12">
+      <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-6">
         <div>
-          <h1 className="text-4xl font-black text-slate-900 tracking-tight">إدارة الأقسام</h1>
-          <p className="text-lg text-slate-500 mt-2 font-medium tracking-tight">عرض وتعديل أقسام المتجر المختلفة</p>
+          <h1 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tight">إدارة الأقسام</h1>
+          <p className="text-sm md:text-lg text-slate-500 mt-1 md:mt-2 font-medium tracking-tight">عرض وتعديل أقسام المتجر المختلفة</p>
         </div>
         <button 
           onClick={() => setIsModalOpen(true)} 
-          className="btn-primary flex items-center group"
+          className="btn-primary flex items-center group py-3 px-6 md:py-4 md:px-8 text-sm md:text-base"
         >
-          <Plus size={20} className="ml-3 group-hover:rotate-90 transition-transform duration-300" />
-          إضافة قسم جديد
+          <Plus size={18} className="ml-2 md:ml-3 group-hover:rotate-90 transition-transform duration-300" />
+          إضافة قسم
         </button>
       </header>
 

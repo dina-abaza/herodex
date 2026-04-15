@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { ShoppingCart, User, Menu, X, LogOut } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store';
+import { apiSlice } from '@/store/api/apiSlice';
 import { logout } from '@/store/slices/authSlice';
 import { useGetCartQuery } from '@/store/api/cartApiSlice';
 import { Button } from '@/components/ui/Button';
@@ -40,6 +41,8 @@ export function Navbar() {
   const handleLogout = () => {
     console.log("User logging out...");
     dispatch(logout());
+    // مسح كاش الـ API بالكامل عند تسجيل الخروج لضمان عدم بقاء بيانات السلة القديمة
+    dispatch(apiSlice.util.resetApiState());
   };
 
   const navLinks = [
@@ -47,6 +50,7 @@ export function Navbar() {
     { name: 'المنتجات', href: '/#products' },
     { name: 'الأقسام', href: '/#categories' },
     { name: 'المراجعات', href: '/#reviews' },
+    { name: 'عن الموقع', href: '/#about' },
   ];
 
   return (
@@ -73,8 +77,8 @@ export function Navbar() {
               />
             </div>
             <div className="mr-3 flex flex-col">
-              <span className="text-2xl font-black text-store tracking-tight leading-none">جمالك</span>
-              <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">للجمال عنوان</span>
+              <span className="text-2xl font-black text-store tracking-tight leading-none ">Herodex</span>
+              <span className="text-[10px] font-bold text-store-gold uppercase tracking-widest mt-0.5">Pharma</span>
             </div>
           </Link>
 
@@ -150,13 +154,12 @@ export function Navbar() {
             )}
           </div>
 
-          {/* Mobile menu button */}
           <div className="lg:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 text-gray-600 hover:text-store hover:bg-store-muted rounded-lg transition-all"
+              className="p-1 text-gray-600 hover:text-store hover:bg-store-muted rounded-lg transition-all"
             >
-              {isOpen ? <X size={26} /> : <Menu size={26} />}
+              {isOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
         </div>
@@ -165,11 +168,11 @@ export function Navbar() {
       {/* Mobile Menu */}
       <div 
         className={cn(
-          'lg:hidden overflow-hidden transition-all duration-300 ease-in-out bg-white border-t border-gray-50 shadow-xl',
-          isOpen ? 'max-h-[500px] opacity-100 py-6' : 'max-h-0 opacity-0 py-0'
+          'lg:hidden transition-all duration-300 ease-in-out bg-white border-t border-gray-50 shadow-xl overflow-y-auto',
+          isOpen ? 'max-h-[85vh] opacity-100 py-6' : 'max-h-0 opacity-0 py-0 invisible'
         )}
       >
-        <div className="px-4 space-y-2">
+        <div className="px-4 space-y-2 pb-10">
           {navLinks.map((link) => (
             <Link 
               key={link.name}

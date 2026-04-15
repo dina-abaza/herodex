@@ -37,10 +37,10 @@ export function Sidebar() {
       {/* Mobile Toggle */}
       <button
         type="button"
-        className="lg:hidden fixed top-4 right-4 z-50 p-4 bg-white rounded-2xl shadow-xl text-gray-900 border border-gray-100 active:scale-95 transition-all"
+        className="lg:hidden fixed top-3 right-3 z-50 p-2.5 bg-white rounded-xl shadow-lg text-gray-900 border border-gray-100 active:scale-95 transition-all"
         onClick={() => setIsOpen(!isOpen)}
       >
-        {isOpen ? <X size={24} /> : <Menu size={24} />}
+        {isOpen ? <X size={20} /> : <Menu size={20} />}
       </button>
 
       {/* Sidebar Container */}
@@ -63,8 +63,8 @@ export function Sidebar() {
               />
             </div>
             <div>
-              <h1 className="text-xl font-black text-gray-900 tracking-tight leading-none">جمالك</h1>
-              <span className="text-rose-600 text-[10px] font-bold uppercase tracking-widest mt-1 block">لوحة التحكم</span>
+              <h1 className="text-xl font-black text-gray-900 tracking-tight leading-none capitalize">Herodex</h1>
+              <span className="text-rose-600 text-[10px] font-bold uppercase tracking-widest mt-1 block">Pharma Admin</span>
             </div>
           </div>
 
