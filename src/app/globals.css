@@ -5,6 +5,15 @@
   --foreground: #0f172a;
   --primary: #e11d48;
   --primary-foreground: #ffffff;
+  /* متجر: أخضر + لمسة ذهبية + أسود/أبيض (بسيط) */
+  --store: #117a5c;
+  --store-dark: #0c5c45;
+  --store-light: #159670;
+  --store-muted: #eef7f4;
+  --store-gold: #ae8c2e;
+  --store-gold-light: #c9a545;
+  --store-gold-muted: #faf7ef;
+  --store-black: #111111;
 }
 
 @theme inline {
@@ -12,6 +21,14 @@
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-store: var(--store);
+  --color-store-dark: var(--store-dark);
+  --color-store-light: var(--store-light);
+  --color-store-muted: var(--store-muted);
+  --color-store-gold: var(--store-gold);
+  --color-store-gold-light: var(--store-gold-light);
+  --color-store-gold-muted: var(--store-gold-muted);
+  --color-store-black: var(--store-black);
   --font-cairo: var(--font-cairo);
   --font-tajawal: var(--font-tajawal);
 }

@@ -87,7 +87,7 @@ export default function ReviewsPage() {
                 className="group relative aspect-square card-modern overflow-hidden cursor-pointer"
               >
                 <img 
-                  src={review.imageUrl} 
+                  src={review.imageUrl || review.image || ''} 
                   alt="Review" 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
