@@ -10,7 +10,7 @@ export function Newsletter() {
           <div className="lg:w-1/2 text-white mb-10 lg:mb-0">
             <h2 className="text-4xl font-extrabold mb-6 leading-tight text-white">انضمي لنشرتنا البريدية <br /> واحصلي على خصم 15%</h2>
             <p className="text-white text-lg mb-8 opacity-90">كوني أول من يعلم عن تشكيلاتنا الجديدة والعروض الحصرية.</p>
-            <div className="flex max-w-md">
+            {/* <div className="flex max-w-md">
               <input 
                 type="email" 
                 placeholder="بريدك الإلكتروني" 
@@ -19,7 +19,7 @@ export function Newsletter() {
               <button className="bg-store-dark hover:bg-store-gold/20 text-white px-8 py-4 rounded-l-2xl font-bold transition-colors ring-1 ring-store-gold/40">
                 اشتراك
               </button>
-            </div>
+            </div> */}
           </div>
           <div className="lg:w-1/3 hidden lg:block">
             <div className="relative">

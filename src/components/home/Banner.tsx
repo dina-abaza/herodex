@@ -40,7 +40,7 @@ export function Banner() {
 
   return (
     <div className="relative w-full lg:object-cover h-[95%] lg:h-[100%] overflow-hidden bg-white group aspect-[16/9] md:aspect-[25/9] lg:aspect-[21/9]">
-      <AnimatePresence mode="wait">
+      <AnimatePresence >
         <motion.div
           key={current}
           initial={{ opacity: 0 }}
