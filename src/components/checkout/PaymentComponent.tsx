@@ -1,0 +1,238 @@
+'use client';
+
+import React, { useState } from 'react';
+import { useCheckoutMutation } from '@/store/api/orderApiSlice';
+import { useGetCartQuery } from '@/store/api/cartApiSlice';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { CreditCard, Wallet, MapPin, Phone, User, CheckCircle2, AlertCircle, ArrowRight, Loader2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'react-toastify';
+import { cn } from '@/utils/cn';
+
+interface ShippingAddress {
+  address: string;
+  city: string;
+  postalCode: string;
+  country: string;
+  phone: string;
+}
+
+export function PaymentComponent() {
+  const { data: cartData, isLoading: cartLoading } = useGetCartQuery(undefined);
+  const [checkout, { isLoading: isProcessing }] = useCheckoutMutation();
+
+  const [paymentMethod] = useState<'wallet'>('wallet');
+  const [walletNumber, setWalletNumber] = useState('');
+  const [shippingAddress, setShippingAddress] = useState<ShippingAddress>({
+    address: '',
+    city: 'القاهرة',
+    postalCode: '12345',
+    country: 'Egypt',
+    phone: '',
+  });
+
+  const cart = cartData?.data || { items: [] };
+  const subtotal = cart.items.reduce((acc: number, item: any) => acc + (item.product?.price * item.quantity), 0);
+  const shipping = 0;
+  const total = subtotal;
+
+  const handleCheckout = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!shippingAddress.phone || shippingAddress.phone.length < 11) {
+      toast.error('يرجى إدخال رقم هاتف صحيح');
+      return;
+    }
+
+    if (!walletNumber || walletNumber.length < 11) {
+      toast.error('يرجى إدخال رقم المحفظة الإلكترونية');
+      return;
+    }
+
+    try {
+      const payload = {
+        paymentMethod: 'wallet',
+        shippingAddress,
+        walletNumber,
+      };
+
+      const result: any = await checkout(payload).unwrap();
+
+      if (result.success && result.data.paymentUrl) {
+        window.location.href = result.data.paymentUrl;
+      } else {
+        toast.error('حدث خطأ أثناء بدء عملية الدفع');
+      }
+    } catch (err: any) {
+      console.error('Checkout error:', err);
+      toast.error(err.data?.message || 'عذراً، حدث خطأ ما. يرجى المحاولة مرة أخرى.');
+    }
+  };
+
+  if (cartLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20">
+        <Loader2 className="w-10 h-10 text-store animate-spin mb-4" />
+        <p className="text-gray-500 font-bold">جاري تحميل بيانات الطلب...</p>
+      </div>
+    );
+  }
+
+  if (cart.items.length === 0) {
+    return (
+      <div className="text-center py-20">
+        <AlertCircle className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+        <h2 className="text-2xl font-bold text-gray-900">سلتك فارغة</h2>
+        <p className="text-gray-500 mt-2">لا يوجد منتجات لإتمام عملية الشراء</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      {/* Checkout Form */}
+      <motion.div 
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        className="lg:col-span-8 space-y-6"
+      >
+        <section className="bg-white p-6 sm:p-8 rounded-3xl border border-gray-100 shadow-sm overflow-hidden relative">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-10 h-10 rounded-full bg-store/10 flex items-center justify-center text-store">
+              <MapPin size={22} />
+            </div>
+            <h2 className="text-xl font-black text-gray-900">عنوان الشحن</h2>
+          </div>
+
+          <form id="checkout-form" onSubmit={handleCheckout} className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <Input 
+              label="العنوان بالتفصيل"
+              placeholder="مثال: 123 شارع التحرير، الدقي"
+              required
+              value={shippingAddress.address}
+              onChange={(e) => setShippingAddress({...shippingAddress, address: e.target.value})}
+              className="md:col-span-2"
+            />
+            <Input 
+              label="المدينة"
+              required
+              value={shippingAddress.city}
+              onChange={(e) => setShippingAddress({...shippingAddress, city: e.target.value})}
+            />
+            <Input 
+              label="رقم الهاتف"
+              placeholder="01XXXXXXXXX"
+              required
+              type="tel"
+              value={shippingAddress.phone}
+              onChange={(e) => setShippingAddress({...shippingAddress, phone: e.target.value})}
+            />
+          </form>
+        </section>
+
+        <section className="bg-white p-6 sm:p-8 rounded-3xl border border-gray-100 shadow-sm">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-10 h-10 rounded-full bg-store/10 flex items-center justify-center text-store">
+              <Wallet size={22} />
+            </div>
+            <h2 className="text-xl font-black text-gray-900">الدفع بالمحفظة الإلكترونية</h2>
+          </div>
+
+          <div className="bg-store/5 p-6 rounded-2xl border border-store/10 mb-6">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 rounded-xl bg-store flex items-center justify-center text-white">
+                <Wallet size={24} />
+              </div>
+              <div>
+                <p className="font-black text-store">المحافظ الإلكترونية المدعومة</p>
+                <p className="text-xs text-gray-500 font-bold">فودافون كاش، اتصالات كاش، أورانج كاش، وي باي</p>
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-store/10">
+              <Input 
+                label="رقم المحفظة (الرقم الذي ستقوم بالدفع منه)"
+                placeholder="01XXXXXXXXX"
+                required
+                value={walletNumber}
+                onChange={(e) => setWalletNumber(e.target.value)}
+              />
+              <p className="mt-3 text-xs text-gray-400 font-bold flex items-center gap-1">
+                <AlertCircle size={14} className="text-store-gold" />
+                تأكد من وجود رصيد كافٍ في محفظتك قبل إتمام العملية.
+              </p>
+            </div>
+          </div>
+        </section>
+      </motion.div>
+
+      {/* Summary */}
+      <motion.div 
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        className="lg:col-span-4"
+      >
+        <div className="bg-store-dark text-white p-8 rounded-[2rem] shadow-xl sticky top-24 overflow-hidden group">
+          <div className="absolute -top-24 -left-24 w-48 h-48 bg-store-gold/10 rounded-full blur-3xl transition-transform duration-1000 group-hover:scale-150"></div>
+          
+          <h2 className="text-xl font-black mb-6 flex items-center justify-between relative">
+            ملخص الطلب
+            <span className="text-xs font-bold bg-white/10 px-3 py-1 rounded-full">{cart.items.length} منتجات</span>
+          </h2>
+
+          <div className="max-h-[300px] overflow-y-auto mb-8 pr-2 custom-scrollbar space-y-4">
+            {cart.items.map((item: any) => (
+              <div key={item._id} className="flex gap-4">
+                <div className="w-14 h-14 rounded-xl bg-white/10 p-1 flex-shrink-0">
+                  <img src={item.product?.image} alt={item.product?.name} className="w-full h-full object-cover rounded-lg" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-bold truncate">{item.product?.name}</p>
+                  <div className="flex justify-between items-center mt-1">
+                    <span className="text-xs text-white/60 font-medium">الكمية: {item.quantity}</span>
+                    <span className="text-sm font-black text-store-gold">{(item.product?.price * item.quantity).toFixed(2)} ج.م</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="space-y-4 relative border-t border-white/10 pt-6">
+            <div className="flex justify-between text-white/70 font-bold">
+              <span>المجموع الفرعي</span>
+              <span>{subtotal.toFixed(2)} ج.م</span>
+            </div>
+            <div className="pt-4 border-t border-white/10 flex justify-between text-2xl font-black">
+              <span>الإجمالي</span>
+              <span className="text-store-gold">{total.toFixed(2)} ج.م</span>
+            </div>
+          </div>
+
+          <Button 
+            form="checkout-form"
+            type="submit"
+            disabled={isProcessing}
+            className="w-full mt-8 py-5 rounded-2xl text-lg font-black bg-store-gold hover:bg-store-gold/90 text-store-dark border-0 shadow-lg shadow-store-gold/20 transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed group"
+          >
+            {isProcessing ? (
+              <>
+                <Loader2 className="ml-2 w-5 h-5 animate-spin" />
+                جاري المعالجة...
+              </>
+            ) : (
+              <>
+                إتمام عملية الدفع
+                <ArrowRight className="mr-2 w-5 h-5 group-hover:translate-x-[-4px] transition-transform" />
+              </>
+            )}
+          </Button>
+          
+          <p className="text-center mt-6 text-[10px] text-white/40 font-bold uppercase tracking-wider">
+            جميع المعاملات مؤمنة بتشفير 256-بت بموجب شروط Paymob
+          </p>
+        </div>
+      </motion.div>
+    </div>
+  );
+}

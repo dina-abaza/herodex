@@ -17,8 +17,8 @@ export default function CartPage() {
 
   const cart = cartData?.data || { items: [] };
   const subtotal = cart.items.reduce((acc: number, item: any) => acc + (item.product?.price * item.quantity), 0);
-  const shipping = subtotal > 500 ? 0 : 35;
-  const total = subtotal + shipping;
+  const shipping = 0;
+  const total = subtotal;
 
   const handleQuantityChange = async (productId: string, newQty: number) => {
     if (newQty < 1) return;
@@ -131,24 +131,18 @@ export default function CartPage() {
                       <span>المجموع الفرعي</span>
                       <span>{subtotal.toFixed(2)} ج.م</span>
                     </div>
-                    <div className="flex justify-between text-gray-500">
-                      <span>رسوم الشحن</span>
-                      <span>{shipping === 0 ? 'مجاني' : `${shipping.toFixed(2)} ج.م`}</span>
-                    </div>
-                    {shipping > 0 && (
-                      <p className="text-[10px] text-store-dark bg-store-gold-muted p-2 rounded-lg border border-store-gold/20">
-                        أضيفي {(500 - subtotal).toFixed(2)} ج.م إضافية للحصول على شحن مجاني!
-                      </p>
-                    )}
+                    
                     <div className="border-t border-gray-50 pt-4 flex justify-between text-xl font-extrabold text-store-black">
                       <span>الإجمالي</span>
                       <span className="text-store">{total.toFixed(2)} ج.م</span>
                     </div>
                   </div>
 
-                  <Button className="w-full py-4 rounded-2xl text-lg font-bold bg-store hover:bg-store-dark text-white border-0 shadow-lg">
-                    إتمام الشراء
-                  </Button>
+                  <Link href="/checkout">
+                    <Button className="w-full py-4 rounded-2xl text-lg font-bold bg-store hover:bg-store-dark text-white border-0 shadow-lg">
+                      إتمام الشراء
+                    </Button>
+                  </Link>
                   
                   <Link href="/" className="mt-4 flex items-center justify-center text-gray-400 text-sm hover:text-store transition-colors">
                     <ArrowRight size={16} className="ml-2" />

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ShoppingCart, User, Menu, X, LogOut } from 'lucide-react';
+import { ShoppingCart, User, Menu, X, LogOut, Package } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store';
 import { apiSlice } from '@/store/api/apiSlice';
@@ -124,6 +124,17 @@ export function Navbar() {
                   {/* عرض أول اسمين فقط */}
                   <span className="text-sm font-bold truncate max-w-[120px]">{getShortName(user.name)}</span>
                 </Link>
+                <Link 
+                  href="/my-orders" 
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-gray-100 transition-all duration-200 group border border-transparent hover:border-neutral-200"
+                  title="طلباتي"
+                >
+                  <Package size={20} className="text-gray-500 group-hover:text-store" />
+                  <span className="text-sm font-bold text-gray-600 group-hover:text-store">طلباتي</span>
+                </Link>
+
+                <div className="h-4 w-px bg-gray-200 mx-1" />
+
                 <button 
                   onClick={handleLogout}
                   className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-all duration-200"
@@ -206,6 +217,14 @@ export function Navbar() {
                   >
                     <User size={20} className="ml-3" />
                     <span>{getShortName(user.name)}</span>
+                  </Link>
+                  <Link 
+                    href="/my-orders"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center px-4 py-3 text-gray-600 font-bold"
+                  >
+                    <Package size={20} className="ml-3" />
+                    <span>طلباتي</span>
                   </Link>
                   <button 
                     onClick={() => {
