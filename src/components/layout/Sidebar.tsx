@@ -16,12 +16,14 @@ import {
   Menu, 
   X,
   Sparkles,
-  ChevronLeft
+  ChevronLeft,
+  ShoppingBag
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
 const navigation = [
   { name: 'لوحة التحكم', href: '/admin/dashboard', icon: LayoutDashboard },
+  { name: 'الطلبات', href: '/admin/orders', icon: ShoppingBag },
   { name: 'المنتجات', href: '/admin/products', icon: Package },
   { name: 'الأقسام', href: '/admin/categories', icon: Tags },
   { name: 'المراجعات', href: '/admin/reviews', icon: Star },

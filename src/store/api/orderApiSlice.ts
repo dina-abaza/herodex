@@ -14,10 +14,18 @@ export const orderApiSlice = apiSlice.injectEndpoints({
       query: () => '/orders/myorders',
       providesTags: ['Order' as any],
     }),
+    getAllOrders: builder.query({
+      query: ({ page = 1, limit = 10, search = '' }) => ({
+        url: '/orders',
+        params: { page, limit, search },
+      }),
+      providesTags: ['Order' as any],
+    }),
   }),
 });
 
 export const {
   useCheckoutMutation,
   useGetMyOrdersQuery,
+  useGetAllOrdersQuery,
 } = orderApiSlice;
