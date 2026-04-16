@@ -9,8 +9,7 @@ export function ReviewsSection() {
   const { data: reviewsData, isLoading: isReviewsLoading } = useGetReviewsQuery(undefined);
   
   // لغرض التجربة عندك عشان تشوفي الحركة كرري السطر اللي تحت لو حبيتي
-  const reviews = reviewsData?.data ? [...reviewsData.data, ...reviewsData.data] : [];
-  
+const reviews = reviewsData?.data ? [...reviewsData.data] : [];  
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // حركه تلقائية كل 4 ثواني فقط لو في أكتر من مراجعة
@@ -45,35 +44,22 @@ export function ReviewsSection() {
         ) : reviews.length > 0 ? (
           <div className="relative flex flex-col items-center">
             
-            {/* حاوية الكاروسيل المطورة لمنع اللون الأبيض */}
-            <div className="relative w-full overflow-hidden py-4 min-h-[550px] flex items-center justify-center">
-              <AnimatePresence mode="popLayout">
+            {/* حاوية الكاروسيل الموحدة المقاس لمنع اختلاف الأحجام */}
+            <div className="relative w-full max-w-[400px] aspect-[4/5] overflow-hidden rounded-[2rem] shadow-lg flex items-center justify-center bg-gray-50">
+              <AnimatePresence initial={false}>
                 <motion.div
                   key={currentIndex}
-                  initial={{ opacity: 0, x: 100, scale: 0.95 }}
-                  animate={{ opacity: 1, x: 0, scale: 1 }}
-                  exit={{ opacity: 0, x: -100, scale: 0.95 }}
-                  transition={{ duration: 0.6, ease: "easeInOut" }}
-                  className="group relative w-full max-w-[450px] aspect-[4/5] overflow-hidden rounded-[2.5rem] shadow-2xl border border-neutral-100 bg-white"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.8, ease: "easeInOut" }}
+                  className="absolute inset-0"
                 >
                   <img 
                     src={reviews[currentIndex].imageUrl || reviews[currentIndex].image || ''} 
                     alt="مراجعة عميلة" 
-                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                    className="w-full h-full object-cover"
                   />
-                  
-                  {/* Overlay التدرج اللوني (الأخضر الغامق) */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-store-dark/90 via-transparent to-transparent flex items-end p-10">
-                    <div className="text-white transform transition-transform duration-500 group-hover:translate-y-[-5px]">
-                      <div className="flex text-store-gold mb-3">
-                        {[...Array(5)].map((_, i) => (
-                          <Star key={i} size={16} className="fill-current" />
-                        ))}
-                      </div>
-                      <p className="font-bold text-xl mb-1 italic">تجربة حقيقية</p>
-                      <p className="text-white/70 text-sm">ثقة عميلاتنا هي سر تميزنا</p>
-                    </div>
-                  </div>
                 </motion.div>
               </AnimatePresence>
             </div>

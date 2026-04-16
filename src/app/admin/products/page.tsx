@@ -56,23 +56,23 @@ export default function ProductsPage() {
   const totalPages = data?.data?.pages || 1;
 
   return (
-    <div className="space-y-12">
-      <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+    <div className="space-y-8 md:space-y-12">
+      <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-6">
         <div>
-          <h1 className="text-4xl font-black text-slate-900 tracking-tight">إدارة المنتجات</h1>
-          <p className="text-lg text-slate-500 mt-2 font-medium tracking-tight">عرض، إضافة وتعديل المنتجات المتاحة في المتجر</p>
+          <h1 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tight">إدارة المنتجات</h1>
+          <p className="text-sm md:text-lg text-slate-500 mt-1 md:mt-2 font-medium tracking-tight">عرض، إضافة وتعديل المنتجات المتاحة في المتجر</p>
         </div>
         <button 
           onClick={() => setIsModalOpen(true)} 
-          className="btn-primary flex items-center group"
+          className="btn-primary flex items-center group py-3 px-6 md:py-4 md:px-8 text-sm md:text-base"
         >
-          <Plus size={20} className="ml-3 group-hover:rotate-90 transition-transform duration-300" />
-          إضافة منتج جديد
+          <Plus size={18} className="ml-2 md:ml-3 group-hover:rotate-90 transition-transform duration-300" />
+          إضافة منتج
         </button>
       </header>
 
-      <div className="card-modern overflow-hidden">
-        <div className="overflow-x-auto">
+      <div className="card-modern overflow-hidden border-none shadow-none md:border md:shadow-sm">
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-right border-collapse">
             <thead>
               <tr className="bg-slate-50/50 border-b border-slate-100">
@@ -120,7 +120,7 @@ export default function ProductsPage() {
                     <td className="px-8 py-6">
                       <div className="flex flex-col">
                         <span className="text-2xl font-black text-rose-600 tracking-tight">{product.price}</span>
-                        <span className="text-xs font-black text-slate-400 uppercase">ريال سعودي</span>
+                        <span className="text-xs font-black text-slate-400 uppercase">جنيه مصري</span>
                       </div>
                     </td>
                     <td className="px-8 py-6">
@@ -160,6 +160,65 @@ export default function ProductsPage() {
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile View: Stacked Layout */}
+        <div className="md:hidden space-y-4 p-4">
+          {isLoading ? (
+            [1, 2, 3].map((i) => (
+              <div key={i} className="bg-white p-4 rounded-2xl border border-slate-100 animate-pulse space-y-4">
+                <div className="flex gap-4">
+                  <div className="w-16 h-16 bg-slate-100 rounded-xl"></div>
+                  <div className="flex-1 space-y-2">
+                    <div className="h-4 bg-slate-100 rounded w-3/4"></div>
+                    <div className="h-3 bg-slate-100 rounded w-1/2"></div>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : products.length > 0 ? (
+            products.map((product: any) => (
+              <div key={product._id} className="bg-white p-5 rounded-[2rem] border border-slate-100 shadow-sm space-y-4 relative group">
+                <div className="flex gap-4">
+                  <div className="w-20 h-20 rounded-2xl overflow-hidden border border-slate-50 flex-shrink-0">
+                    <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-black text-slate-900 text-lg truncate">{product.name}</h3>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      <span className="px-2 py-1 bg-slate-50 text-slate-500 rounded-lg text-[10px] font-black uppercase tracking-tighter">
+                        {product.category?.name || 'غير مصنف'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between pt-4 border-t border-slate-50">
+                  <div className="flex flex-col">
+                    <span className="text-xl font-black text-rose-600 tracking-tighter">{product.price}</span>
+                    <span className="text-[10px] font-black text-slate-400 uppercase">جنيه مصري</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => {
+                        setEditingProduct(product);
+                        setIsModalOpen(true);
+                      }}
+                      className="p-3 bg-blue-50 text-blue-600 rounded-xl active:scale-90 transition-all"
+                    >
+                      <Edit size={16} />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(product._id)}
+                      className="p-3 bg-rose-50 text-rose-600 rounded-xl active:scale-90 transition-all"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : null}
         </div>
 
         {totalPages > 1 && (

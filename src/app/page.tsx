@@ -7,7 +7,7 @@ import { Banner } from '@/components/home/Banner';
 import { CategoryFilter } from '@/components/home/CategoryFilter';
 import { ProductList } from '@/components/home/ProductList';
 import { ReviewsSection } from '@/components/home/ReviewsSection';
-import { Newsletter } from '@/components/home/Newsletter';
+import { AboutSection } from '@/components/home/AboutSection';
 
 export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -33,9 +33,11 @@ export default function HomePage() {
           onCategoryChange={handleCategoryChange} 
         />
 
-        <ReviewsSection />
+       
 
-        <Newsletter />
+        <AboutSection />
+
+         <ReviewsSection />
       </main>
 
       <Footer />

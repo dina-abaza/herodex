@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/Button';
 import { Trash2, Plus, Minus, ShoppingBag, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'react-toastify';
 
 export default function CartPage() {
   const { data: cartData, isLoading } = useGetCartQuery(undefined);
@@ -28,11 +29,15 @@ export default function CartPage() {
     }
   };
 
-  const handleRemove = async (productId: string) => {
+  const handleRemove = async (productId: string, productName: string) => {
     try {
-      await removeItem(productId).unwrap();
+      const response = await removeItem(productId).unwrap();
+      if (response?.success) {
+        toast.info(`تم حذف ${productName} من السلة 🗑️`);
+      }
     } catch (err) {
       console.error(err);
+      toast.error('عذراً، حدث خطأ أثناء الحذف. يرجى المحاولة مرة أخرى.');
     }
   };
 
@@ -85,7 +90,7 @@ export default function CartPage() {
                             <p className="text-gray-400 text-sm">{item.product?.category?.name || 'مستحضرات تجميل'}</p>
                           </div>
                           <button 
-                            onClick={() => handleRemove(item.product?._id)}
+                            onClick={() => handleRemove(item.product?._id, item.product?.name)}
                             className="text-gray-300 hover:text-red-500 transition-colors"
                           >
                             <Trash2 size={20} />
@@ -108,7 +113,7 @@ export default function CartPage() {
                               <Plus size={16} />
                             </button>
                           </div>
-                          <span className="font-extrabold text-store">{(item.product?.price * item.quantity).toFixed(2)} ر.س</span>
+                          <span className="font-extrabold text-store">{(item.product?.price * item.quantity).toFixed(2)} ج.م</span>
                         </div>
                       </div>
                     </motion.div>
@@ -124,20 +129,20 @@ export default function CartPage() {
                   <div className="space-y-4 mb-8">
                     <div className="flex justify-between text-gray-500">
                       <span>المجموع الفرعي</span>
-                      <span>{subtotal.toFixed(2)} ر.س</span>
+                      <span>{subtotal.toFixed(2)} ج.م</span>
                     </div>
                     <div className="flex justify-between text-gray-500">
                       <span>رسوم الشحن</span>
-                      <span>{shipping === 0 ? 'مجاني' : `${shipping.toFixed(2)} ر.س`}</span>
+                      <span>{shipping === 0 ? 'مجاني' : `${shipping.toFixed(2)} ج.م`}</span>
                     </div>
                     {shipping > 0 && (
                       <p className="text-[10px] text-store-dark bg-store-gold-muted p-2 rounded-lg border border-store-gold/20">
-                        أضيفي {(500 - subtotal).toFixed(2)} ر.س إضافية للحصول على شحن مجاني!
+                        أضيفي {(500 - subtotal).toFixed(2)} ج.م إضافية للحصول على شحن مجاني!
                       </p>
                     )}
                     <div className="border-t border-gray-50 pt-4 flex justify-between text-xl font-extrabold text-store-black">
                       <span>الإجمالي</span>
-                      <span className="text-store">{total.toFixed(2)} ر.س</span>
+                      <span className="text-store">{total.toFixed(2)} ج.م</span>
                     </div>
                   </div>
 

@@ -3,6 +3,8 @@
 import React, { Suspense, useEffect } from 'react';
 import { Provider, useDispatch } from 'react-redux';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { store } from './store';
 import { setCredentials } from '@/store/slices/authSlice';
 
@@ -51,6 +53,19 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <AuthCallbackHandler />
       </Suspense>
       {children}
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        toastClassName="font-cairo"
+      />
     </Provider>
   );
 }

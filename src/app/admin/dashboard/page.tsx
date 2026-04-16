@@ -48,11 +48,11 @@ export default function DashboardPage() {
   const stats = data?.data || { totalProducts: 0, totalCategories: 0, totalUsers: 0 };
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-8 md:space-y-12">
       <header className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-black text-slate-900 tracking-tight">نظرة عامة</h1>
-          <p className="text-lg text-slate-500 mt-2 font-medium">مرحباً بك في لوحة تحكم متجر جمالك</p>
+          <h1 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tight">نظرة عامة</h1>
+          <p className="text-sm md:text-lg text-slate-500 mt-1 md:mt-2 font-medium">مرحباً بك في لوحة تحكم Herodex Pharma</p>
         </div>
         <div className="flex items-center gap-3">
           <div className="h-2 w-2 bg-emerald-500 rounded-full animate-pulse"></div>
