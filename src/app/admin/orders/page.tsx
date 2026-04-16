@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useGetAllOrdersQuery } from '@/store/api/orderApiSlice';
+import { useGetAllOrdersQuery, useUpdateOrderStatusMutation } from '@/store/api/orderApiSlice';
 import { 
   Search, 
   ShoppingBag, 
@@ -16,7 +16,10 @@ import {
   CheckCircle2,
   Clock,
   XCircle,
-  AlertCircle
+  AlertCircle,
+  Truck,
+  Package,
+  Loader2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/utils/cn';
@@ -34,12 +37,26 @@ export default function OrdersPage() {
     search 
   });
 
+  const [updateStatus, { isLoading: isUpdating }] = useUpdateOrderStatusMutation();
+
+  const handleStatusChange = async (orderId: string, newStatus: string) => {
+    try {
+      await updateStatus({ orderId, status: newStatus }).unwrap();
+      // Update selected order in local state to reflect change immediately if modal is open
+      if (selectedOrder && selectedOrder._id === orderId) {
+        setSelectedOrder({ ...selectedOrder, orderStatus: newStatus });
+      }
+    } catch (error: any) {
+      alert(error?.data?.message || 'حدث خطأ أثناء تحديث الحالة');
+    }
+  };
+
   const orders = data?.data?.orders || [];
   const totalPages = data?.data?.pages || 1;
   const totalItems = data?.data?.totalItems || 0;
 
-  const getStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
+  const getPaymentStatusColor = (status: string) => {
+    switch (status?.toLowerCase()) {
       case 'paid':
         return 'bg-emerald-50 text-emerald-600 border-emerald-100';
       case 'pending':
@@ -51,16 +68,48 @@ export default function OrdersPage() {
     }
   };
 
-  const getStatusIcon = (status: string) => {
-    switch (status.toLowerCase()) {
-      case 'paid':
+  const getOrderStatusColor = (status: string) => {
+    switch (status?.toLowerCase()) {
+      case 'delivered':
+        return 'bg-emerald-50 text-emerald-600 border-emerald-100';
+      case 'pending':
+        return 'bg-amber-50 text-amber-600 border-amber-100';
+      case 'processing':
+        return 'bg-blue-50 text-blue-600 border-blue-100';
+      case 'shipped':
+        return 'bg-indigo-50 text-indigo-600 border-indigo-100';
+      case 'cancelled':
+        return 'bg-rose-50 text-rose-600 border-rose-100';
+      default:
+        return 'bg-slate-50 text-slate-600 border-slate-100';
+    }
+  };
+
+  const getOrderStatusIcon = (status: string) => {
+    switch (status?.toLowerCase()) {
+      case 'delivered':
         return <CheckCircle2 size={14} className="ml-1.5" />;
       case 'pending':
         return <Clock size={14} className="ml-1.5" />;
-      case 'failed':
+      case 'processing':
+        return <Package size={14} className="ml-1.5" />;
+      case 'shipped':
+        return <Truck size={14} className="ml-1.5" />;
+      case 'cancelled':
         return <XCircle size={14} className="ml-1.5" />;
       default:
         return <AlertCircle size={14} className="ml-1.5" />;
+    }
+  };
+
+  const getOrderStatusLabel = (status: string) => {
+    switch (status?.toLowerCase()) {
+      case 'delivered': return 'تم التوصيل';
+      case 'pending': return 'قيد الانتظار';
+      case 'processing': return 'جاري التنفيذ';
+      case 'shipped': return 'تم الشحن';
+      case 'cancelled': return 'ملغي';
+      default: return status || 'غير محدد';
     }
   };
 
@@ -110,7 +159,8 @@ export default function OrdersPage() {
                 <th className="px-8 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">العميل</th>
                 <th className="px-8 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">التاريخ</th>
                 <th className="px-8 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">المبلغ</th>
-                <th className="px-8 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">الحالة</th>
+                <th className="px-8 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">حالة الدفع</th>
+                <th className="px-8 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">حالة الطلب</th>
                 <th className="px-8 py-6 text-xs font-black text-slate-400 uppercase tracking-widest text-center">الإجراءات</th>
               </tr>
             </thead>
@@ -118,7 +168,7 @@ export default function OrdersPage() {
               {isLoading || isFetching ? (
                 [1, 2, 3, 4, 5].map((i) => (
                   <tr key={i} className="animate-pulse">
-                    <td colSpan={6} className="px-8 py-8">
+                    <td colSpan={7} className="px-8 py-8">
                       <div className="h-8 bg-slate-100 rounded-xl w-full"></div>
                     </td>
                   </tr>
@@ -150,11 +200,19 @@ export default function OrdersPage() {
                     <td className="px-8 py-6">
                       <span className={cn(
                         "inline-flex items-center px-3 py-1.5 rounded-full text-xs font-black border tracking-tight",
-                        getStatusColor(order.paymentStatus)
+                        getPaymentStatusColor(order.paymentStatus)
                       )}>
-                        {getStatusIcon(order.paymentStatus)}
                         {order.paymentStatus === 'paid' ? 'تم الدفع' : 
                          order.paymentStatus === 'pending' ? 'قيد الانتظار' : 'فشل الدفع'}
+                      </span>
+                    </td>
+                    <td className="px-8 py-6">
+                      <span className={cn(
+                        "inline-flex items-center px-3 py-1.5 rounded-full text-xs font-black border tracking-tight",
+                        getOrderStatusColor(order.orderStatus)
+                      )}>
+                        {getOrderStatusIcon(order.orderStatus)}
+                        {getOrderStatusLabel(order.orderStatus)}
                       </span>
                     </td>
                     <td className="px-8 py-6">
@@ -175,7 +233,7 @@ export default function OrdersPage() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={6} className="px-8 py-24 text-center">
+                  <td colSpan={7} className="px-8 py-24 text-center">
                     <div className="flex flex-col items-center justify-center space-y-4">
                       <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center">
                         <ShoppingBag className="text-slate-300" size={32} />
@@ -210,12 +268,20 @@ export default function OrdersPage() {
                     <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">#{order._id.slice(-8).toUpperCase()}</span>
                     <h3 className="font-black text-slate-900 text-lg mt-1">{order.user?.name || 'عميل غير معروف'}</h3>
                   </div>
-                  <span className={cn(
-                    "inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-black border",
-                    getStatusColor(order.paymentStatus)
-                  )}>
-                    {order.paymentStatus === 'paid' ? 'تم' : 'قيد'}
-                  </span>
+                  <div className="flex flex-col gap-1 items-end">
+                    <span className={cn(
+                      "inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black border",
+                      getPaymentStatusColor(order.paymentStatus)
+                    )}>
+                      {order.paymentStatus === 'paid' ? 'مدفوع' : 'قيد الدفع'}
+                    </span>
+                    <span className={cn(
+                      "inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black border",
+                      getOrderStatusColor(order.orderStatus)
+                    )}>
+                      {getOrderStatusLabel(order.orderStatus)}
+                    </span>
+                  </div>
                 </div>
                 
                 <div className="flex items-center justify-between pt-4 border-t border-slate-50">
@@ -271,7 +337,7 @@ export default function OrdersPage() {
         {selectedOrder && (
           <div className="space-y-8 py-2">
             {/* Header info */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-slate-50 p-6 rounded-3xl space-y-3">
                 <div className="flex items-center text-slate-400 font-black text-xs uppercase tracking-widest">
                   <User size={14} className="ml-2" /> معلومات العميل
@@ -295,35 +361,60 @@ export default function OrdersPage() {
                     {selectedOrder.shippingAddress.address}, {selectedOrder.shippingAddress.city}
                   </p>
                   <p className="text-slate-500 font-bold text-sm">
-                    الرمز البريدي: {selectedOrder.shippingAddress.postalCode} | {selectedOrder.shippingAddress.country}
+                    {selectedOrder.shippingAddress.postalCode} | {selectedOrder.shippingAddress.country}
                   </p>
                 </div>
               </div>
 
               <div className="bg-slate-50 p-6 rounded-3xl space-y-3">
                 <div className="flex items-center text-slate-400 font-black text-xs uppercase tracking-widest">
-                  <CreditCard size={14} className="ml-2" /> الدفع والطلب
+                  <Truck size={14} className="ml-2" /> حالة الطلب (تعديل)
                 </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-slate-500 font-bold text-sm">الحالة:</span>
+                <div className="space-y-3">
+                  <div className="relative">
+                    <select
+                      value={selectedOrder.orderStatus}
+                      onChange={(e) => handleStatusChange(selectedOrder._id, e.target.value)}
+                      disabled={isUpdating}
+                      className="w-full bg-white border border-slate-200 rounded-2xl px-4 py-3 text-sm font-black text-slate-900 focus:ring-2 focus:ring-rose-500 focus:border-rose-500 outline-none transition-all appearance-none cursor-pointer disabled:opacity-50"
+                    >
+                      <option value="pending">قيد الانتظار (Pending)</option>
+                      <option value="processing">جاري التنفيذ (Processing)</option>
+                      <option value="shipped">تم الشحن (Shipped)</option>
+                      <option value="delivered">تم التوصيل (Delivered)</option>
+                      <option value="cancelled">ملغي (Cancelled)</option>
+                    </select>
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                      {isUpdating ? <Loader2 size={16} className="animate-spin" /> : <ChevronLeft size={16} />}
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between text-xs font-bold px-1">
+                    <span className="text-slate-500">حالة الدفع:</span>
                     <span className={cn(
-                      "px-2.5 py-1 rounded-lg text-xs font-black",
-                      getStatusColor(selectedOrder.paymentStatus)
+                      "px-2 py-0.5 rounded-lg text-[10px] font-black border",
+                      getPaymentStatusColor(selectedOrder.paymentStatus)
                     )}>
                       {selectedOrder.paymentStatus === 'paid' ? 'تم الدفع' : 'معلق'}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center text-sm font-bold">
-                    <span className="text-slate-500">الطريقة:</span>
-                    <span className="text-slate-900 capitalize">{selectedOrder.paymentMethod}</span>
-                  </div>
-                  {selectedOrder.paymobOrderId && (
-                    <div className="text-[10px] text-slate-400 font-bold pt-1 border-t border-slate-200">
-                      ID: {selectedOrder.paymobOrderId}
-                    </div>
-                  )}
                 </div>
+              </div>
+            </div>
+
+            <div className="bg-slate-50 p-6 rounded-3xl flex flex-wrap gap-8 items-center">
+              <div>
+                <span className="text-xs font-black text-slate-400 uppercase tracking-widest block mb-1">طريقة الدفع</span>
+                <span className="text-sm font-black text-slate-900 capitalize">{selectedOrder.paymentMethod}</span>
+              </div>
+              {selectedOrder.paymobOrderId && (
+                <div>
+                  <span className="text-xs font-black text-slate-400 uppercase tracking-widest block mb-1">معرف Paymob</span>
+                  <span className="text-sm font-black text-slate-900">{selectedOrder.paymobOrderId}</span>
+                </div>
+              )}
+              <div>
+                <span className="text-xs font-black text-slate-400 uppercase tracking-widest block mb-1">تاريخ الطلب</span>
+                <span className="text-sm font-black text-slate-900">{formatDate(selectedOrder.createdAt)}</span>
               </div>
             </div>
 

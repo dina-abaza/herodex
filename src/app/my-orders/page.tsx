@@ -4,13 +4,59 @@ import React from 'react';
 import { useGetMyOrdersQuery } from '@/store/api/orderApiSlice';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
-import { Package, Calendar, CreditCard, Wallet, ShoppingBag, ArrowLeft } from 'lucide-react';
+import { Package, Calendar, CreditCard, Wallet, ShoppingBag, ArrowLeft, CheckCircle2, Clock, Truck, XCircle, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { cn } from '@/utils/cn';
 import Link from 'next/link';
 
 export default function MyOrdersPage() {
   const { data: response, isLoading } = useGetMyOrdersQuery(undefined);
   const orders = response?.data || [];
+
+  const getStatusStyles = (status: string) => {
+    switch (status?.toLowerCase()) {
+      case 'delivered':
+        return 'bg-emerald-50 text-emerald-600 border-emerald-100';
+      case 'pending':
+        return 'bg-amber-50 text-amber-600 border-amber-100';
+      case 'processing':
+        return 'bg-blue-50 text-blue-600 border-blue-100';
+      case 'shipped':
+        return 'bg-indigo-50 text-indigo-600 border-indigo-100';
+      case 'cancelled':
+        return 'bg-rose-50 text-rose-600 border-rose-100';
+      default:
+        return 'bg-gray-50 text-gray-600 border-gray-100';
+    }
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status?.toLowerCase()) {
+      case 'delivered':
+        return <CheckCircle2 size={14} />;
+      case 'pending':
+        return <Clock size={14} />;
+      case 'processing':
+        return <Package size={14} />;
+      case 'shipped':
+        return <Truck size={14} />;
+      case 'cancelled':
+        return <XCircle size={14} />;
+      default:
+        return <AlertCircle size={14} />;
+    }
+  };
+
+  const getStatusLabel = (status: string) => {
+    switch (status?.toLowerCase()) {
+      case 'delivered': return 'تم التوصيل';
+      case 'pending': return 'قيد الانتظار';
+      case 'processing': return 'جاري التنفيذ';
+      case 'shipped': return 'تم الشحن';
+      case 'cancelled': return 'ملغي';
+      default: return status || 'غير محدد';
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50/50">
@@ -74,6 +120,21 @@ export default function MyOrdersPage() {
                       <div className="space-y-1">
                         <p className="text-[10px] text-gray-400 font-black uppercase tracking-wider">المجموع</p>
                         <p className="text-store font-black">{order.totalPrice.toFixed(2)} ج.م</p>
+                      </div>
+                      <div className="mr-auto flex flex-col items-end gap-2">
+                        <div className={cn(
+                          "flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black border tracking-tight",
+                          getStatusStyles(order.orderStatus)
+                        )}>
+                          {getStatusIcon(order.orderStatus)}
+                          {getStatusLabel(order.orderStatus)}
+                        </div>
+                        {/* <div className={cn(
+                          "text-[10px] font-black px-2 py-0.5 rounded-lg border",
+                          order.paymentStatus === 'paid' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-rose-50 text-rose-600 border-rose-100'
+                        )}>
+                          {order.paymentStatus === 'paid' ? 'تم الدفع' : 'بانتظار الدفع'}
+                        </div> */}
                       </div>
                     </div>
                   </div>

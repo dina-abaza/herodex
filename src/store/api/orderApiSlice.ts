@@ -21,6 +21,14 @@ export const orderApiSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ['Order' as any],
     }),
+    updateOrderStatus: builder.mutation({
+      query: ({ orderId, status }) => ({
+        url: `/orders/${orderId}/status`,
+        method: 'PUT',
+        body: { status },
+      }),
+      invalidatesTags: ['Order' as any],
+    }),
   }),
 });
 
@@ -28,4 +36,5 @@ export const {
   useCheckoutMutation,
   useGetMyOrdersQuery,
   useGetAllOrdersQuery,
+  useUpdateOrderStatusMutation,
 } = orderApiSlice;
