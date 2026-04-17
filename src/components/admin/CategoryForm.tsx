@@ -51,7 +51,7 @@ const handleFormSubmit = (values: CategoryFormValues) => {
     
     // الحل البديل: لو الوصف فاضي، ابعت مسافة واحدة " "
     // ده هيخلي السيرفر يقبله وفي نفس الوقت هيمسح الكلام القديم
-    formData.append('description', values.description?.trim() === '' ? ' ' : values.description);
+    formData.append('description', values.description?.trim() ? values.description : ' ');
     
     if (image) {
       formData.append('image', image);
