@@ -35,7 +35,7 @@ export function ProductCard({ product }: ProductCardProps) {
     e.stopPropagation();
 
     if (!user) {
-      router.push('/admin/login');
+      router.push('/login');
       return;
     }
 
