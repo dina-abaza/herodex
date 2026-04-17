@@ -30,7 +30,7 @@ export function Footer() {
               هيروديكس فارما - وجهتك الأولى لأفضل المنتجات الطبية والعناية بالشعر والبشرة بمكونات طبيعية ١٠٠٪. 
               <Link href="/#about" className="text-store-gold hover:underline mr-1 font-bold">اقرأ المزيد عن هيروديكس...</Link>
             </p>
-            <div className="flex gap-2">
+            {/* <div className="flex gap-2">
               {[Globe, MessageCircle, Send, Share2].map((Icon, i) => (
                 <a
                   key={i}
@@ -40,7 +40,7 @@ export function Footer() {
                   <Icon size={18} />
                 </a>
               ))}
-            </div>
+            </div> */}
           </div>
 
           <div>
