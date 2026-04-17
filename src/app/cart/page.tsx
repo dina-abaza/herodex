@@ -57,12 +57,12 @@ export default function CartPage() {
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-50/90 via-store-muted/20 to-gray-50/90">
       <Navbar />
 
-      <main className="flex-1 py-12">
+      <main className="flex-1 py-6 md:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-extrabold text-store-black mb-8">سلة المشتريات</h1>
+          <h1 className="text-2xl md:text-3xl font-extrabold text-store-black mb-6 md:mb-8">سلة المشتريات</h1>
 
           {cart.items.length > 0 ? (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
               {/* Items List */}
               <div className="lg:col-span-2 space-y-4">
                 <AnimatePresence>
@@ -73,9 +73,9 @@ export default function CartPage() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, x: -20 }}
                       key={item._id}
-                      className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center"
+                      className="bg-white p-3 md:p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 lg:gap-6"
                     >
-                      <div className="w-24 h-24 rounded-xl overflow-hidden border border-gray-50 flex-shrink-0">
+                      <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden border border-gray-50 flex-shrink-0">
                         <img 
                           src={item.product?.image} 
                           alt={item.product?.name} 
@@ -83,37 +83,37 @@ export default function CartPage() {
                         />
                       </div>
                       
-                      <div className="mr-6 flex-1">
+                      <div className="flex-1 min-w-0">
                         <div className="flex justify-between items-start">
-                          <div>
-                            <h3 className="font-bold text-gray-900 text-lg">{item.product?.name}</h3>
-                            <p className="text-gray-400 text-sm">{item.product?.category?.name || 'مستحضرات تجميل'}</p>
+                          <div className="min-w-0">
+                            <h3 className="font-bold text-gray-900 text-sm md:text-lg truncate md:whitespace-normal">{item.product?.name}</h3>
+                            <p className="text-gray-400 text-[10px] md:text-sm">{item.product?.category?.name || 'مستحضرات تجميل'}</p>
                           </div>
                           <button 
                             onClick={() => handleRemove(item.product?._id, item.product?.name)}
-                            className="text-gray-300 hover:text-red-500 transition-colors"
+                            className="text-gray-300 hover:text-red-500 transition-colors p-1"
                           >
-                            <Trash2 size={20} />
+                            <Trash2 size={18} className="md:w-5 md:h-5" />
                           </button>
                         </div>
 
-                        <div className="flex justify-between items-center mt-4">
-                          <div className="flex items-center bg-gray-50 rounded-lg p-1">
+                        <div className="flex justify-between items-center mt-3 md:mt-4">
+                          <div className="flex items-center bg-gray-50 rounded-lg p-0.5 md:p-1">
                             <button 
                               onClick={() => handleQuantityChange(item.product?._id, item.quantity - 1)}
-                              className="w-8 h-8 flex items-center justify-center text-gray-500 hover:bg-white hover:shadow-sm rounded-md transition-all"
+                              className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center text-gray-500 hover:bg-white hover:shadow-sm rounded-md transition-all"
                             >
-                              <Minus size={16} />
+                              <Minus size={14} className="md:w-4 md:h-4" />
                             </button>
-                            <span className="w-10 text-center font-bold text-gray-700">{item.quantity}</span>
+                            <span className="w-7 md:w-10 text-center font-bold text-gray-700 text-sm md:text-base">{item.quantity}</span>
                             <button 
                               onClick={() => handleQuantityChange(item.product?._id, item.quantity + 1)}
-                              className="w-8 h-8 flex items-center justify-center text-gray-500 hover:bg-white hover:shadow-sm rounded-md transition-all"
+                              className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center text-gray-500 hover:bg-white hover:shadow-sm rounded-md transition-all"
                             >
-                              <Plus size={16} />
+                              <Plus size={14} className="md:w-4 md:h-4" />
                             </button>
                           </div>
-                          <span className="font-extrabold text-store">{(item.product?.price * item.quantity).toFixed(2)} ج.م</span>
+                          <span className="font-extrabold text-store text-sm md:text-lg">{(item.product?.price * item.quantity).toFixed(2)} ج.م</span>
                         </div>
                       </div>
                     </motion.div>
@@ -123,7 +123,7 @@ export default function CartPage() {
 
               {/* Summary */}
               <div className="lg:col-span-1">
-                <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm sticky top-24">
+                <div className="bg-white p-6 md:p-8 rounded-3xl border border-gray-100 shadow-sm sticky top-24">
                   <h2 className="text-xl font-bold text-gray-900 mb-6">ملخص الطلب</h2>
                   
                   <div className="space-y-4 mb-8">
