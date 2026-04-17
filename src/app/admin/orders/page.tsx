@@ -337,7 +337,7 @@ export default function OrdersPage() {
         {selectedOrder && (
           <div className="space-y-8 py-2">
             {/* Header info */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-slate-50 p-6 rounded-3xl space-y-3">
                 <div className="flex items-center text-slate-400 font-black text-xs uppercase tracking-widest">
                   <User size={14} className="ml-2" /> معلومات العميل

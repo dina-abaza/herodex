@@ -113,8 +113,8 @@ export default function MyOrdersPage() {
                       <div className="space-y-1">
                         <p className="text-[10px] text-gray-400 font-black uppercase tracking-wider">وسيلة الدفع</p>
                         <div className="flex items-center gap-2 text-gray-700 font-bold">
-                          {order.paymentMethod === 'card' ? <CreditCard size={16} className="text-store" /> : <Wallet size={16} className="text-store" />}
-                          {order.paymentMethod === 'card' ? 'بطاقة بنكية' : 'محفظة إلكترونية'}
+                          {order.paymentMethod === 'COD' ? <CreditCard size={16} className="text-store" /> : <Wallet size={16} className="text-store" />}
+                          {order.paymentMethod === 'COD' ? 'دفع عند الاستلام' : 'محفظة إلكترونية'}
                         </div>
                       </div>
                       <div className="space-y-1">
@@ -129,12 +129,15 @@ export default function MyOrdersPage() {
                           {getStatusIcon(order.orderStatus)}
                           {getStatusLabel(order.orderStatus)}
                         </div>
+                        {/* payment status */}
+                        {order.paymentMethod !=='COD' && (
                         <div className={cn(
                           "text-[10px] font-black px-2 py-0.5 rounded-lg border",
                           order.paymentStatus === 'paid' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-rose-50 text-rose-600 border-rose-100'
                         )}>
                           {order.paymentStatus === 'paid' ? 'تم الدفع' : order.paymentStatus === 'pending' ? 'بانتظار الدفع' : 'فشل الدفع'}
                         </div>
+                        )}
                       </div>
                     </div>
                   </div>

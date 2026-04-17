@@ -22,7 +22,7 @@ export function PaymentComponent() {
   const { data: cartData, isLoading: cartLoading } = useGetCartQuery(undefined);
   const [checkout, { isLoading: isProcessing }] = useCheckoutMutation();
 
-  const [paymentMethod] = useState<'wallet'>('wallet');
+  const [paymentMethod, setPaymentMethod] = useState<'card' | 'wallet' | 'COD'>('card');
   const [walletNumber, setWalletNumber] = useState('');
   const [shippingAddress, setShippingAddress] = useState<ShippingAddress>({
     address: '',
@@ -45,24 +45,34 @@ export function PaymentComponent() {
       return;
     }
 
-    if (!walletNumber || walletNumber.length < 11) {
+    if (paymentMethod === 'wallet' && (!walletNumber || walletNumber.length < 11)) {
       toast.error('يرجى إدخال رقم المحفظة الإلكترونية');
       return;
     }
 
     try {
-      const payload = {
-        paymentMethod: 'wallet',
+      const payload: any = {
+        paymentMethod,
         shippingAddress,
-        walletNumber,
       };
+
+      if (paymentMethod === 'wallet') {
+        payload.walletNumber = walletNumber;
+      }
 
       const result: any = await checkout(payload).unwrap();
 
-      if (result.success && result.data.paymentUrl) {
-        window.location.href = result.data.paymentUrl;
+      if (result.success) {
+        if (paymentMethod === 'COD') {
+          toast.success('تم تسجيل طلبك بنجاح');
+          window.location.href = `/checkout/success?order_id=${result.data.orderId}`;
+        } else if (result.data.paymentUrl) {
+          window.location.href = result.data.paymentUrl;
+        } else {
+          toast.error('حدث خطأ أثناء بدء عملية الدفع');
+        }
       } else {
-        toast.error('حدث خطأ أثناء بدء عملية الدفع');
+        toast.error('حدث خطأ أثناء معالجة الطلب');
       }
     } catch (err: any) {
       console.error('Checkout error:', err);
@@ -134,36 +144,131 @@ export function PaymentComponent() {
         <section className="bg-white p-6 sm:p-8 rounded-3xl border border-gray-100 shadow-sm">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-10 h-10 rounded-full bg-store/10 flex items-center justify-center text-store">
-              <Wallet size={22} />
+              <CreditCard size={22} />
             </div>
-            <h2 className="text-xl font-black text-gray-900">الدفع بالمحفظة الإلكترونية</h2>
+            <h2 className="text-xl font-black text-gray-900">وسيلة الدفع</h2>
           </div>
 
-          <div className="bg-store/5 p-6 rounded-2xl border border-store/10 mb-6">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 rounded-xl bg-store flex items-center justify-center text-white">
-                <Wallet size={24} />
-              </div>
-              <div>
-                <p className="font-black text-store">المحافظ الإلكترونية المدعومة</p>
-                <p className="text-xs text-gray-500 font-bold">فودافون كاش، اتصالات كاش، أورانج كاش، وي باي</p>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-store/10">
-              <Input 
-                label="رقم المحفظة (الرقم الذي ستقوم بالدفع منه)"
-                placeholder="01XXXXXXXXX"
-                required
-                value={walletNumber}
-                onChange={(e) => setWalletNumber(e.target.value)}
-              />
-              <p className="mt-3 text-xs text-gray-400 font-bold flex items-center gap-1">
-                <AlertCircle size={14} className="text-store-gold" />
-                تأكد من وجود رصيد كافٍ في محفظتك قبل إتمام العملية.
-              </p>
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+            {/* <button
+              onClick={() => setPaymentMethod('card')}
+              className={cn(
+                "flex flex-col items-center gap-3 p-6 rounded-2xl border-2 transition-all",
+                paymentMethod === 'card' 
+                  ? "border-store bg-store/5 text-store shadow-sm" 
+                  : "border-gray-100 hover:border-gray-200 text-gray-500"
+              )}
+            >
+              <CreditCard size={32} />
+              <span className="font-bold">بطاقة بنكية</span>
+            </button> */}
+            <button
+              onClick={() => setPaymentMethod('wallet')}
+              className={cn(
+                "flex flex-col items-center gap-3 p-6 rounded-2xl border-2 transition-all",
+                paymentMethod === 'wallet' 
+                  ? "border-store bg-store/5 text-store shadow-sm" 
+                  : "border-gray-100 hover:border-gray-200 text-gray-500"
+              )}
+            >
+              <Wallet size={32} />
+              <span className="font-bold">محفظة ذكية</span>
+            </button>
+            <button
+              onClick={() => setPaymentMethod('COD')}
+              className={cn(
+                "flex flex-col items-center gap-3 p-6 rounded-2xl border-2 transition-all",
+                paymentMethod === 'COD' 
+                  ? "border-store bg-store/5 text-store shadow-sm" 
+                  : "border-gray-100 hover:border-gray-200 text-gray-500"
+              )}
+            >
+              <CheckCircle2 size={32} />
+              <span className="font-bold">دفع عند الاستلام</span>
+            </button>
           </div>
+
+          <AnimatePresence mode="wait">
+            {paymentMethod === 'card' && (
+              <motion.div
+                key="card"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="bg-gray-50 p-6 rounded-2xl border border-gray-100"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-store flex items-center justify-center text-white">
+                    <CreditCard size={24} />
+                  </div>
+                  <div>
+                    <p className="font-black text-store">الدفع بالبطاقة البنكية</p>
+                    <p className="text-xs text-gray-500 font-bold">فيزا، ماستركارد، ميزة</p>
+                  </div>
+                </div>
+                <p className="mt-4 text-sm text-gray-500 font-bold leading-relaxed">
+                  سيتم توجيهك إلى صفحة Paymob الآمنة لإتمام عملية الدفع باستخدام بيانات بطاقتك.
+                </p>
+              </motion.div>
+            )}
+
+            {paymentMethod === 'wallet' && (
+              <motion.div
+                key="wallet"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="bg-store/5 p-6 rounded-2xl border border-store/10"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-store flex items-center justify-center text-white">
+                    <Wallet size={24} />
+                  </div>
+                  <div>
+                    <p className="font-black text-store">المحافظ الإلكترونية الذكية</p>
+                    <p className="text-xs text-gray-500 font-bold">فودافون كاش، اتصالات كاش، أورانج كاش، وي باي</p>
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-store/10">
+                  <Input 
+                    label="رقم المحفظة (الرقم الذي ستقوم بالدفع منه)"
+                    placeholder="01XXXXXXXXX"
+                    required
+                    value={walletNumber}
+                    onChange={(e) => setWalletNumber(e.target.value)}
+                  />
+                  <p className="mt-3 text-xs text-gray-400 font-bold flex items-center gap-1">
+                    <AlertCircle size={14} className="text-store-gold" />
+                    تأكد من وجود رصيد كافٍ في محفظتك قبل إتمام العملية.
+                  </p>
+                </div>
+              </motion.div>
+            )}
+
+            {paymentMethod === 'COD' && (
+              <motion.div
+                key="COD"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="bg-store-gold/5 p-6 rounded-2xl border border-store-gold/10"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-store-gold flex items-center justify-center text-store-dark">
+                    <CheckCircle2 size={24} />
+                  </div>
+                  <div>
+                    <p className="font-black text-store-dark">الدفع عند الاستلام (COD)</p>
+                    <p className="text-xs text-gray-600 font-bold">ادفع نقداً عند استلام طلبك</p>
+                  </div>
+                </div>
+                <p className="mt-4 text-sm text-gray-600 font-bold leading-relaxed">
+                  سيتم معالجة طلبك فوراً، وسيقوم مندوب الشحن بالتحصيل عند تسليم المنتج.
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </section>
       </motion.div>
 
@@ -222,7 +327,7 @@ export function PaymentComponent() {
               </>
             ) : (
               <>
-                إتمام عملية الدفع
+                إتمام الطلب
                 <ArrowRight className="mr-2 w-5 h-5 group-hover:translate-x-[-4px] transition-transform" />
               </>
             )}

@@ -17,9 +17,10 @@ function SuccessContent() {
   const router = useRouter();
   const dispatch = useDispatch();
   const transactionId = searchParams.get('transaction_id');
+  const orderId = searchParams.get('order_id');
 
   useEffect(() => {
-    // تفريغ السلة في الواجهة الأمامية تماماً كما ذكر الدليل
+    // تفريغ السلة في الواجهة الأمامية
     dispatch(apiSlice.util.invalidateTags(['Cart' as any]));
   }, [dispatch]);
 
@@ -49,15 +50,17 @@ function SuccessContent() {
             ></motion.div>
           </div>
 
-          <h1 className="text-3xl font-black text-gray-900 mb-4">تم الدفع بنجاح!</h1>
+          <h1 className="text-3xl font-black text-gray-900 mb-4">تم الطلب بنجاح!</h1>
           <p className="text-gray-500 font-bold mb-8">
             شكراً لثقتك بنا. تم استلام طلبك وجاري العمل على تجهيزه وشحنه لك في أقرب وقت.
           </p>
 
           <div className="bg-gray-50 p-6 rounded-3xl border border-gray-100 mb-8 text-right">
             <div className="flex justify-between items-center mb-4 pb-4 border-b border-gray-100">
-              <span className="text-sm text-gray-400 font-bold">رقم العملية (Transaction ID)</span>
-              <span className="text-sm font-black text-store">{transactionId || '---'}</span>
+              <span className="text-sm text-gray-400 font-bold">
+                {transactionId ? 'رقم العملية (Transaction ID)' : 'رقم الطلب (Order ID)'}
+              </span>
+              <span className="text-sm font-black text-store">{transactionId || orderId || '---'}</span>
             </div>
             <div className="flex gap-3 text-sm text-gray-600 font-bold items-center">
               <Package size={18} className="text-store-gold" />
