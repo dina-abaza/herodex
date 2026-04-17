@@ -146,7 +146,7 @@ export function PaymentComponent() {
             <div className="w-10 h-10 rounded-full bg-store/10 flex items-center justify-center text-store">
               <CreditCard size={22} />
             </div>
-            <h2 className="text-xl font-black text-gray-900">وسيلة الدفع</h2>
+            <h2 className="text-xl font-black text-gray-900">اختر وسيلة الدفع</h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
@@ -172,7 +172,7 @@ export function PaymentComponent() {
               )}
             >
               <Wallet size={32} />
-              <span className="font-bold">محفظة ذكية</span>
+              <span className="font-bold">محفظة ذكية <span className='text-red-500'>(فودافون كاش)</span></span>
             </button>
             <button
               onClick={() => setPaymentMethod('COD')}
@@ -189,7 +189,7 @@ export function PaymentComponent() {
           </div>
 
           <AnimatePresence mode="wait">
-            {paymentMethod === 'card' && (
+            {/* {paymentMethod === 'card' && (
               <motion.div
                 key="card"
                 initial={{ opacity: 0, y: 10 }}
@@ -210,7 +210,7 @@ export function PaymentComponent() {
                   سيتم توجيهك إلى صفحة Paymob الآمنة لإتمام عملية الدفع باستخدام بيانات بطاقتك.
                 </p>
               </motion.div>
-            )}
+            )} */}
 
             {paymentMethod === 'wallet' && (
               <motion.div
