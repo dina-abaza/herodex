@@ -62,14 +62,14 @@ export function Footer() {
             </ul>
           </div>
 
-          <div>
+          {/* <div>
             <h3 className="text-lg font-bold text-store-black mb-6">خدمة العملاء</h3>
             <ul className="space-y-4">
               {[
                 ['/shipping', 'سياسة الشحن'],
                 ['/returns', 'سياسة الاستبدال والاسترجاع'],
                 ['/privacy', 'سياسة الخصوصية'],
-                ['/contact', 'تواصل معنا'],
+                // ['/contact', 'تواصل معنا'],
               ].map(([href, label]) => (
                 <li key={href}>
                   <Link href={href} className="text-neutral-600 hover:text-store text-sm transition-colors">
@@ -78,7 +78,7 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </div> */}
 
           <div>
             <h3 className="text-lg font-bold text-store-black mb-6">معلومات التواصل</h3>
@@ -102,9 +102,10 @@ export function Footer() {
         <div className="border-t border-neutral-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-neutral-500 text-xs">
           <p>© {new Date().getFullYear()} Herodex Pharma. جميع الحقوق محفوظة.</p>
           <div className="flex space-x-6 space-x-reverse text-[10px] font-bold uppercase text-neutral-400">
-            <span className="border border-neutral-200 px-2 py-0.5 rounded">Visa</span>
-            <span className="border border-neutral-200 px-2 py-0.5 rounded">Mastercard</span>
-            <span className="border border-neutral-200 px-2 py-0.5 rounded">Mada</span>
+            {/* <span className="border border-neutral-200 px-2 py-0.5 rounded">Visa</span> */}
+            <span className="border border-neutral-200 px-2 py-0.5 rounded">vodafone cash</span>
+            <span className="border border-neutral-200 px-2 py-0.5 rounded">cash on delivery</span>
+            {/* <span className="border border-neutral-200 px-2 py-0.5 rounded">Mada</span> */}
           </div>
         </div>
       </div>
