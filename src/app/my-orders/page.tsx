@@ -129,12 +129,12 @@ export default function MyOrdersPage() {
                           {getStatusIcon(order.orderStatus)}
                           {getStatusLabel(order.orderStatus)}
                         </div>
-                        {/* <div className={cn(
+                        <div className={cn(
                           "text-[10px] font-black px-2 py-0.5 rounded-lg border",
                           order.paymentStatus === 'paid' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-rose-50 text-rose-600 border-rose-100'
                         )}>
-                          {order.paymentStatus === 'paid' ? 'تم الدفع' : 'بانتظار الدفع'}
-                        </div> */}
+                          {order.paymentStatus === 'paid' ? 'تم الدفع' : order.paymentStatus === 'pending' ? 'بانتظار الدفع' : 'فشل الدفع'}
+                        </div>
                       </div>
                     </div>
                   </div>
