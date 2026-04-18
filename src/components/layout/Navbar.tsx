@@ -11,12 +11,14 @@ import { logout } from '@/store/slices/authSlice';
 import { useGetCartQuery } from '@/store/api/cartApiSlice';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/utils/cn';
+import { useRouter, usePathname } from 'next/navigation';
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
   const dispatch = useDispatch();
+  const pathname = usePathname();
   const { user } = useSelector((state: RootState) => state.auth);
   const { data: cartData } = useGetCartQuery(undefined, { skip: !user });
   
@@ -37,6 +39,24 @@ export function Navbar() {
   };
 
   const cartItemsCount = cartData?.data?.items?.reduce((acc: number, item: any) => acc + item.quantity, 0) || 0;
+
+  const handleHashClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    // إذا كان الرابط يحتوي على hash
+    if (href.includes('#')) {
+      const [path, hash] = href.split('#');
+      
+      // إذا كنا في نفس الصفحة الرئيسية (أو المسار متطابق)
+      if (pathname === path || (pathname === '/' && path === '')) {
+        const element = document.getElementById(hash);
+        if (element) {
+          e.preventDefault();
+          element.scrollIntoView({ behavior: 'smooth' });
+          window.history.pushState(null, '', href);
+          setIsOpen(false);
+        }
+      }
+    }
+  };
 
   const handleLogout = () => {
     console.log("User logging out...");
@@ -88,6 +108,7 @@ export function Navbar() {
               <Link 
                 key={link.name}
                 href={link.href} 
+                onClick={(e: any) => handleHashClick(e, link.href)}
                 className="px-4 py-2 text-gray-600 hover:text-store font-bold transition-all duration-200 relative group"
               >
                 {link.name}
@@ -188,7 +209,10 @@ export function Navbar() {
             <Link 
               key={link.name}
               href={link.href} 
-              onClick={() => setIsOpen(false)}
+              onClick={(e: any) => {
+                handleHashClick(e, link.href);
+                setIsOpen(false);
+              }}
               className="block px-4 py-3 text-gray-600 hover:text-store hover:bg-store-muted rounded-xl font-bold transition-all"
             >
               {link.name}

@@ -2,8 +2,28 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Mail, Phone, MapPin, Globe, MessageCircle, Send, Share2 } from 'lucide-react';
+import { useRouter, usePathname } from 'next/navigation';
 
 export function Footer() {
+  const pathname = usePathname();
+  
+  const handleHashClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    // إذا كان الرابط يحتوي على hash
+    if (href.includes('#')) {
+      const [path, hash] = href.split('#');
+      
+      // إذا كنا في نفس الصفحة الرئيسية (أو المسار متطابق)
+      if (pathname === path || (pathname === '/' && path === '')) {
+        const element = document.getElementById(hash);
+        if (element) {
+          e.preventDefault();
+          element.scrollIntoView({ behavior: 'smooth' });
+          window.history.pushState(null, '', href);
+        }
+      }
+    }
+  };
+
   return (
     <footer className="bg-white text-neutral-800 border-t border-neutral-200 pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -28,7 +48,13 @@ export function Footer() {
             </Link>
             <p className="text-neutral-600 leading-relaxed text-sm font-medium">
               هيروديكس فارما - وجهتك الأولى لأفضل المنتجات الطبية والعناية بالشعر والبشرة بمكونات طبيعية ١٠٠٪. 
-              <Link href="/#about" className="text-store-gold hover:underline mr-1 font-bold">اقرأ المزيد عن هيروديكس...</Link>
+              <Link 
+                href="/#about" 
+                onClick={(e) => handleHashClick(e, '/#about')}
+                className="text-store-gold hover:underline mr-1 font-bold"
+              >
+                اقرأ المزيد عن هيروديكس...
+              </Link>
             </p>
              <div className="flex gap-2">
               {[Globe, MessageCircle, Send, Share2].map((Icon, i) => (
@@ -54,7 +80,11 @@ export function Footer() {
                 ['/#about', 'عن الموقع'],
               ].map(([href, label]) => (
                 <li key={href}>
-                  <Link href={href} className="text-neutral-600 hover:text-store text-sm transition-colors">
+                  <Link 
+                    href={href} 
+                    onClick={(e) => handleHashClick(e, href)}
+                    className="text-neutral-600 hover:text-store text-sm transition-colors"
+                  >
                     {label}
                   </Link>
                 </li>
