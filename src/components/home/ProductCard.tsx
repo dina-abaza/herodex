@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
 import { ShoppingCart, Star } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { useAddToCartMutation } from '@/store/api/cartApiSlice';
@@ -56,21 +55,20 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <>
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true }}
+      {/* CSS animate-scale-in بدل motion.div initial/whileInView */}
+      <div
         onClick={handleOpenModal}
-        className="group bg-white rounded-[2rem] shadow-sm border border-neutral-100 overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 cursor-pointer"
+        className="animate-scale-in group bg-white rounded-[2rem] shadow-sm border border-neutral-100 overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 cursor-pointer"
       >
-        {/* Image Section - تحسين عرض الصورة */}
+        {/* Image Section */}
         <div className="relative aspect-[4/5] overflow-hidden bg-store-muted/30 flex items-center justify-center">
-          <img 
-            src={product.image} 
-            alt={product.name} 
+          <img
+            src={product.image}
+            alt={product.name}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            loading="lazy"
           />
-          
+
           {/* Rating Badge */}
           <div className="absolute top-4 left-4 bg-white/80 backdrop-blur-md px-3 py-1 rounded-full flex items-center shadow-sm border border-white/20">
             <Star size={12} className="text-store-gold fill-store-gold ml-1" />
@@ -85,18 +83,18 @@ export function ProductCard({ product }: ProductCardProps) {
             <span className="text-[10px] font-black text-store-gold bg-store-gold/5 px-3 py-1 rounded-md uppercase tracking-[0.1em] mb-3 inline-block border border-store-gold/10">
               {product.category?.name || 'مستحضرات تجميل'}
             </span>
-            
+
             {/* Title */}
             <h3 className="text-lg font-bold text-gray-900 group-hover:text-store transition-colors line-clamp-1 leading-tight">
               {product.name}
             </h3>
-            
-            {/* Description - الوصف سطرين فقط */}
+
+            {/* Description */}
             <div className="mt-2">
               <p className="text-gray-400 text-xs line-clamp-2 leading-relaxed font-medium">
                 {product.description}
               </p>
-              <button 
+              <button
                 onClick={handleOpenModal}
                 className="text-store-gold text-[10px] font-black mt-1 hover:underline decoration-2 underline-offset-4"
               >
@@ -118,9 +116,9 @@ export function ProductCard({ product }: ProductCardProps) {
                 <span className="text-[10px] font-bold text-store">ج.م</span>
               </div>
             </div>
-            
-            <button 
-              className="group/cart relative w-12 h-12 rounded-2xl flex items-center justify-center bg-store hover:bg-store-dark text-white shadow-lg shadow-store/20 transition-all duration-300 active:scale-90" 
+
+            <button
+              className="group/cart relative w-12 h-12 rounded-2xl flex items-center justify-center bg-store hover:bg-store-dark text-white shadow-lg shadow-store/20 transition-all duration-300 active:scale-90"
               onClick={handleAddToCart}
               disabled={isLoading}
               title="أضيفي للسلة"
@@ -133,7 +131,7 @@ export function ProductCard({ product }: ProductCardProps) {
             </button>
           </div>
         </div>
-      </motion.div>
+      </div>
 
       {/* Product Detail Modal */}
       <Modal
@@ -145,10 +143,11 @@ export function ProductCard({ product }: ProductCardProps) {
         <div className="flex flex-col md:flex-row gap-8 text-right overflow-hidden" dir="rtl">
           {/* Large Image */}
           <div className="w-full md:w-1/2 aspect-square rounded-3xl overflow-hidden bg-store-muted/20 border border-neutral-100 shadow-inner">
-            <img 
-              src={product.image} 
-              alt={product.name} 
+            <img
+              src={product.image}
+              alt={product.name}
               className="w-full h-full object-cover"
+              loading="lazy"
             />
           </div>
 
@@ -176,7 +175,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 </p>
               </div>
 
-              {/* Indian Formula Badge Mentioned by User in About Section */}
+              {/* Indian Formula Badge */}
               <div className="p-4 bg-gradient-to-br from-store-muted/50 to-white rounded-2xl border border-store/10 shadow-sm flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-store/10 flex items-center justify-center shrink-0">
                   <div className="w-2 h-2 bg-store rounded-full animate-pulse" />
@@ -202,8 +201,8 @@ export function ProductCard({ product }: ProductCardProps) {
                 </div>
               </div>
 
-              <button 
-                className="group/modal-cart relative w-16 h-16 rounded-2xl flex items-center justify-center bg-store hover:bg-store-dark text-white shadow-xl shadow-store/20 transition-all active:scale-95" 
+              <button
+                className="group/modal-cart relative w-16 h-16 rounded-2xl flex items-center justify-center bg-store hover:bg-store-dark text-white shadow-xl shadow-store/20 transition-all active:scale-95"
                 onClick={handleAddToCart}
                 disabled={isLoading}
                 title="أضيفي للسلة"
