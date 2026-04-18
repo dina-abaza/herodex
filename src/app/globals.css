@@ -116,3 +116,101 @@ body {
 .animate-bounce-slow {
   animation: bounce-slow 2s infinite;
 }
+
+/* ===== CSS Animations بديلة لـ framer-motion ===== */
+
+/* Fade In Up — للـ scroll animations (بديل whileInView) */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fade In — للـ opacity فقط */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Float — للكرات الزخرفية (بديل animate float في framer) */
+@keyframes float {
+  0%   { transform: translate(0, 0) scale(1); }
+  33%  { transform: translate(20px, -40px) scale(1.1); }
+  66%  { transform: translate(-10px, -20px) scale(0.95); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+/* Scale In — لبطاقات المنتجات */
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Classes جاهزة للاستخدام */
+.animate-fade-in-up {
+  animation: fade-in-up 0.7s ease-out both;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.8s ease-in-out both;
+}
+
+.animate-float {
+  animation: float 8s ease-in-out infinite;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.5s ease-out both;
+}
+
+/* Animation delays للـ staggering */
+.animation-delay-100 { animation-delay: 0.1s; }
+.animation-delay-200 { animation-delay: 0.2s; }
+.animation-delay-300 { animation-delay: 0.3s; }
+.animation-delay-400 { animation-delay: 0.4s; }
+
+/* Intersection Observer-based animation class */
+/* تُضاف تلقائياً عندما يدخل العنصر الـ viewport */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hover utility (بديل whileHover في framer) */
+.hover-lift {
+  transition: transform 0.3s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-5px);
+}
+
+/* Carousel fade transition (بديل AnimatePresence) */
+.carousel-item {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+  pointer-events: none;
+}
+
+.carousel-item.active {
+  opacity: 1;
+  pointer-events: auto;
+}

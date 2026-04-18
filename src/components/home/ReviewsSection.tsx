@@ -3,16 +3,15 @@
 import React, { useEffect, useState } from 'react';
 import { useGetReviewsQuery } from '@/store/api/reviewApiSlice';
 import { Star } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 
 export function ReviewsSection() {
   const { data: reviewsData, isLoading: isReviewsLoading } = useGetReviewsQuery(undefined);
-  
-  // لغرض التجربة عندك عشان تشوفي الحركة كرري السطر اللي تحت لو حبيتي
-const reviews = reviewsData?.data ? [...reviewsData.data] : [];  
+
+  const reviews = reviewsData?.data ? [...reviewsData.data] : [];
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // حركه تلقائية كل 4 ثواني فقط لو في أكتر من مراجعة
+  // حركة تلقائية كل 4 ثواني فقط لو في أكتر من مراجعة
   useEffect(() => {
     if (reviews.length <= 1) return;
     const timer = setInterval(() => {
@@ -24,7 +23,7 @@ const reviews = reviewsData?.data ? [...reviewsData.data] : [];
   return (
     <section id="reviews" className="py-24 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* العناوين */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-store-muted text-store font-bold text-sm mb-6 border border-store/15">
@@ -43,31 +42,30 @@ const reviews = reviewsData?.data ? [...reviewsData.data] : [];
           </div>
         ) : reviews.length > 0 ? (
           <div className="relative flex flex-col items-center">
-            
-            {/* حاوية الكاروسيل الموحدة المقاس لمنع اختلاف الأحجام */}
-            <div className="relative w-full max-w-[400px] aspect-[4/5] overflow-hidden rounded-[2rem] shadow-lg flex items-center justify-center bg-gray-50">
-              <AnimatePresence initial={false}>
-                <motion.div
-                  key={currentIndex}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.8, ease: "easeInOut" }}
-                  className="absolute inset-0"
+
+            {/* حاوية الكاروسيل — CSS transitions بدل AnimatePresence */}
+            <div className="relative w-full max-w-[400px] aspect-[4/5] overflow-hidden rounded-[2rem] shadow-lg bg-gray-50">
+              {reviews.map((review: any, idx: number) => (
+                <div
+                  key={idx}
+                  className={`carousel-item${idx === currentIndex ? ' active' : ''}`}
                 >
-                  <img 
-                    src={reviews[currentIndex].imageUrl || reviews[currentIndex].image || ''} 
-                    alt="مراجعة عميلة" 
-                    className="w-full h-full object-cover"
+                  <Image
+                    src={review.imageUrl || review.image || ''}
+                    alt="مراجعة عميلة"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 400px"
+                    unoptimized={!!(review.imageUrl || review.image)?.startsWith('http')}
                   />
-                </motion.div>
-              </AnimatePresence>
+                </div>
+              ))}
             </div>
 
-            {/* نقاط التنقل (Bullets) تظهر فقط لو في أكتر من مراجعة */}
+            {/* نقاط التنقل */}
             {reviews.length > 1 && (
               <div className="flex gap-3 mt-8">
-                {reviews.map((_, idx) => (
+                {reviews.map((_: any, idx: number) => (
                   <button
                     key={idx}
                     onClick={() => setCurrentIndex(idx)}

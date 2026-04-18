@@ -18,6 +18,7 @@ const tajawal = Tajawal({
 
 // التعديل هنا فقط في الـ Metadata لتحسين الـ SEO
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://herodex.com'),
   title: "Herodex Pharma | أفضل علاج لتساقط الشعر الشديد وفراغات الشعر",
   description: "اكتشفي مجموعة FortaHair من Herodex Pharma. منتجات طبية 100% لعلاج تساقط الشعر للنساء طبيعي، تكثيف الشعر، وعلاج الفراغات. أفضل منتج لمنع تساقط الشعر في مصر بتركيبة هندية.",
   keywords: [

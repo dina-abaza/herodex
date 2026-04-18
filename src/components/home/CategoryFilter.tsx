@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { useGetCategoriesQuery } from '@/store/api/categoryApiSlice';
 import { cn } from '@/utils/cn';
 
@@ -70,13 +71,16 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
                   )}
                 >
                   {category.image ? (
-                    <img 
-                      src={category.image} 
-                      alt={category.name} 
+                    <Image
+                      src={category.image}
+                      alt={category.name}
+                      fill
                       className={cn(
-                        "w-full h-full object-contain p-1 transition-transform duration-700 group-hover:scale-110",
+                        "object-contain p-1 transition-transform duration-700 group-hover:scale-110",
                         selectedCategory === category._id ? "brightness-110" : "brightness-100"
                       )}
+                      sizes="(max-width: 768px) 112px, 176px"
+                      unoptimized={category.image.startsWith('http')}
                     />
                   ) : (
                     <div className="w-full h-full bg-store-muted flex items-center justify-center text-store/40">
