@@ -43,7 +43,7 @@ export function AboutSection() {
             {/* Image Side */}
             <div
               ref={(el) => addRef(el, 0)}
-              className="reveal relative w-full aspect-[16/9] md:aspect-[21/9] overflow-hidden bg-[#f8f8f8] border-b border-store-gold/10"
+              className="reveal relative w-full aspect-[16/14] md:aspect-[21/14] overflow-hidden bg-[#f8f8f8] border-b border-store-gold/10"
             >
               <Image
                 src="/aboutimage.webp"
@@ -100,4 +100,4 @@ export function AboutSection() {
     </section>
   );
 }
-
+

@@ -15,44 +15,46 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
   const categories = categoriesData?.data || [];
 
   return (
-    <div id="categories" className="py-20 bg-white">
+    <div id="categories" className="py-20 bg-gray-50/50"> {/* خلفية هادئة لإبراز الكروت البيضاء */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-black text-store-black tracking-tight">تسوقي حسب الفئات</h2>
-          <p className="text-gray-500 mt-4 text-lg font-medium">اختاري من بين تشكيلتنا المتنوعة والمنظمة</p>
-          <div className="w-24 h-1.5 bg-gradient-to-l from-store-gold to-store mx-auto mt-6 rounded-full shadow-sm shadow-store/20"></div>
+          <h2 className="text-4xl font-black text-slate-900 tracking-tight">تسوق من الأقسام</h2>
+          <div className="w-20 h-1.5 bg-store mx-auto mt-4 rounded-full"></div>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-8 md:gap-14">
-          {/* "All" Category */}
+        <div className="flex flex-wrap justify-center gap-6 md:gap-10">
+          
+          {/* قسم "الكل" بتصميم بروفيشنال */}
           <button
             onClick={() => onSelectCategory('')}
-            className="flex flex-col items-center group transition-all duration-300"
+            className="w-[45%] md:w-[28%] lg:w-[20%] flex flex-col items-center group transition-all duration-500"
           >
             <div 
               className={cn(
-                "w-28 h-28 md:w-44 md:h-44 rounded-full border-4 flex items-center justify-center transition-all duration-500 shadow-md",
+                "w-full aspect-[4/3] rounded-3xl border-2 flex items-center justify-center transition-all duration-500 relative overflow-hidden",
                 selectedCategory === '' 
-                  ? "bg-store border-store-gold/40 scale-110 shadow-lg shadow-store/30" 
-                  : "bg-gray-50 border-white hover:border-store/25 hover:bg-store-muted"
+                  ? "bg-store border-store shadow-xl shadow-store/20 -translate-y-2" 
+                  : "bg-white border-transparent shadow-md hover:shadow-lg hover:-translate-y-1"
               )}
             >
               <span className={cn(
-                "text-xl md:text-2xl font-black",
-                selectedCategory === '' ? "text-white" : "text-gray-400 group-hover:text-store"
+                "text-2xl font-black z-10",
+                selectedCategory === '' ? "text-white" : "text-slate-600 group-hover:text-store"
               )}>الكل</span>
+              {/* لمسة جمالية خلفية لنص "الكل" */}
+              <div className="absolute inset-0 opacity-10 bg-gradient-to-br from-white to-transparent"></div>
             </div>
             <span className={cn(
-              "mt-4 font-black text-sm md:text-base transition-colors",
-              selectedCategory === '' ? "text-store" : "text-gray-500 group-hover:text-store"
+              "mt-4 font-bold text-xl transition-colors tracking-wide text-center",
+              selectedCategory === '' ? "text-store" : "text-slate-500 group-hover:text-slate-900"
             )}>جميع المنتجات</span>
           </button>
 
           {isLoading ? (
-            [1, 2, 3, 4].map((i) => (
-              <div key={i} className="flex flex-col items-center animate-pulse">
-                <div className="w-28 h-28 md:w-44 md:h-44 rounded-full bg-gray-100"></div>
-                <div className="w-16 h-4 bg-gray-100 mt-4 rounded"></div>
+            [1, 2, 3].map((i) => (
+              <div key={i} className="w-[45%] md:w-[28%] lg:w-[20%] flex flex-col items-center animate-pulse">
+                <div className="w-full aspect-[4/3] rounded-3xl bg-gray-200"></div>
+                <div className="w-2/3 h-5 bg-gray-200 mt-4 rounded-full"></div>
               </div>
             ))
           ) : (
@@ -60,40 +62,39 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
               <button
                 key={category._id}
                 onClick={() => onSelectCategory(category._id)}
-                className="flex flex-col items-center group transition-all duration-300"
+                className="w-[45%] md:w-[28%] lg:w-[20%] flex flex-col items-center group transition-all duration-500"
               >
                 <div 
                   className={cn(
-                    "w-28 h-28 md:w-44 md:h-44 rounded-full border-4 overflow-hidden transition-all duration-500 shadow-md relative bg-white",
+                    "w-full aspect-[4/3] rounded-3xl border-2 overflow-hidden transition-all duration-500 relative shadow-md",
                     selectedCategory === category._id 
-                      ? "border-store-gold/50 scale-110 shadow-lg shadow-store/20 ring-2 ring-store-gold/30" 
-                      : "border-white hover:border-store/20 group-hover:shadow-store/10"
+                      ? "border-store shadow-xl shadow-store/20 -translate-y-2 ring-4 ring-store/10" 
+                      : "border-transparent bg-white hover:shadow-lg hover:-translate-y-1"
                   )}
                 >
                   {category.image ? (
-                    <Image
-                      src={category.image}
-                      alt={category.name}
+                    <Image 
+                      src={category.image} 
+                      alt={category.name} 
                       fill
                       className={cn(
-                        "object-contain p-1 transition-transform duration-700 group-hover:scale-110",
-                        selectedCategory === category._id ? "brightness-110" : "brightness-100"
+                        "object-cover transition-transform duration-1000 group-hover:scale-110", // object-cover تجعل الصورة تملأ الفريم
+                        selectedCategory === category._id ? "scale-110" : "scale-100"
                       )}
-                      sizes="(max-width: 768px) 112px, 176px"
+                      sizes="(max-width: 768px) 50vw, 25vw"
                       unoptimized={category.image.startsWith('http')}
                     />
                   ) : (
-                    <div className="w-full h-full bg-store-muted flex items-center justify-center text-store/40">
+                    <div className="w-full h-full bg-slate-100 flex items-center justify-center text-slate-400 text-4xl font-bold">
                       {category.name.charAt(0)}
                     </div>
                   )}
-                  {selectedCategory === category._id && (
-                    <div className="absolute inset-0 bg-store/5 ring-4 ring-store-gold/20 inset-1 rounded-full pointer-events-none"></div>
-                  )}
+                  {/* Overlay خفيف لجعل الصور تبدو متناسقة */}
+                  <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
                 </div>
                 <span className={cn(
-                  "mt-4 font-black text-sm md:text-base transition-colors",
-                  selectedCategory === category._id ? "text-store" : "text-gray-500 group-hover:text-store"
+                  "mt-4 font-bold text-xl transition-colors tracking-wide text-center",
+                  selectedCategory === category._id ? "text-store" : "text-slate-500 group-hover:text-slate-900"
                 )}>{category.name}</span>
               </button>
             ))

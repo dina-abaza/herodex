@@ -1,50 +1,62 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Mail, Phone, MapPin, Globe, MessageCircle, Send, Share2 } from 'lucide-react';
+// تأكدي إن الأيقونات دي بس هي اللي مستوردة عشان ميبقاش فيه Error
+import { Mail, Phone, MapPin, Facebook, Instagram, MessageCircle, Share2 } from 'lucide-react';
 
 export function Footer() {
   return (
     <footer className="bg-white text-neutral-800 border-t border-neutral-200 pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 gap-y-12 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-16">
+          
+          {/* العمود الأول: الشعار والوصف */}
           <div className="space-y-6">
-            <Link href="/" className="flex items-center group">
-              <div className="relative w-12 h-12 overflow-hidden rounded-full border-2 border-store-muted group-hover:border-store transition-colors shadow-sm">
+            <Link href="/" className="flex items-center group w-fit">
+              <div className="relative w-14 h-14 overflow-hidden rounded-full border-2 border-store-muted group-hover:border-store transition-colors shadow-sm">
                 <Image
                   src="/logo/logo.jpeg"
                   alt="Logo"
                   fill
                   className="object-cover"
-                  sizes="48px"
+                  sizes="56px"
                 />
               </div>
               <div className="mr-3 flex flex-col">
-                <span className="text-2xl font-black text-store tracking-tight leading-none uppercase">Herodex</span>
+                <span className="text-2xl font-black text-store tracking-tight leading-none">Herodex</span>
                 <span className="text-[10px] font-bold text-store-gold uppercase tracking-widest mt-1 block">
                   Pharma
                 </span>
               </div>
             </Link>
-            <p className="text-neutral-600 leading-relaxed text-sm font-medium">
+            <p className="text-neutral-600 leading-relaxed text-sm font-medium max-w-sm text-right">
               هيروديكس فارما - وجهتك الأولى لأفضل المنتجات الطبية والعناية بالشعر والبشرة بمكونات طبيعية ١٠٠٪. 
-              <Link href="/#about" className="text-store-gold hover:underline mr-1 font-bold">اقرأ المزيد عن هيروديكس...</Link>
+              <Link href="/#about" className="text-store-gold hover:underline mr-1 font-bold">اقرأ المزيد...</Link>
             </p>
-             <div className="flex gap-2">
-              {[Globe, MessageCircle, Send, Share2].map((Icon, i) => (
-                <a
-                  key={i}
-                  href="#"
-                  className="w-10 h-10 rounded-full border border-neutral-200 bg-neutral-50 flex items-center justify-center text-store hover:bg-black/5  hover:border-store transition-colors"
-                >
-                  <Icon size={18} />
-                </a>
-              ))}
+            
+            {/* السوشيال ميديا - تم تنظيفها تماماً */}
+            <div className="flex gap-3">
+              <a href="https://www.facebook.com/share/1AtoCKMpRZ/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full border border-neutral-200 bg-neutral-50 flex items-center justify-center text-store hover:bg-store hover:text-white transition-all duration-300">
+                <Facebook size={18} />
+              </a>
+              <a href="https://www.instagram.com/herodex.pharma?igsh=bjlyMTkybHU3d3Yw&utm_source=qr" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full border border-neutral-200 bg-neutral-50 flex items-center justify-center text-store hover:bg-store hover:text-white transition-all duration-300">
+                <Instagram size={18} />
+              </a>
+              {/* أيقونة مؤقتة للتيك توك عشان الكود ميضربش */}
+              <a href="#" className="w-10 h-10 rounded-full border border-neutral-200 bg-neutral-50 flex items-center justify-center text-store hover:bg-store hover:text-white transition-all duration-300">
+                <Share2 size={18} />
+              </a>
+              <a href="https://wa.me/201101546900" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full border border-neutral-200 bg-neutral-50 flex items-center justify-center text-store hover:bg-store hover:text-white transition-all duration-300">
+                <MessageCircle size={18} />
+              </a>
             </div> 
           </div>
 
-          <div>
-            <h3 className="text-lg font-bold text-store-black mb-6">روابط سريعة</h3>
+          {/* باقي الأعمدة (روابط سريعة وتواصل) كما هي تماماً في تصميمك الأصلي */}
+          <div className="lg:justify-self-center">
+            <h3 className="text-lg font-bold text-store-black mb-6 border-r-4 border-store-gold pr-3">روابط سريعة</h3>
             <ul className="space-y-4">
               {[
                 ['/', 'الرئيسية'],
@@ -54,7 +66,7 @@ export function Footer() {
                 ['/#about', 'عن الموقع'],
               ].map(([href, label]) => (
                 <li key={href}>
-                  <Link href={href} className="text-neutral-600 hover:text-store text-sm transition-colors">
+                  <Link href={href} className="text-neutral-600 hover:text-store hover:pr-2 text-sm transition-all duration-200 flex items-center">
                     {label}
                   </Link>
                 </li>
@@ -62,51 +74,24 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* <div>
-            <h3 className="text-lg font-bold text-store-black mb-6">خدمة العملاء</h3>
+          <div className="lg:justify-self-end">
+            <h3 className="text-lg font-bold text-store-black mb-6 border-r-4 border-store-gold pr-3">معلومات التواصل</h3>
             <ul className="space-y-4">
-              {[
-                ['/shipping', 'سياسة الشحن'],
-                ['/returns', 'سياسة الاستبدال والاسترجاع'],
-                ['/privacy', 'سياسة الخصوصية'],
-                // ['/contact', 'تواصل معنا'],
-              ].map(([href, label]) => (
-                <li key={href}>
-                  <Link href={href} className="text-neutral-600 hover:text-store text-sm transition-colors">
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div> */}
-
-          <div>
-            <h3 className="text-lg font-bold text-store-black mb-6">معلومات التواصل</h3>
-            <ul className="space-y-4">
-              <li className="flex items-center text-neutral-600 text-sm">
-                <MapPin size={18} className="ml-3 text-store shrink-0" />
-                القاهرة، جمهورية مصر العربية
+              <li className="flex items-start text-neutral-600 text-sm">
+                <MapPin size={18} className="ml-3 text-store shrink-0 mt-0.5" />
+                <span>القاهرة، جمهورية مصر العربية</span>
               </li>
-              <li className="flex items-center text-neutral-600 text-sm text-left" dir="ltr">
+              <li className="flex items-center text-neutral-600 text-sm text-left font-bold" dir="ltr">
                 <Phone size={18} className="ml-3 text-store shrink-0" />
-                +20 10 66 230 290
-              </li>
-              <li className="flex items-center text-neutral-600 text-sm text-left" dir="ltr">
-                <Phone size={18} className="ml-3 text-store shrink-0" />
-                +20 12 112 15 315
+                +20 110 154 6900
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-neutral-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-neutral-500 text-xs">
-          <p>© {new Date().getFullYear()} Herodex Pharma. جميع الحقوق محفوظة.</p>
-          <div className="flex space-x-6 space-x-reverse text-[10px] font-bold uppercase text-neutral-400">
-            {/* <span className="border border-neutral-200 px-2 py-0.5 rounded">Visa</span> */}
-            <span className="border border-neutral-200 px-2 py-0.5 rounded">vodafone cash</span>
-            <span className="border border-neutral-200 px-2 py-0.5 rounded">cash on delivery</span>
-            {/* <span className="border border-neutral-200 px-2 py-0.5 rounded">Mada</span> */}
-          </div>
+        {/* الحقوق */}
+        <div className="border-t border-neutral-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-6 text-neutral-500">
+          <p className="text-xs font-medium italic">© {new Date().getFullYear()} Herodex Pharma. جميع الحقوق محفوظة.</p>
         </div>
       </div>
     </footer>

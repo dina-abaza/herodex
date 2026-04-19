@@ -22,6 +22,12 @@ const AboutSection = dynamic(
   { ssr: false }
 );
 
+// إضافة الكومبوننت الجديد بـ dynamic import
+const QuestionSection = dynamic(
+  () => import('@/components/home/questionSection').then((m) => m.QuestionSection),
+  { ssr: false }
+);
+
 const ReviewsSection = dynamic(
   () => import('@/components/home/ReviewsSection').then((m) => m.ReviewsSection),
   { ssr: false }
@@ -54,6 +60,9 @@ export function HomeClient() {
         />
 
         <AboutSection />
+        
+        {/* الكومبوننت الجديد مكانه هنا تحت الـ About */}
+        <QuestionSection />
 
         <ReviewsSection />
       </main>
