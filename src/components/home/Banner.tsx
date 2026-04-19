@@ -8,20 +8,20 @@ import { ChevronRight, ChevronLeft } from 'lucide-react';
 
 const bannerImages = [
   {
-    desktop: '/banars/panars [219]/first panar 1776084748544.jpg',
-    mobile: '/banars/panar16 9/first panar 1776086532329.jpg'
+    desktop: '/banars/banarsdesc/panardesc1.webp',
+    mobile: '/banars/banarsmob/panarmob1.webp'
   },
   {
-    desktop: '/banars/panars [219]/1776084757590.jpg',
-    mobile: '/banars/panar16 9/1776086526115.jpg'
+    desktop: '/banars/banarsdesc/panardesc2.webp',
+    mobile: '/banars/banarsmob/panarmob2.webp'
   },
   {
-    desktop: '/banars/panars [219]/1776084769058.jpg',
-    mobile: '/banars/panar16 9/1776086717551.png'
+    desktop: '/banars/banarsdesc/panardesc3.webp',
+    mobile: '/banars/banarsmob/panarmob3.webp'
   },
   {
-    desktop: '/banars/panars [219]/1776084775534.jpg',
-    mobile: '/banars/panar16 9/1776086743742.png'
+    desktop: '/banars/banarsdesc/panardesc4.webp',
+    mobile: '/banars/banarsmob/panarmob4.webp'
   }
 ];
 
@@ -34,6 +34,8 @@ export function Banner() {
     }, 6000);
     return () => clearInterval(timer);
   }, []);
+
+
 
   const next = () => setCurrent((prev) => (prev === bannerImages.length - 1 ? 0 : prev + 1));
   const prev = () => setCurrent((prev) => (prev === 0 ? bannerImages.length - 1 : prev - 1));
@@ -57,7 +59,7 @@ export function Banner() {
               fill
               className="object-cover"
               sizes="100vw"
-              priority
+              priority={current === 0}
             />
           </div>
           {/* Mobile Image */}
@@ -68,7 +70,7 @@ export function Banner() {
               fill
               className="object-cover"
               sizes="100vw"
-              priority
+              priority={current === 0}
             />
           </div>
         </motion.div>

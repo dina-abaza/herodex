@@ -18,37 +18,40 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
     <div id="categories" className="py-20 bg-gray-50/50"> {/* خلفية هادئة لإبراز الكروت البيضاء */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-black text-slate-900 tracking-tight">تسوق من الأقسام</h2>
+          <h2 className="text-3xl font-black text-slate-900 tracking-tight">تسوق من الأقسام</h2>
           <div className="w-20 h-1.5 bg-store mx-auto mt-4 rounded-full"></div>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-6 md:gap-10">
-          
+        <div className="flex flex-nowrap md:flex-wrap overflow-x-auto md:overflow-visible justify-start md:justify-center gap-6 md:gap-10 pb-4 md:pb-0 no-scrollbar items-stretch ">
           {/* قسم "الكل" بتصميم بروفيشنال */}
-          <button
-            onClick={() => onSelectCategory('')}
-            className="w-[45%] md:w-[28%] lg:w-[20%] flex flex-col items-center group transition-all duration-500"
-          >
-            <div 
-              className={cn(
-                "w-full aspect-[4/3] rounded-3xl border-2 flex items-center justify-center transition-all duration-500 relative overflow-hidden",
-                selectedCategory === '' 
-                  ? "bg-store border-store shadow-xl shadow-store/20 -translate-y-2" 
-                  : "bg-white border-transparent shadow-md hover:shadow-lg hover:-translate-y-1"
-              )}
-            >
-              <span className={cn(
-                "text-2xl font-black z-10",
-                selectedCategory === '' ? "text-white" : "text-slate-600 group-hover:text-store"
-              )}>الكل</span>
-              {/* لمسة جمالية خلفية لنص "الكل" */}
-              <div className="absolute inset-0 opacity-10 bg-gradient-to-br from-white to-transparent"></div>
-            </div>
-            <span className={cn(
-              "mt-4 font-bold text-xl transition-colors tracking-wide text-center",
-              selectedCategory === '' ? "text-store" : "text-slate-500 group-hover:text-slate-900"
-            )}>جميع المنتجات</span>
-          </button>
+       {/* الكلاسات المعدلة للـ Button */}
+<button
+  onClick={() => onSelectCategory('')}
+  className="w-[45%] md:w-[28%] lg:w-[20%] flex flex-col items-center group transition-all duration-500 pt-2" // أضفنا pt-2 لإعطاء مساحة للـ translate فلا يظهر "مأكول"
+>
+  <div 
+    className={cn(
+      "w-full aspect-[4/3] rounded-3xl border-2 flex items-center justify-center transition-all duration-500 relative overflow-hidden",
+      selectedCategory === '' 
+        ? "bg-store border-store shadow-xl shadow-store/20 -translate-y-2" 
+        : "bg-white border-transparent shadow-md hover:shadow-lg hover:-translate-y-1"
+    )}
+  >
+    <span className={cn(
+      "text-lg md:text-2xl font-black z-10",
+      selectedCategory === '' ? "text-white" : "text-slate-600 group-hover:text-store"
+    )}>الكل</span>
+    <div className="absolute inset-0 opacity-10 bg-gradient-to-br from-white to-transparent"></div>
+  </div>
+  
+  {/* النص السفلي المعدل */}
+  <span className={cn(
+    "mt-4 font-bold text-sm md:text-xl transition-colors tracking-wide text-center min-h-[3rem] flex items-start justify-center", // أضفنا min-h لتوحيد السطر
+    selectedCategory === '' ? "text-store" : "text-slate-500 group-hover:text-slate-900"
+  )}>
+   كل المنتجات
+  </span>
+</button>
 
           {isLoading ? (
             [1, 2, 3].map((i) => (

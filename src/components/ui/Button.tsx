@@ -10,11 +10,14 @@ export interface ButtonProps
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = 'primary', size = 'md', isLoading, children, disabled, ...props }, ref) => {
+    
+    // التعديل هنا: استبدال الـ rose بـ store لربطها بالـ Config
     const variants = {
-      primary: 'bg-rose-600 text-white hover:bg-rose-700 shadow-xl shadow-rose-200/50 active:scale-95',
+      primary: 'bg-store text-white hover:bg-store-dark shadow-xl shadow-store/20 active:scale-95',
       secondary: 'bg-slate-100 text-slate-900 hover:bg-slate-200 active:scale-95',
       outline: 'border-2 border-slate-100 bg-transparent hover:bg-slate-50 text-slate-700 hover:border-slate-200 active:scale-95',
       ghost: 'bg-transparent hover:bg-slate-50 text-slate-600 active:scale-95',
+      // سبت الـ danger زي ما هي عشان لو حبيتي تستخدميها للتنبيه باللون الأحمر
       danger: 'bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white active:scale-95 shadow-sm',
     };
 
@@ -28,7 +31,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         className={cn(
-          'inline-flex items-center justify-center transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/20 disabled:pointer-events-none disabled:opacity-50 tracking-tight cursor-pointer',
+          // التعديل هنا: تغيير لون الـ focus ring ليتناسب مع المتجر
+          'inline-flex items-center justify-center transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-store/20 disabled:pointer-events-none disabled:opacity-50 tracking-tight cursor-pointer',
           variants[variant],
           sizes[size],
           className
@@ -45,6 +49,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     );
   }
 );
+
 Button.displayName = 'Button';
 
 export { Button };

@@ -3,8 +3,16 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-// تأكدي إن الأيقونات دي بس هي اللي مستوردة عشان ميبقاش فيه Error
-import { Mail, Phone, MapPin, Facebook, Instagram, MessageCircle, Share2 } from 'lucide-react';
+// استيراد الأيقونات من react-icons (Font Awesome)
+import { 
+  FaFacebook, 
+  FaInstagram, 
+  FaWhatsapp, 
+  FaPhoneAlt, 
+  FaMapMarkerAlt,
+  FaShareAlt,
+  FaEnvelope 
+} from 'react-icons/fa';
 
 export function Footer() {
   return (
@@ -17,7 +25,7 @@ export function Footer() {
             <Link href="/" className="flex items-center group w-fit">
               <div className="relative w-14 h-14 overflow-hidden rounded-full border-2 border-store-muted group-hover:border-store transition-colors shadow-sm">
                 <Image
-                  src="/logo/logo.jpeg"
+                  src="/logo/logo.webp"
                   alt="Logo"
                   fill
                   className="object-cover"
@@ -36,7 +44,7 @@ export function Footer() {
               <Link href="/#about" className="text-store-gold hover:underline mr-1 font-bold">اقرأ المزيد...</Link>
             </p>
             
-            {/* السوشيال ميديا - تم تنظيفها تماماً وإصلاح السينتاكس وأحجام الأهداف */}
+            {/* السوشيال ميديا باستخدام react-icons */}
             <div className="flex gap-3">
               <a 
                 href="https://www.facebook.com/share/1AtoCKMpRZ/?mibextid=wwXIfr" 
@@ -45,7 +53,7 @@ export function Footer() {
                 aria-label="تابعنا على فيسبوك"
                 className="w-12 h-12 rounded-full border border-neutral-200 bg-neutral-50 flex items-center justify-center text-store hover:bg-store hover:text-white transition-all duration-300 shadow-sm"
               >
-                <Facebook size={20} />
+                <FaFacebook size={20} />
               </a>
               <a 
                 href="https://www.instagram.com/herodex.pharma?igsh=bjlyMTkybHU3d3Yw&utm_source=qr" 
@@ -54,15 +62,14 @@ export function Footer() {
                 aria-label="تابعنا على انستجرام"
                 className="w-12 h-12 rounded-full border border-neutral-200 bg-neutral-50 flex items-center justify-center text-store hover:bg-store hover:text-white transition-all duration-300 shadow-sm"
               >
-                <Instagram size={20} />
+                <FaInstagram size={20} />
               </a>
-              {/* أيقونة مؤقتة للتيك توك */}
               <a 
                 href="#" 
-                aria-label="تابعنا على تيك توك"
+                aria-label="مشاركة"
                 className="w-12 h-12 rounded-full border border-neutral-200 bg-neutral-50 flex items-center justify-center text-store hover:bg-store hover:text-white transition-all duration-300 shadow-sm"
               >
-                <Share2 size={20} />
+                <FaShareAlt size={20} />
               </a>
               <a 
                 href="https://wa.me/201101546900" 
@@ -71,12 +78,12 @@ export function Footer() {
                 aria-label="تواصل معنا عبر واتساب"
                 className="w-12 h-12 rounded-full border border-neutral-200 bg-neutral-50 flex items-center justify-center text-store hover:bg-store hover:text-white transition-all duration-300 shadow-sm"
               >
-                <MessageCircle size={20} />
+                <FaWhatsapp size={20} />
               </a>
             </div> 
           </div>
 
-          {/* باقي الأعمدة (روابط سريعة وتواصل) كما هي تماماً في تصميمك الأصلي */}
+          {/* روابط سريعة */}
           <div className="lg:justify-self-center">
             <h3 className="text-lg font-bold text-store-black mb-6 border-r-4 border-store-gold pr-3">روابط سريعة</h3>
             <ul className="space-y-4">
@@ -96,15 +103,16 @@ export function Footer() {
             </ul>
           </div>
 
+          {/* معلومات التواصل */}
           <div className="lg:justify-self-end">
             <h3 className="text-lg font-bold text-store-black mb-6 border-r-4 border-store-gold pr-3">معلومات التواصل</h3>
             <ul className="space-y-4">
               <li className="flex items-start text-neutral-600 text-sm">
-                <MapPin size={18} className="ml-3 text-store shrink-0 mt-0.5" />
+                <FaMapMarkerAlt size={18} className="ml-3 text-store shrink-0 mt-0.5" />
                 <span>القاهرة، جمهورية مصر العربية</span>
               </li>
               <li className="flex items-center text-neutral-600 text-sm text-left font-bold" dir="ltr">
-                <Phone size={18} className="ml-3 text-store shrink-0" />
+                <FaPhoneAlt size={18} className="ml-3 text-store shrink-0" />
                 +20 110 154 6900
               </li>
             </ul>

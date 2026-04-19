@@ -65,7 +65,7 @@ export function Navbar() {
           <Link href="/" className="flex items-center group transition-transform duration-300 hover:scale-105">
             <div className="relative w-16 h-16 overflow-hidden rounded-full border-2 border-store-muted group-hover:border-store-gold/60 transition-colors shadow-sm">
               <Image 
-                src="/logo/logo.jpeg" 
+                src="/logo/logo.webp" 
                 alt="Logo" 
                 fill 
                 className="object-cover"
