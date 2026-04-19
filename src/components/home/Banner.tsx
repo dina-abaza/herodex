@@ -8,19 +8,19 @@ import { ChevronRight, ChevronLeft } from 'lucide-react';
 
 const bannerImages = [
   {
-    desktop: '/banars/banarsdesk/panardesc1.webp',
+    desktop: '/banars/banarsdesc/panardesc1.webp',
     mobile: '/banars/banarsmob/panarmob1.webp'
   },
   {
-    desktop: '/banars/banarsdesk/panardesc2.webp',
+    desktop: '/banars/banarsdesc/panardesc2.webp',
     mobile: '/banars/banarsmob/panarmob2.webp'
   },
   {
-    desktop: '/banars/banarsdesk/panardesc3.webp',
+    desktop: '/banars/banarsdesc/panardesc3.webp',
     mobile: '/banars/banarsmob/panarmob3.webp'
   },
   {
-    desktop: '/banars/banarsdesk/panardesc4.webp',
+    desktop: '/banars/banarsdesc/panardesc4.webp',
     mobile: '/banars/banarsmob/panarmob4.webp'
   }
 ];

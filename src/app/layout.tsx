@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { Cairo, Tajawal } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/providers";
+import {WhatsAppFloat} from "@/components/home/WhatsAppFloat";
 
 const cairo = Cairo({
   variable: "--font-cairo",
@@ -62,7 +63,9 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col font-cairo text-[115%] leading-[1.6]">
         <Suspense fallback={null}>
-          <Providers>{children}</Providers>
+          <Providers>{children}
+            <WhatsAppFloat/>
+          </Providers>
         </Suspense>
       </body>
     </html>
