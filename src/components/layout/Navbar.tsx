@@ -97,6 +97,7 @@ export function Navbar() {
           <div className="hidden lg:flex items-center space-x-4 space-x-reverse">
             <Link 
               href="/cart" 
+              aria-label={`سلة التسوق (${cartItemsCount} منتجات)`}
               className="p-2 text-gray-500 hover:text-store hover:bg-store-muted rounded-full transition-all duration-200 relative"
             >
               <ShoppingCart size={22} />
@@ -113,6 +114,7 @@ export function Navbar() {
               <div className="flex items-center space-x-2 space-x-reverse">
                 <Link 
                   href={user.role === 'admin' ? '/admin/dashboard' : '/'} 
+                  aria-label={user.role === 'admin' ? 'لوحة تحكم المسؤول' : 'الملف الشخصي'}
                   className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-store-muted text-store-dark hover:bg-store-muted/80 transition-colors group border border-neutral-200"
                 >
                   <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center overflow-hidden border border-neutral-200">
@@ -123,6 +125,7 @@ export function Navbar() {
                 </Link>
                 <Link 
                   href="/my-orders" 
+                  aria-label="عرض طلباتي"
                   className="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-gray-100 transition-all duration-200 group border border-transparent hover:border-neutral-200"
                   title="طلباتي"
                 >
@@ -134,6 +137,7 @@ export function Navbar() {
 
                 <button 
                   onClick={handleLogout}
+                  aria-label="تسجيل الخروج"
                   className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-all duration-200"
                   title="تسجيل الخروج"
                 >
@@ -146,13 +150,18 @@ export function Navbar() {
                   <Button 
                     size="sm" 
                     variant="outline"
+                    aria-label="دخول إلى الحساب"
                     className="border-gray-200 hover:border-store/30 hover:text-store font-bold"
                   >
                     تسجيل دخول
                   </Button>
                 </Link>
                 <Link href="/register">
-                  <Button size="sm" className="bg-store hover:bg-store-dark font-bold shadow-md text-white border-0">
+                  <Button 
+                    size="sm" 
+                    aria-label="إنشاء حساب جديد"
+                    className="bg-store hover:bg-store-dark font-bold shadow-md text-white border-0"
+                  >
                     إنشاء حساب
                   </Button>
                 </Link>
@@ -165,9 +174,10 @@ export function Navbar() {
           <div className="lg:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-1 text-gray-600 hover:text-store hover:bg-store-muted rounded-lg transition-all"
+              aria-label={isOpen ? "إغلاق القائمة" : "فتح القائمة"}
+              className="p-2 text-gray-600 hover:text-store hover:bg-store-muted rounded-lg transition-all"
             >
-              {isOpen ? <X size={22} /> : <Menu size={22} />}
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>

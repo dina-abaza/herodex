@@ -91,44 +91,39 @@ export function ProductCard({ product }: ProductCardProps) {
 
             {/* Description */}
             <div className="mt-2">
-              <p className="text-gray-400 text-xs line-clamp-2 leading-relaxed font-medium">
+              <p className="text-gray-600 text-xs line-clamp-2 leading-relaxed font-bold">
                 {product.description}
               </p>
               <button
                 onClick={handleOpenModal}
+                aria-label={`عرض تفاصيل المنتج: ${product.name}`}
                 className="text-store-gold text-[10px] font-black mt-1 hover:underline decoration-2 underline-offset-4"
               >
-                اعرض المزيد...
+                قراءة المزيد...
               </button>
             </div>
           </div>
 
-          {/* Price and Action Section */}
-          <div className="flex items-center justify-between pt-4 border-t border-gray-50">
+          {/* Price & Action */}
+          <div className="flex items-center justify-between pt-2 border-t border-gray-50">
             <div className="flex flex-col">
-              <span className="text-[10px] text-gray-400 line-through decoration-store-gold/30">
-                {(product.price * 1.2).toFixed(2)} ج.م
+              <span className="text-xs text-gray-400 font-bold line-through ml-1 leading-none mb-1">
+                {(product.price + 100).toLocaleString()} ج.م
               </span>
-              <div className="flex items-baseline gap-1">
-                <span className="text-xl font-black text-store tracking-tighter">
-                  {product.price.toFixed(2)}
-                </span>
-                <span className="text-[10px] font-bold text-store">ج.م</span>
-              </div>
+              <span className="text-xl font-black text-store-dark tracking-tight">
+                {product.price?.toLocaleString()} <span className="text-xs font-bold text-gray-500 mr-0.5">ج.م</span>
+              </span>
             </div>
 
-            <button
-              className="group/cart relative w-12 h-12 rounded-2xl flex items-center justify-center bg-store hover:bg-store-dark text-white shadow-lg shadow-store/20 transition-all duration-300 active:scale-90"
+            <Button
+              size="icon"
+              className="rounded-2xl w-12 h-12 shadow-lg shadow-store/10"
               onClick={handleAddToCart}
-              disabled={isLoading}
-              title="أضيفي للسلة"
+              isLoading={isLoading}
+              aria-label={`إضافة ${product.name} إلى سلة المشتريات`}
             >
-              {isLoading ? (
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              ) : (
-                <ShoppingCart size={22} className="transition-transform duration-300 group-hover/cart:scale-110" />
-              )}
-            </button>
+              <ShoppingCart size={20} />
+            </Button>
           </div>
         </div>
       </div>

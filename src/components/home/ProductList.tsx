@@ -69,6 +69,7 @@ export function ProductList({ selectedCategory, onCategoryChange }: ProductListP
                   variant="outline"
                   disabled={page === 1}
                   onClick={() => setPage(page - 1)}
+                  aria-label="الصفحة السابقة"
                   className="rounded-full w-12 h-12 p-0 flex items-center justify-center"
                 >
                   <ChevronRight size={20} />
@@ -78,6 +79,7 @@ export function ProductList({ selectedCategory, onCategoryChange }: ProductListP
                     <button
                       key={i}
                       onClick={() => setPage(i + 1)}
+                      aria-label={`انتقل إلى الصفحة ${i + 1}`}
                       className={`w-10 h-10 rounded-full text-sm font-bold transition-all ${
                         page === i + 1 
                           ? 'bg-store text-white shadow-md' 
@@ -92,6 +94,7 @@ export function ProductList({ selectedCategory, onCategoryChange }: ProductListP
                   variant="outline"
                   disabled={page === totalPages}
                   onClick={() => setPage(page + 1)}
+                  aria-label="الصفحة التالية"
                   className="rounded-full w-12 h-12 p-0 flex items-center justify-center"
                 >
                   <ChevronLeft size={20} />

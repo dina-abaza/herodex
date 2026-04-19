@@ -6,31 +6,46 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Banner } from '@/components/home/Banner';
 import { Footer } from '@/components/layout/Footer';
 
-// Components تحت الفولد — تُحمَّل بـ dynamic import لتأخير hydration
+// Components تحت الفولد — تُحمَّل بـ dynamic import لتأخير hydration مع توفير skeleton لمنع الـ CLS
 const CategoryFilter = dynamic(
   () => import('@/components/home/CategoryFilter').then((m) => m.CategoryFilter),
-  { ssr: false }
+  { 
+    ssr: true,
+    loading: () => <div className="py-20 bg-white h-[350px] md:h-[450px] animate-pulse" />
+  }
 );
 
 const ProductList = dynamic(
   () => import('@/components/home/ProductList').then((m) => m.ProductList),
-  { ssr: false }
+  { 
+    ssr: true,
+    loading: () => <div className="py-16 bg-gray-50/80 h-[800px] md:h-[1200px] animate-pulse" />
+  }
 );
 
 const AboutSection = dynamic(
   () => import('@/components/home/AboutSection').then((m) => m.AboutSection),
-  { ssr: false }
+  { 
+    ssr: true,
+    loading: () => <div className="py-24 bg-white h-[500px] md:h-[700px] animate-pulse" />
+  }
 );
 
-// إضافة الكومبوننت الجديد بـ dynamic import
+// إضافة الكومبوننت الجديد بـ dynamic import مع skeleton
 const QuestionSection = dynamic(
   () => import('@/components/home/questionSection').then((m) => m.QuestionSection),
-  { ssr: false }
+  { 
+    ssr: true,
+    loading: () => <div className="py-20 bg-white h-[600px] md:h-[900px] animate-pulse" />
+  }
 );
 
 const ReviewsSection = dynamic(
   () => import('@/components/home/ReviewsSection').then((m) => m.ReviewsSection),
-  { ssr: false }
+  { 
+    ssr: true,
+    loading: () => <div className="py-24 bg-gray-50 h-[400px] md:h-[600px] animate-pulse" />
+  }
 );
 
 export function HomeClient() {

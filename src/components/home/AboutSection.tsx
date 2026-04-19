@@ -70,7 +70,7 @@ export function AboutSection() {
 
               <p
                 ref={(el) => addRef(el, 2)}
-                className="reveal animation-delay-200 text-lg md:text-2xl text-gray-700 font-bold leading-relaxed max-w-3xl"
+                className="reveal animation-delay-200 text-lg md:text-2xl text-gray-900 font-bold leading-relaxed max-w-3xl"
               >
                 منتجات طبية مصرية بمواد طبيعية ١٠٠٪، خالية من المينوكسيديل ومعززة بالتركيبة الهندية المتطورة والكافيين المركز، لنتائج حقيقية في إنبات الشعر ومعالجة التساقط في أقل من ٣٠ يوم.
               </p>
