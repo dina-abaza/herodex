@@ -11,6 +11,7 @@ import { setCredentials } from '@/store/slices/authSlice';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { UserPlus } from 'lucide-react';
+import Link from 'next/link';
 
 const registerSchema = z
   .object({
