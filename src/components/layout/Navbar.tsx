@@ -6,19 +6,16 @@ import Image from 'next/image';
 import { ShoppingCart, User, Menu, X, LogOut, Package } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store';
-import { apiSlice } from '@/store/api/apiSlice';
 import { logout } from '@/store/slices/authSlice';
 import { useGetCartQuery } from '@/store/api/cartApiSlice';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/utils/cn';
-import { useRouter, usePathname } from 'next/navigation';
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
   const dispatch = useDispatch();
-  const pathname = usePathname();
   const { user } = useSelector((state: RootState) => state.auth);
   const { data: cartData } = useGetCartQuery(undefined, { skip: !user });
   
@@ -40,29 +37,9 @@ export function Navbar() {
 
   const cartItemsCount = cartData?.data?.items?.reduce((acc: number, item: any) => acc + item.quantity, 0) || 0;
 
-  const handleHashClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    // إذا كان الرابط يحتوي على hash
-    if (href.includes('#')) {
-      const [path, hash] = href.split('#');
-      
-      // إذا كنا في نفس الصفحة الرئيسية (أو المسار متطابق)
-      if (pathname === path || (pathname === '/' && path === '')) {
-        const element = document.getElementById(hash);
-        if (element) {
-          e.preventDefault();
-          element.scrollIntoView({ behavior: 'smooth' });
-          window.history.pushState(null, '', href);
-          setIsOpen(false);
-        }
-      }
-    }
-  };
-
   const handleLogout = () => {
     console.log("User logging out...");
     dispatch(logout());
-    // مسح كاش الـ API بالكامل عند تسجيل الخروج لضمان عدم بقاء بيانات السلة القديمة
-    dispatch(apiSlice.util.resetApiState());
   };
 
   const navLinks = [
@@ -108,7 +85,6 @@ export function Navbar() {
               <Link 
                 key={link.name}
                 href={link.href} 
-                onClick={(e: any) => handleHashClick(e, link.href)}
                 className="px-4 py-2 text-gray-600 hover:text-store font-bold transition-all duration-200 relative group"
               >
                 {link.name}
@@ -198,83 +174,78 @@ export function Navbar() {
       </div>
 
       {/* Mobile Menu */}
-      <div 
-        className={cn(
-          'lg:hidden transition-all duration-300 ease-in-out bg-white border-t border-gray-50 shadow-xl overflow-y-auto',
-          isOpen ? 'max-h-[85vh] opacity-100 py-6' : 'max-h-0 opacity-0 py-0 invisible'
-        )}
-      >
-        <div className="px-4 space-y-2 pb-10">
-          {navLinks.map((link) => (
-            <Link 
-              key={link.name}
-              href={link.href} 
-              onClick={(e: any) => {
-                handleHashClick(e, link.href);
-                setIsOpen(false);
-              }}
-              className="block px-4 py-3 text-gray-600 hover:text-store hover:bg-store-muted rounded-xl font-bold transition-all"
-            >
-              {link.name}
-            </Link>
-          ))}
-          
-          <div className="pt-4 mt-4 border-t border-gray-100">
-            <Link 
-              href="/cart" 
-              onClick={() => setIsOpen(false)}
-              className="flex items-center justify-between px-4 py-3 bg-store-muted rounded-xl text-store-dark font-bold border border-neutral-200"
-            >
-              <div className="flex items-center">
-                <ShoppingCart size={22} className="ml-3" />
-                <span>السلة</span>
-              </div>
-              <span className="bg-store text-white text-xs px-2 py-1 rounded-full">{cartItemsCount}</span>
-            </Link>
+      {isOpen && (
+        <div className="lg:hidden bg-white border-t border-gray-100">
+          <div className="px-4 space-y-2 pb-10 pt-4">
+            {navLinks.map((link) => (
+              <Link 
+                key={link.name}
+                href={link.href} 
+                onClick={() => setIsOpen(false)}
+                className="block px-4 py-3 text-gray-600 hover:text-store hover:bg-store-muted rounded-xl font-bold transition-all"
+              >
+                {link.name}
+              </Link>
+            ))}
             
-            <div className="mt-4 flex flex-col space-y-2">
-              {mounted && user ? (
-                <>
-                  <Link 
-                    href={user.role === 'admin' ? '/admin/dashboard' : '/'}
-                    className="flex items-center px-4 py-3 text-gray-600 font-bold"
-                  >
-                    <User size={20} className="ml-3" />
-                    <span>{getShortName(user.name)}</span>
-                  </Link>
-                  <Link 
-                    href="/my-orders"
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center px-4 py-3 text-gray-600 font-bold"
-                  >
-                    <Package size={20} className="ml-3" />
-                    <span>طلباتي</span>
-                  </Link>
-                  <button 
-                    onClick={() => {
-                      handleLogout();
-                      setIsOpen(false);
-                    }} 
-                    className="flex items-center px-4 py-3 text-red-600 font-bold"
-                  >
-                    <LogOut size={20} className="ml-3" />
-                    <span>تسجيل الخروج</span>
-                  </button>
-                </>
-              ) : mounted ? (
-                <div className="grid grid-cols-2 gap-3 px-2">
-                  <Link href="/login" className="w-full">
-                    <Button variant="outline" className="w-full">تسجيل دخول</Button>
-                  </Link>
-                  <Link href="/register" className="w-full">
-                    <Button className="w-full bg-store hover:bg-store-dark text-white border-0">إنشاء حساب</Button>
-                  </Link>
+            <div className="pt-4 mt-4 border-t border-gray-100">
+              <Link 
+                href="/cart" 
+                onClick={() => setIsOpen(false)}
+                className="flex items-center justify-between px-4 py-3 bg-store-muted rounded-xl text-store-dark font-bold border border-neutral-200"
+              >
+                <div className="flex items-center">
+                  <ShoppingCart size={22} className="ml-3" />
+                  <span>السلة</span>
                 </div>
-              ) : null}
+                <span className="bg-store text-white text-xs px-2 py-1 rounded-full">{cartItemsCount}</span>
+              </Link>
+              
+              <div className="mt-4 flex flex-col space-y-2">
+                {mounted && user ? (
+                  <>
+                    <Link 
+                      href={user.role === 'admin' ? '/admin/dashboard' : '/'}
+                      className="flex items-center px-4 py-3 text-gray-600 font-bold"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <User size={20} className="ml-3" />
+                      <span>{getShortName(user.name)}</span>
+                    </Link>
+                    <Link 
+                      href="/my-orders"
+                      onClick={() => setIsOpen(false)}
+                      className="flex items-center px-4 py-3 text-gray-600 font-bold"
+                    >
+                      <Package size={20} className="ml-3" />
+                      <span>طلباتي</span>
+                    </Link>
+                    <button 
+                      onClick={() => {
+                        handleLogout();
+                        setIsOpen(false);
+                      }} 
+                      className="flex items-center px-4 py-3 text-red-600 font-bold"
+                    >
+                      <LogOut size={20} className="ml-3" />
+                      <span>تسجيل الخروج</span>
+                    </button>
+                  </>
+                ) : mounted ? (
+                  <div className="grid grid-cols-2 gap-3 px-2">
+                    <Link href="/login" onClick={() => setIsOpen(false)}>
+                      <Button variant="outline" className="w-full">تسجيل دخول</Button>
+                    </Link>
+                    <Link href="/register" onClick={() => setIsOpen(false)}>
+                      <Button className="w-full bg-store hover:bg-store-dark text-white border-0">إنشاء حساب</Button>
+                    </Link>
+                  </div>
+                ) : null}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </nav>
   );
 }
