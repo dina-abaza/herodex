@@ -13,7 +13,7 @@ export function QuestionSection() {
           <div className="w-full md:sticky md:top-24">
             <div className="relative w-full aspect-[9/16] md:aspect-[9/20] max-h-[900px] rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white bg-white group">
               <Image 
-                src="/questionImage.jpeg" 
+                src="/questionImage.webp" 
                 alt="مميزات المنتج"
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-105"

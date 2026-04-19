@@ -17,7 +17,7 @@ export function Footer() {
             <Link href="/" className="flex items-center group w-fit">
               <div className="relative w-14 h-14 overflow-hidden rounded-full border-2 border-store-muted group-hover:border-store transition-colors shadow-sm">
                 <Image
-                  src="/logo/logo.jpeg"
+                  src="/logo/logo.webp"
                   alt="Logo"
                   fill
                   className="object-cover"
