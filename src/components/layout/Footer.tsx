@@ -36,20 +36,42 @@ export function Footer() {
               <Link href="/#about" className="text-store-gold hover:underline mr-1 font-bold">اقرأ المزيد...</Link>
             </p>
             
-            {/* السوشيال ميديا - تم تنظيفها تماماً */}
+            {/* السوشيال ميديا - تم تنظيفها تماماً وإصلاح السينتاكس وأحجام الأهداف */}
             <div className="flex gap-3">
-              <a href="https://www.facebook.com/share/1AtoCKMpRZ/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full border border-neutral-200 bg-neutral-50 flex items-center justify-center text-store hover:bg-store hover:text-white transition-all duration-300">
-                <Facebook size={18} />
+              <a 
+                href="https://www.facebook.com/share/1AtoCKMpRZ/?mibextid=wwXIfr" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                aria-label="تابعنا على فيسبوك"
+                className="w-12 h-12 rounded-full border border-neutral-200 bg-neutral-50 flex items-center justify-center text-store hover:bg-store hover:text-white transition-all duration-300 shadow-sm"
+              >
+                <Facebook size={20} />
               </a>
-              <a href="https://www.instagram.com/herodex.pharma?igsh=bjlyMTkybHU3d3Yw&utm_source=qr" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full border border-neutral-200 bg-neutral-50 flex items-center justify-center text-store hover:bg-store hover:text-white transition-all duration-300">
-                <Instagram size={18} />
+              <a 
+                href="https://www.instagram.com/herodex.pharma?igsh=bjlyMTkybHU3d3Yw&utm_source=qr" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                aria-label="تابعنا على انستجرام"
+                className="w-12 h-12 rounded-full border border-neutral-200 bg-neutral-50 flex items-center justify-center text-store hover:bg-store hover:text-white transition-all duration-300 shadow-sm"
+              >
+                <Instagram size={20} />
               </a>
-              {/* أيقونة مؤقتة للتيك توك عشان الكود ميضربش */}
-              <a href="#" className="w-10 h-10 rounded-full border border-neutral-200 bg-neutral-50 flex items-center justify-center text-store hover:bg-store hover:text-white transition-all duration-300">
-                <Share2 size={18} />
+              {/* أيقونة مؤقتة للتيك توك */}
+              <a 
+                href="#" 
+                aria-label="تابعنا على تيك توك"
+                className="w-12 h-12 rounded-full border border-neutral-200 bg-neutral-50 flex items-center justify-center text-store hover:bg-store hover:text-white transition-all duration-300 shadow-sm"
+              >
+                <Share2 size={20} />
               </a>
-              <a href="https://wa.me/201101546900" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full border border-neutral-200 bg-neutral-50 flex items-center justify-center text-store hover:bg-store hover:text-white transition-all duration-300">
-                <MessageCircle size={18} />
+              <a 
+                href="https://wa.me/201101546900" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                aria-label="تواصل معنا عبر واتساب"
+                className="w-12 h-12 rounded-full border border-neutral-200 bg-neutral-50 flex items-center justify-center text-store hover:bg-store hover:text-white transition-all duration-300 shadow-sm"
+              >
+                <MessageCircle size={20} />
               </a>
             </div> 
           </div>

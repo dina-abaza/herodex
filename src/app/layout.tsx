@@ -7,13 +7,13 @@ import { Providers } from "@/providers";
 const cairo = Cairo({
   variable: "--font-cairo",
   subsets: ["arabic", "latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  weight: ["400", "700", "900"],
 });
 
 const tajawal = Tajawal({
   variable: "--font-tajawal",
   subsets: ["arabic", "latin"],
-  weight: ["300", "400", "500", "700", "800", "900"],
+  weight: ["400", "700", "900"],
 });
 
 // التعديل هنا فقط في الـ Metadata لتحسين الـ SEO
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
+  maximumScale: 5,
   themeColor: "#117a5c",
 };
 
