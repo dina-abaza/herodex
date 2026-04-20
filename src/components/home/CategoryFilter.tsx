@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { useGetCategoriesQuery } from '@/store/api/categoryApiSlice';
 import { cn } from '@/utils/cn';
+import LoadingSpinner from '@/components/ui/loading';
 
 interface CategoryFilterProps {
   selectedCategory: string;
@@ -15,57 +16,67 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
   const categories = categoriesData?.data || [];
 
   return (
-    <div id="categories" className="py-20 bg-gray-50/50"> {/* خلفية هادئة لإبراز الكروت البيضاء */}
+    <div id="categories" className="py-20 bg-gray-50/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl font-black text-slate-900 tracking-tight">تسوق من الأقسام</h2>
-          <div className="w-20 h-1.5 bg-store mx-auto mt-4 rounded-full"></div>
+        
+        {/* القسم العلوي المعدل - Header */}
+        <div className="text-center mb-16 space-y-3">
+          <h2 className="text-4xl md:text-5xl font-black tracking-tight">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-store to-slate-900">
+              تسوق من الأقسام
+            </span>
+          </h2>
+          
+          <p className="text-slate-500 text-lg md:text-xl font-bold italic opacity-80">
+            اكتشفي مجموعتنا المختارة بعناية لتناسب جمالك
+          </p>
+
+          {/* الخط المتدرج المميز */}
+          <div className="relative w-28 h-1.5 mx-auto mt-6">
+            <div className="absolute inset-0 bg-store rounded-full"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-pulse"></div>
+          </div>
         </div>
 
-        <div className="flex flex-nowrap md:flex-wrap overflow-x-auto md:overflow-visible justify-start md:justify-center gap-6 md:gap-10 pb-4 md:pb-0 no-scrollbar items-stretch ">
-          {/* قسم "الكل" بتصميم بروفيشنال */}
-       {/* الكلاسات المعدلة للـ Button */}
-<button
-  onClick={() => onSelectCategory('')}
-  className="w-[45%] md:w-[28%] lg:w-[20%] flex flex-col items-center group transition-all duration-500 pt-2" // أضفنا pt-2 لإعطاء مساحة للـ translate فلا يظهر "مأكول"
->
-  <div 
-    className={cn(
-      "w-full aspect-[4/3] rounded-3xl border-2 flex items-center justify-center transition-all duration-500 relative overflow-hidden",
-      selectedCategory === '' 
-        ? "bg-store border-store shadow-xl shadow-store/20 -translate-y-2" 
-        : "bg-white border-transparent shadow-md hover:shadow-lg hover:-translate-y-1"
-    )}
-  >
-    <span className={cn(
-      "text-lg md:text-2xl font-black z-10",
-      selectedCategory === '' ? "text-white" : "text-slate-600 group-hover:text-store"
-    )}>الكل</span>
-    <div className="absolute inset-0 opacity-10 bg-gradient-to-br from-white to-transparent"></div>
-  </div>
-  
-  {/* النص السفلي المعدل */}
-  <span className={cn(
-    "mt-4 font-bold text-sm md:text-xl transition-colors tracking-wide text-center min-h-[3rem] flex items-start justify-center", // أضفنا min-h لتوحيد السطر
-    selectedCategory === '' ? "text-store" : "text-slate-500 group-hover:text-slate-900"
-  )}>
-   كل المنتجات
-  </span>
-</button>
+        <div className="flex flex-nowrap md:flex-wrap overflow-x-auto md:overflow-visible justify-start md:justify-center gap-6 md:gap-10 pb-4 md:pb-0 no-scrollbar items-stretch">
+          {/* زرار "الكل" */}
+          <button
+            onClick={() => onSelectCategory('')}
+            className="w-[45%] md:w-[28%] lg:w-[20%] flex flex-col items-center group transition-all duration-500 pt-2"
+          >
+            <div 
+              className={cn(
+                "w-full aspect-[4/3] rounded-3xl border-2 flex items-center justify-center transition-all duration-500 relative overflow-hidden",
+                selectedCategory === '' 
+                  ? "bg-store border-store shadow-xl shadow-store/20 -translate-y-2" 
+                  : "bg-white border-transparent shadow-md hover:shadow-lg hover:-translate-y-1"
+              )}
+            >
+              <span className={cn(
+                "text-lg md:text-2xl font-black z-10",
+                selectedCategory === '' ? "text-white" : "text-slate-600 group-hover:text-store"
+              )}>الكل</span>
+              <div className="absolute inset-0 opacity-10 bg-gradient-to-br from-white to-transparent"></div>
+            </div>
+            
+            <span className={cn(
+              "mt-4 font-bold text-sm md:text-xl transition-colors tracking-wide text-center min-h-[3rem] flex items-start justify-center",
+              selectedCategory === '' ? "text-store" : "text-slate-500 group-hover:text-slate-900"
+            )}>
+              كل المنتجات
+            </span>
+          </button>
 
           {isLoading ? (
-            [1, 2, 3].map((i) => (
-              <div key={i} className="w-[45%] md:w-[28%] lg:w-[20%] flex flex-col items-center animate-pulse">
-                <div className="w-full aspect-[4/3] rounded-3xl bg-gray-200"></div>
-                <div className="w-2/3 h-5 bg-gray-200 mt-4 rounded-full"></div>
-              </div>
-            ))
+            <div className="w-full flex justify-center py-16">
+              <LoadingSpinner />
+            </div>
           ) : (
             categories.map((category: any) => (
               <button
                 key={category._id}
                 onClick={() => onSelectCategory(category._id)}
-                className="w-[45%] md:w-[28%] lg:w-[20%] flex flex-col items-center group transition-all duration-500"
+                className="w-[45%] md:w-[28%] lg:w-[20%] flex flex-col items-center group transition-all duration-500 pt-2"
               >
                 <div 
                   className={cn(
@@ -81,7 +92,7 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
                       alt={category.name} 
                       fill
                       className={cn(
-                        "object-cover transition-transform duration-1000 group-hover:scale-110", // object-cover تجعل الصورة تملأ الفريم
+                        "object-cover transition-transform duration-1000 group-hover:scale-110",
                         selectedCategory === category._id ? "scale-110" : "scale-100"
                       )}
                       sizes="(max-width: 768px) 50vw, 25vw"
@@ -92,11 +103,10 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
                       {category.name.charAt(0)}
                     </div>
                   )}
-                  {/* Overlay خفيف لجعل الصور تبدو متناسقة */}
                   <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
                 </div>
                 <span className={cn(
-                  "mt-4 font-bold text-xl transition-colors tracking-wide text-center",
+                  "mt-4 font-bold text-sm md:text-xl transition-colors tracking-wide text-center min-h-[3rem] flex items-start justify-center",
                   selectedCategory === category._id ? "text-store" : "text-slate-500 group-hover:text-slate-900"
                 )}>{category.name}</span>
               </button>
