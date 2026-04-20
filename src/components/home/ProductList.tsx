@@ -5,7 +5,7 @@ import { ProductCard } from './ProductCard';
 import { useGetProductsQuery } from '@/store/api/productApiSlice';
 import { Button } from '@/components/ui/Button';
 import { ChevronLeft, ChevronRight, PackageSearch } from 'lucide-react';
-
+import LoadingSpinner from '@/components/ui/loading';
 interface ProductListProps {
   selectedCategory: string;
   onCategoryChange: (id: string) => void;
@@ -50,11 +50,7 @@ export function ProductList({ selectedCategory, onCategoryChange }: ProductListP
         </div>
 
         {isLoading || isFetching ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-              <div key={i} className="h-[400px] bg-white animate-pulse rounded-2xl border border-gray-100"></div>
-            ))}
-          </div>
+         <LoadingSpinner />
         ) : products.length > 0 ? (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
