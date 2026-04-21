@@ -16,7 +16,7 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
   const categories = categoriesData?.data || [];
 
   return (
-    <div id="categories" className="py-20 bg-gray-50/50">
+    <div id="categories" className="py-12 md:py-20 bg-gray-50/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* القسم العلوي المعدل - Header */}
@@ -38,11 +38,94 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
           </div>
         </div>
 
-        <div className="flex flex-nowrap md:flex-wrap overflow-x-auto md:overflow-visible justify-start md:justify-center gap-6 md:gap-10 pb-4 md:pb-0 no-scrollbar items-stretch">
-          {/* زرار "الكل" */}
+        {/* Mobile Layout (only visible on small screens) */}
+        <div className="flex flex-col md:hidden gap-4 pb-4">
+          {/* Categories first on mobile */}
+          <div className="flex flex-row flex-wrap justify-center gap-2">
+            {isLoading ? (
+              <div className="w-full flex justify-center py-16">
+                <LoadingSpinner />
+              </div>
+            ) : (
+              categories.map((category: any) => (
+                <button
+                  key={category._id}
+                  onClick={() => onSelectCategory(category._id)}
+                  className="w-[48%] flex flex-col items-center group transition-all duration-500 pt-2"
+                >
+                  <div 
+                    className={cn(
+                      "w-full aspect-[4/3] rounded-3xl border-2 overflow-hidden transition-all duration-500 relative shadow-md",
+                      selectedCategory === category._id 
+                        ? "border-store shadow-xl shadow-store/20 -translate-y-2 ring-4 ring-store/10" 
+                        : "border-transparent bg-white hover:shadow-lg hover:-translate-y-1"
+                    )}
+                  >
+                    {category.image ? (
+                      <Image 
+                        src={category.image} 
+                        alt={category.name} 
+                        fill
+                        className={cn(
+                          "object-cover transition-transform duration-1000 group-hover:scale-110",
+                          selectedCategory === category._id ? "scale-110" : "scale-100"
+                        )}
+                        sizes="(max-width: 768px) 50vw"
+                        unoptimized={category.image.startsWith('http')}
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-slate-100 flex items-center justify-center text-slate-400 text-4xl font-bold">
+                        {category.name.charAt(0)}
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
+                  </div>
+                  <span className={cn(
+                    "mt-4 font-bold text-base transition-colors tracking-wide text-center min-h-[3rem] flex items-start justify-center",
+                    selectedCategory === category._id ? "text-store" : "text-slate-500 group-hover:text-slate-900"
+                  )}>{category.name}</span>
+                </button>
+              ))
+            )}
+          </div>
+
+          {/* "الكل" button on mobile, centered below */}
+          <div className="w-full flex justify-center">
+            <button
+              onClick={() => onSelectCategory('')}
+              className="w-[48%] flex flex-col items-center group transition-all duration-500 pt-2"
+            >
+              <div 
+                className={cn(
+                  "w-full aspect-[4/3] rounded-3xl border-2 flex items-center justify-center transition-all duration-500 relative overflow-hidden",
+                  selectedCategory === '' 
+                    ? "bg-store border-store shadow-xl shadow-store/20 -translate-y-2" 
+                    : "bg-white border-transparent shadow-md hover:shadow-lg hover:-translate-y-1"
+                )}
+              >
+                <span className={cn(
+                  "text-xl font-black z-10",
+                  selectedCategory === '' ? "text-white" : "text-slate-600 group-hover:text-store"
+                )}>الكل</span>
+                <div className="absolute inset-0 opacity-10 bg-gradient-to-br from-white to-transparent"></div>
+              </div>
+              
+              <span className={cn(
+                "mt-4 font-bold text-lg transition-colors tracking-wide text-center min-h-[3rem] flex items-start justify-center",
+                selectedCategory === '' ? "text-store" : "text-slate-500 group-hover:text-slate-900"
+              )}>
+                كل المنتجات
+              </span>
+            </button>
+          </div>
+        </div>
+
+        {/* Desktop/Tablet Layout (original, only visible on md and up) */}
+        <div className="hidden md:flex flex-nowrap overflow-x-auto justify-center gap-10 pb-0 no-scrollbar items-stretch">
+          {/* زرار "الكل" FIRST on desktop */}
           <button
             onClick={() => onSelectCategory('')}
-            className="w-[45%] md:w-[28%] lg:w-[20%] flex flex-col items-center group transition-all duration-500 pt-2"
+            className="w-[28%] lg:w-[20%] flex flex-col items-center group transition-all duration-500 pt-2"
           >
             <div 
               className={cn(
@@ -76,7 +159,7 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
               <button
                 key={category._id}
                 onClick={() => onSelectCategory(category._id)}
-                className="w-[45%] md:w-[28%] lg:w-[20%] flex flex-col items-center group transition-all duration-500 pt-2"
+                className="w-[28%] lg:w-[20%] flex flex-col items-center group transition-all duration-500 pt-2"
               >
                 <div 
                   className={cn(
@@ -95,7 +178,7 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
                         "object-cover transition-transform duration-1000 group-hover:scale-110",
                         selectedCategory === category._id ? "scale-110" : "scale-100"
                       )}
-                      sizes="(max-width: 768px) 50vw, 25vw"
+                      sizes="(min-width: 768px) 25vw"
                       unoptimized={category.image.startsWith('http')}
                     />
                   ) : (
