@@ -37,7 +37,10 @@ export function ProductList({
 
   const products = data?.data?.products || (selectedCategory === '' && page === 1 ? initialProducts.products : []);
   const totalPages = data?.data?.pages || (selectedCategory === '' && page === 1 ? initialProducts.pages : 1);
-  const showLoading = (isLoading || isFetching) && products.length === 0;
+  
+  // Only show loading if we don't have data AND we aren't using initialProducts
+  const isInitialLoad = selectedCategory === '' && page === 1 && initialProducts.products.length > 0;
+  const showLoading = (isLoading || isFetching) && !isInitialLoad && products.length === 0;
 
   return (
     <section id="products" className="py-10 md:py-16 bg-gradient-to-b from-gray-50/80 via-store-muted/30 to-gray-50/80">
@@ -68,8 +71,12 @@ export function ProductList({
         ) : products.length > 0 ? (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
-              {products.map((product: any) => (
-                <ProductCard key={product._id} product={product} />
+              {products.map((product: any, index: number) => (
+                <ProductCard 
+                  key={product._id} 
+                  product={product} 
+                  priority={isInitialLoad && index < 4} 
+                />
               ))}
             </div>
 
