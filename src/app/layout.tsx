@@ -62,6 +62,7 @@ export default function RootLayout({
       lang="ar"
       dir="rtl"
       className={`${cairo.variable} ${tajawal.variable} h-full antialiased`}
+      // data-scroll-behavior="smooth"
     >
       <body className="min-h-full flex flex-col font-cairo text-[115%] leading-[1.6]">
         <Suspense fallback={null}>

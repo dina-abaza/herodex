@@ -57,7 +57,7 @@ export function Sidebar() {
           <div className="flex items-center px-6 h-24 border-b border-gray-50">
             <div className="relative w-12 h-12 overflow-hidden rounded-2xl border-2 border-rose-100 shadow-lg shadow-rose-100 rotate-3 ml-4">
               <Image 
-                src="/logo/logo.jpeg" 
+                src="/logo/logo.webp" 
                 alt="Logo" 
                 fill 
                 className="object-cover"
