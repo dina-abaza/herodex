@@ -34,7 +34,7 @@ export function ProductList({ selectedCategory, onCategoryChange }: ProductListP
   const totalPages = data?.data?.pages || 1;
 
   return (
-    <section id="products" className="py-16 bg-gradient-to-b from-gray-50/80 via-store-muted/30 to-gray-50/80">
+    <section id="products" className="py-10 md:py-16 bg-gradient-to-b from-gray-50/80 via-store-muted/30 to-gray-50/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-end mb-12">
           <div>
@@ -53,7 +53,7 @@ export function ProductList({ selectedCategory, onCategoryChange }: ProductListP
          <LoadingSpinner />
         ) : products.length > 0 ? (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
               {products.map((product: any) => (
                 <ProductCard key={product._id} product={product} />
               ))}
