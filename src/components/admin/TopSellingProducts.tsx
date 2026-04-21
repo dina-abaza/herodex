@@ -42,14 +42,14 @@ export const TopSellingProducts = () => {
       ) : (
         <div className="space-y-4 overflow-y-auto pr-2">
           {products.map((product: any, index: number) => {
-            const productImageUrl = product?.image?.url || product?.image || '';
+            // const productImageUrl =product?.image || '';
             
             return (
               <div key={product._id} className="flex items-center gap-4 p-3 hover:bg-slate-50 rounded-2xl transition-colors border border-transparent hover:border-slate-100">
                 <div className="w-16 h-16 rounded-xl bg-slate-100 flex-shrink-0 relative overflow-hidden flex items-center justify-center">
-                  {productImageUrl ? (
+                  {product?.image? (
                     <Image 
-                      src={productImageUrl} 
+                      src={product?.image} 
                       alt={product.name} 
                       fill 
                       className="object-cover"
