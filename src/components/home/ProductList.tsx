@@ -1,17 +1,24 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ProductCard } from './ProductCard';
 import { useGetProductsQuery } from '@/store/api/productApiSlice';
 import { Button } from '@/components/ui/Button';
 import { ChevronLeft, ChevronRight, PackageSearch } from 'lucide-react';
-import LoadingSpinner from '@/components/ui/loading';
 interface ProductListProps {
   selectedCategory: string;
   onCategoryChange: (id: string) => void;
+  initialProducts?: {
+    products: any[];
+    pages: number;
+  };
 }
 
-export function ProductList({ selectedCategory, onCategoryChange }: ProductListProps) {
+export function ProductList({ 
+  selectedCategory, 
+  onCategoryChange, 
+  initialProducts = { products: [], pages: 1 } 
+}: ProductListProps) {
   const [page, setPage] = useState(1);
 
   // Reset page when category changes
@@ -23,15 +30,14 @@ export function ProductList({ selectedCategory, onCategoryChange }: ProductListP
     page, 
     limit: 8, 
     category: selectedCategory 
+  }, {
+    // Skip the initial fetch if we have products from SSR and no filters are applied
+    skip: initialProducts.products.length > 0 && selectedCategory === '' && page === 1,
   });
 
-  // Force refetch on mount to ensure fresh data
-  useEffect(() => {
-    refetch();
-  }, [refetch]);
-
-  const products = data?.data?.products || [];
-  const totalPages = data?.data?.pages || 1;
+  const products = data?.data?.products || (selectedCategory === '' && page === 1 ? initialProducts.products : []);
+  const totalPages = data?.data?.pages || (selectedCategory === '' && page === 1 ? initialProducts.pages : 1);
+  const showLoading = (isLoading || isFetching) && products.length === 0;
 
   return (
     <section id="products" className="py-10 md:py-16 bg-gradient-to-b from-gray-50/80 via-store-muted/30 to-gray-50/80">
@@ -49,8 +55,16 @@ export function ProductList({ selectedCategory, onCategoryChange }: ProductListP
           </button>
         </div>
 
-        {isLoading || isFetching ? (
-         <LoadingSpinner />
+        {showLoading ? (
+           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
+             {[...Array(4)].map((_, i) => (
+               <div key={i} className="bg-white rounded-3xl p-4 shadow-sm animate-pulse">
+                 <div className="aspect-square bg-gray-200 rounded-2xl mb-4" />
+                 <div className="h-6 bg-gray-200 rounded w-3/4 mb-2" />
+                 <div className="h-4 bg-gray-200 rounded w-1/2" />
+               </div>
+             ))}
+           </div>
         ) : products.length > 0 ? (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">

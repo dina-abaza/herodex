@@ -108,10 +108,10 @@ export function ProductCard({ product }: ProductCardProps) {
           <div className="flex items-center justify-between pt-2 border-t border-gray-50">
             <div className="flex flex-col">
               <span className="text-xs text-gray-400 font-bold line-through ml-1 leading-none mb-1">
-                {(product.price + 100).toLocaleString()} ج.م
+                {(product.price + 100).toLocaleString('en-US')} ج.م
               </span>
               <span className="text-xl font-black text-store-dark tracking-tight">
-                {product.price?.toLocaleString()} <span className="text-xs font-bold text-gray-500 mr-0.5">ج.م</span>
+                {product.price?.toLocaleString('en-US')} <span className="text-xs font-bold text-gray-500 mr-0.5">ج.م</span>
               </span>
             </div>
 

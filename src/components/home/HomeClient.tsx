@@ -5,24 +5,10 @@ import dynamic from 'next/dynamic';
 import { Navbar } from '@/components/layout/Navbar';
 import { Banner } from '@/components/home/Banner';
 import { Footer } from '@/components/layout/Footer';
+import { CategoryFilter } from '@/components/home/CategoryFilter';
+import { ProductList } from '@/components/home/ProductList';
 
 // Components تحت الفولد — تُحمَّل بـ dynamic import لتأخير hydration مع توفير skeleton لمنع الـ CLS
-const CategoryFilter = dynamic(
-  () => import('@/components/home/CategoryFilter').then((m) => m.CategoryFilter),
-  { 
-    ssr: true,
-    loading: () => <div className="py-20 bg-white h-[350px] md:h-[450px] animate-pulse" />
-  }
-);
-
-const ProductList = dynamic(
-  () => import('@/components/home/ProductList').then((m) => m.ProductList),
-  { 
-    ssr: true,
-    loading: () => <div className="py-16 bg-gray-50/80 h-[800px] md:h-[1200px] animate-pulse" />
-  }
-);
-
 const AboutSection = dynamic(
   () => import('@/components/home/AboutSection').then((m) => m.AboutSection),
   { 
@@ -48,7 +34,17 @@ const ReviewsSection = dynamic(
   }
 );
 
-export function HomeClient() {
+interface HomeClientProps {
+  initialData: {
+    initialCategories: any[];
+    initialProducts: {
+      products: any[];
+      pages: number;
+    };
+  };
+}
+
+export function HomeClient({ initialData }: HomeClientProps) {
   const [selectedCategory, setSelectedCategory] = useState('');
 
   const handleCategoryChange = (id: string) => {
@@ -63,15 +59,17 @@ export function HomeClient() {
         {/* فوق الفولد — يُحمَّل مباشرة */}
         <Banner />
 
-        {/* تحت الفولد — dynamic imports لتقليل initial bundle */}
+        {/* Categories and Products are now part of the initial HTML */}
         <CategoryFilter
           selectedCategory={selectedCategory}
           onSelectCategory={handleCategoryChange}
+          initialCategories={initialData.initialCategories}
         />
 
         <ProductList
           selectedCategory={selectedCategory}
           onCategoryChange={handleCategoryChange}
+          initialProducts={initialData.initialProducts}
         />
 
         <AboutSection />
