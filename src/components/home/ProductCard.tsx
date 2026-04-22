@@ -10,11 +10,14 @@ import { useRouter } from 'next/navigation';
 import { Modal } from '@/components/ui/Modal';
 import { toast } from 'react-toastify';
 
+import Image from 'next/image';
+
 interface ProductCardProps {
   product: any;
+  priority?: boolean;
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, priority = false }: ProductCardProps) {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const router = useRouter();
   const { user } = useSelector((state: RootState) => state.auth);
@@ -62,11 +65,13 @@ export function ProductCard({ product }: ProductCardProps) {
       >
         {/* Image Section */}
         <div className="relative aspect-[4/5] overflow-hidden bg-store-muted/30 flex items-center justify-center">
-          <img
+          <Image
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-            loading="lazy"
+            fill
+            priority={priority}
+            className="object-cover transition-transform duration-700 group-hover:scale-110"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
           />
 
           {/* Rating Badge */}
@@ -108,10 +113,10 @@ export function ProductCard({ product }: ProductCardProps) {
           <div className="flex items-center justify-between pt-2 border-t border-gray-50">
             <div className="flex flex-col">
               <span className="text-xs text-gray-400 font-bold line-through ml-1 leading-none mb-1">
-                {(product.price + 100).toLocaleString()} ج.م
+                {(product.price + 100).toLocaleString('en-US')} ج.م
               </span>
               <span className="text-xl font-black text-store-dark tracking-tight">
-                {product.price?.toLocaleString()} <span className="text-xs font-bold text-gray-500 mr-0.5">ج.م</span>
+                {product.price?.toLocaleString('en-US')} <span className="text-xs font-bold text-gray-500 mr-0.5">ج.م</span>
               </span>
             </div>
 
@@ -137,12 +142,13 @@ export function ProductCard({ product }: ProductCardProps) {
       >
         <div className="flex flex-col md:flex-row gap-8 text-right overflow-hidden" dir="rtl">
           {/* Large Image */}
-          <div className="w-full md:w-1/2 aspect-square rounded-3xl overflow-hidden bg-store-muted/20 border border-neutral-100 shadow-inner">
-            <img
+          <div className="w-full md:w-1/2 aspect-square rounded-3xl overflow-hidden bg-store-muted/20 border border-neutral-100 shadow-inner relative">
+            <Image
               src={product.image}
               alt={product.name}
-              className="w-full h-full object-cover"
-              loading="lazy"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
             />
           </div>
 

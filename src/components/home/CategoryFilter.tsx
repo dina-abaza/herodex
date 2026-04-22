@@ -1,19 +1,24 @@
 'use client';
 
-import React from 'react';
 import Image from 'next/image';
 import { useGetCategoriesQuery } from '@/store/api/categoryApiSlice';
 import { cn } from '@/utils/cn';
-import LoadingSpinner from '@/components/ui/loading';
 
 interface CategoryFilterProps {
   selectedCategory: string;
   onSelectCategory: (id: string) => void;
+  initialCategories?: any[];
 }
 
-export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryFilterProps) {
-  const { data: categoriesData, isLoading } = useGetCategoriesQuery(undefined);
-  const categories = categoriesData?.data || [];
+export function CategoryFilter({ selectedCategory, onSelectCategory, initialCategories = [] }: CategoryFilterProps) {
+  const { data: categoriesData, isLoading } = useGetCategoriesQuery(undefined, {
+    // Skip the query if we already have initialCategories from SSR
+    // This prevents a redundant network request and flickering on first load
+    skip: initialCategories.length > 0,
+  });
+  
+  const categories = categoriesData?.data || initialCategories;
+  const showLoading = isLoading && categories.length === 0;
 
   return (
     <div id="categories" className="py-12 md:py-20 bg-gray-50/50">
@@ -42,10 +47,14 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
         <div className="flex flex-col md:hidden gap-4 pb-4">
           {/* Categories first on mobile */}
           <div className="flex flex-row flex-wrap justify-center gap-2">
-            {isLoading ? (
-              <div className="w-full flex justify-center py-16">
-                <LoadingSpinner />
-              </div>
+            {showLoading ? (
+              // عرض هيكل تحميل بسيط بدلاً من الـ Spinner المزعج
+              [...Array(2)].map((_, i) => (
+                <div key={i} className="w-[48%] flex flex-col items-center pt-2 animate-pulse">
+                  <div className="w-full aspect-[4/3] rounded-3xl bg-gray-200" />
+                  <div className="mt-4 w-20 h-4 bg-gray-200 rounded" />
+                </div>
+              ))
             ) : (
               categories.map((category: any) => (
                 <button
@@ -66,6 +75,7 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
                         src={category.image} 
                         alt={category.name} 
                         fill
+                        priority // تحسين الـ LCP كون الأقسام في أعلى الصفحة
                         className={cn(
                           "object-cover transition-transform duration-1000 group-hover:scale-110",
                           selectedCategory === category._id ? "scale-110" : "scale-100"
@@ -92,6 +102,7 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
           {/* "الكل" button on mobile, centered below */}
           <div className="w-full flex justify-center">
             <button
+              key="all-mobile" // إضافة مفتاح فريد
               onClick={() => onSelectCategory('')}
               className="w-[48%] flex flex-col items-center group transition-all duration-500 pt-2"
             >
@@ -124,6 +135,7 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
         <div className="hidden md:flex flex-nowrap overflow-x-auto justify-center gap-10 pb-0 no-scrollbar items-stretch">
           {/* زرار "الكل" FIRST on desktop */}
           <button
+            key="all-desktop" // إضافة مفتاح فريد
             onClick={() => onSelectCategory('')}
             className="w-[28%] lg:w-[20%] flex flex-col items-center group transition-all duration-500 pt-2"
           >
@@ -150,10 +162,14 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
             </span>
           </button>
 
-          {isLoading ? (
-            <div className="w-full flex justify-center py-16">
-              <LoadingSpinner />
-            </div>
+          {showLoading ? (
+            // عرض هيكل تحميل بسيط بدلاً من الـ Spinner المزعج
+            [...Array(4)].map((_, i) => (
+              <div key={i} className="w-[28%] lg:w-[20%] flex flex-col items-center pt-2 animate-pulse">
+                <div className="w-full aspect-[4/3] rounded-3xl bg-gray-200" />
+                <div className="mt-4 w-20 h-4 bg-gray-200 rounded" />
+              </div>
+            ))
           ) : (
             categories.map((category: any) => (
               <button
@@ -174,6 +190,7 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
                       src={category.image} 
                       alt={category.name} 
                       fill
+                      priority // تحسين الـ LCP كون الأقسام في أعلى الصفحة
                       className={cn(
                         "object-cover transition-transform duration-1000 group-hover:scale-110",
                         selectedCategory === category._id ? "scale-110" : "scale-100"
