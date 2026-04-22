@@ -19,7 +19,7 @@ const tajawal = Tajawal({
 
 // التعديل هنا فقط في الـ Metadata لتحسين الـ SEO
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://herodex.com'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.herodex-pharma.com'),
   title: "Herodex Pharma | أفضل علاج لتساقط الشعر الشديد وفراغات الشعر",
   description: "اكتشفي مجموعة FortaHair من Herodex Pharma. منتجات طبية 100% لعلاج تساقط الشعر للنساء طبيعي، تكثيف الشعر، وعلاج الفراغات. أفضل منتج لمنع تساقط الشعر في مصر بتركيبة هندية.",
   keywords: [
@@ -43,6 +43,8 @@ export const metadata: Metadata = {
   }
 };
 
+
+
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -60,7 +62,7 @@ export default function RootLayout({
       lang="ar"
       dir="rtl"
       className={`${cairo.variable} ${tajawal.variable} h-full antialiased`}
-      data-scroll-behavior="smooth"
+      // data-scroll-behavior="smooth"
     >
       <body className="min-h-full flex flex-col font-cairo text-[115%] leading-[1.6]">
         <Suspense fallback={null}>
