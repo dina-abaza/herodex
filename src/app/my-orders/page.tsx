@@ -2,6 +2,9 @@
 
 import React from 'react';
 import { useGetMyOrdersQuery } from '@/store/api/orderApiSlice';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
+import { useRouter } from 'next/navigation';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { Package, Calendar, CreditCard, Wallet, ShoppingBag, ArrowLeft, CheckCircle2, Clock, Truck, XCircle, AlertCircle } from 'lucide-react';
@@ -10,7 +13,23 @@ import { cn } from '@/utils/cn';
 import Link from 'next/link';
 
 export default function MyOrdersPage() {
-  const { data: response, isLoading } = useGetMyOrdersQuery(undefined);
+  const router = useRouter();
+  const { token } = useSelector((state: RootState) => state.auth);
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  React.useEffect(() => {
+    if (mounted && !token) {
+      router.push('/login?redirect=/my-orders');
+    }
+  }, [mounted, token, router]);
+
+  const { data: response, isLoading } = useGetMyOrdersQuery(undefined, {
+    skip: !token,
+  });
   const orders = response?.data || [];
 
   const getStatusStyles = (status: string) => {
@@ -57,6 +76,18 @@ export default function MyOrdersPage() {
       default: return status || 'غير محدد';
     }
   };
+
+  if (!mounted || !token) {
+    return (
+      <div className="min-h-screen flex flex-col bg-gray-50/50">
+        <Navbar />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-store"></div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50/50">

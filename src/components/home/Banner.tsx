@@ -58,8 +58,8 @@ export function Banner() {
               alt={`Banner ${current + 1} Desktop`}
               fill
               className="object-cover"
-              sizes="100vw"
-              priority={current === 0}
+              sizes="(max-width: 768px) 100vw, 100vw"
+              priority
             />
           </div>
           {/* Mobile Image */}
@@ -70,7 +70,7 @@ export function Banner() {
               fill
               className="object-cover"
               sizes="100vw"
-              priority={current === 0}
+              priority
             />
           </div>
         </motion.div>

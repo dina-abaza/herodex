@@ -55,6 +55,8 @@ export default function RegisterPage() {
       if (res?.success) {
         if (res?.data?.token) {
           dispatch(setCredentials({ user: res.data, token: res.data.token }));
+          // مسح guestId بعد التسجيل الناجح لأن السلة تم دمجها في السيرفر
+          localStorage.removeItem('guestId');
         }
         router.push('/');
       }
