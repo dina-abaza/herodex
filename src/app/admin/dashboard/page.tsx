@@ -5,6 +5,7 @@ import React from 'react';
 import { useGetStatsQuery } from '@/store/api/statsApiSlice';
 import { Package, Tags, Users, ShoppingCart } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { TopSellingProducts } from '@/components/admin/TopSellingProducts';
 
 const StatCard = ({ title, value, icon: Icon, color, trend }: any) => (
   <motion.div
@@ -14,12 +15,12 @@ const StatCard = ({ title, value, icon: Icon, color, trend }: any) => (
     <div className="relative z-10">
       <p className="text-sm font-bold text-slate-400 mb-2 uppercase tracking-wider">{title}</p>
       <h3 className="text-4xl font-black text-slate-900 tracking-tight">{value}</h3>
-      {trend && (
+      {/* {trend && (
         <div className={`inline-flex items-center px-2 py-1 rounded-lg mt-4 text-xs font-bold ${trend > 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'}`}>
           <span className="ml-1">{trend > 0 ? '+' : ''}{trend}%</span>
           منذ الشهر الماضي
         </div>
-      )}
+      )} */}
     </div>
     <div className={`p-4 rounded-2xl ${color} text-white shadow-xl shadow-opacity-20 transition-all duration-500 group-hover:scale-110 group-hover:rotate-6`}>
       <Icon size={24} />
@@ -66,26 +67,26 @@ export default function DashboardPage() {
           value={stats.totalProducts}
           icon={Package}
           color="bg-rose-500"
-          trend={12}
+          // trend={12}
         />
         <StatCard
           title="إجمالي الأقسام"
           value={stats.totalCategories}
           icon={Tags}
           color="bg-amber-500"
-          trend={5}
+          // trend={5}
         />
         <StatCard
           title="إجمالي المستخدمين"
           value={stats.totalUsers}
           icon={Users}
           color="bg-indigo-500"
-          trend={18}
+          // trend={18}
         />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-grid-4">
-        <section className="card-modern p-grid-4 min-h-[400px] flex flex-col">
+        {/* <section className="card-modern p-grid-4 min-h-[400px] flex flex-col">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-2xl font-black text-slate-900">آخر العمليات</h2>
             <button className="text-rose-600 font-bold text-sm hover:bg-rose-50 px-4 py-2 rounded-xl transition-colors">عرض الكل</button>
@@ -96,19 +97,9 @@ export default function DashboardPage() {
             </div>
             <p className="text-slate-400 font-bold text-lg">لا توجد عمليات بيع مؤخراً</p>
           </div>
-        </section>
+        </section> */}
 
-        <section className="card-modern p-grid-4 min-h-[400px] flex flex-col">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-2xl font-black text-slate-900">أكثر الأقسام مبيعاً</h2>
-          </div>
-          <div className="flex-1 flex flex-col items-center justify-center text-center space-y-4">
-            <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center">
-              <Tags className="text-slate-300" size={32} />
-            </div>
-            <p className="text-slate-400 font-bold text-lg">سيتم عرض المخططات البيانية هنا</p>
-          </div>
-        </section>
+        <TopSellingProducts />
       </div>
     </div>
   );
