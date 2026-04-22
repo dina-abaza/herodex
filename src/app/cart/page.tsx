@@ -13,16 +13,6 @@ import { toast } from 'react-toastify';
 export default function CartPage() {
   const { data: cartData, isLoading, error } = useGetCartQuery(undefined);
   
-  React.useEffect(() => {
-    console.log('🔍 Cart Page Debug:');
-    console.log('--- isLoading:', isLoading);
-    console.log('--- error:', error);
-    console.log('--- data:', cartData);
-    if (typeof window !== 'undefined') {
-      console.log('--- localStorage guestId:', localStorage.getItem('guestId'));
-    }
-  }, [cartData, isLoading, error]);
-
   const [updateItem, { isLoading: isUpdating }] = useUpdateCartItemMutation();
   const [removeItem, { isLoading: isRemoving }] = useRemoveFromCartMutation();
 
