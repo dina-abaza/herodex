@@ -33,13 +33,13 @@ export const metadata: Metadata = {
     title: "Herodex",
   },
   icons: {
-    icon: "/logo/logo.jpeg",
-    apple: "/logo/logo.jpeg",
+    icon: "/logo/logo.webp",
+    apple: "/logo/logo.webp",
   },
   openGraph: {
     title: "Herodex Pharma | حل نهائي لتساقط الشعر وتكثيفه",
     description: "مجموعة فورتا هير (FortaHair) لعلاج فراغات الشعر وتساقطه. منتجات طبيعية 100% لنتائج سريعة.",
-    images: ["/logo/logo.jpeg"],
+    images: ["/logo/logo.webp"],
   }
 };
 
@@ -60,6 +60,7 @@ export default function RootLayout({
       lang="ar"
       dir="rtl"
       className={`${cairo.variable} ${tajawal.variable} h-full antialiased`}
+      data-scroll-behavior="smooth"
     >
       <body className="min-h-full flex flex-col font-cairo text-[115%] leading-[1.6]">
         <Suspense fallback={null}>

@@ -18,12 +18,6 @@ export default function CheckoutPage() {
     setMounted(true);
   }, []);
 
-  useEffect(() => {
-    if (mounted && !token) {
-      router.push('/login?redirect=/checkout');
-    }
-  }, [token, router, mounted]);
-
   if (!mounted) {
     return (
       <div className="min-h-screen flex flex-col bg-gray-50/50">
@@ -34,10 +28,6 @@ export default function CheckoutPage() {
         <Footer />
       </div>
     );
-  }
-
-  if (!token) {
-    return null;
   }
 
   return (

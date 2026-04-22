@@ -17,7 +17,7 @@ export function Navbar() {
   const [mounted, setMounted] = useState(false);
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.auth);
-  const { data: cartData } = useGetCartQuery(undefined, { skip: !user });
+  const { data: cartData } = useGetCartQuery(undefined);
   
   useEffect(() => {
     setMounted(true);

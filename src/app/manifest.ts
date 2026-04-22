@@ -11,19 +11,19 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: '#e11d48',
     icons: [
       {
-        src: '/logo/logo.jpeg',
+        src: '/logo/logo.webp',
         sizes: 'any',
-        type: 'image/jpeg',
+        type: 'image/webp',
       },
       {
-        src: '/logo/logo.jpeg',
+        src: '/logo/logo.webp',
         sizes: '192x192',
-        type: 'image/jpeg',
+        type: 'image/webp',
       },
       {
-        src: '/logo/logo.jpeg',
+        src: '/logo/logo.webp',
         sizes: '512x512',
-        type: 'image/jpeg',
+        type: 'image/webp',
       },
     ],
   }

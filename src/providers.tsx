@@ -36,6 +36,8 @@ function AuthCallbackHandler() {
         const json = await res.json();
         if (json?.success && json?.data) {
           dispatch(setCredentials({ user: json.data, token }));
+          // مسح guestId بعد تسجيل الدخول الناجح عبر جوجل
+          localStorage.removeItem('guestId');
         }
       } finally {
         router.replace(pathname);
