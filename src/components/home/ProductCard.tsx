@@ -21,7 +21,9 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const router = useRouter();
   const { user } = useSelector((state: RootState) => state.auth);
-  const [addToCart, { isLoading }] = useAddToCartMutation();
+  const [addToCart] = useAddToCartMutation();
+
+
 
   const handleOpenModal = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -32,32 +34,34 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
     setIsModalOpen(false);
   };
 
-  const handleAddToCart = async (e: React.MouseEvent) => {
+  const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
-    try {
-      const response = await addToCart({ productId: product._id, quantity: 1, product: product }).unwrap();
-      if (response?.success) {
-        toast.success(`تم إضافة ${product.name} إلى السلة بنجاح ✨`);
-      }
-    } catch (err: any) {
-      console.error(err);
-      if (err?.data?.message?.includes('already') || err?.status === 400) {
-        toast.info('هذا المنتج موجود بالفعل في سلتك 😊');
-      } else {
-        toast.error('عذراً، حدث خطأ أثناء الإضافة. يرجى المحاولة مرة أخرى.');
-      }
-    }
+    // تشغيل الإضافة في الخلفية بدون انتظار الرد (Optimistic UI)
+    addToCart({ productId: product._id, quantity: 1, product: product });
+    
+    // إظهار رسالة النجاح فوراً لتجربة سريعة جداً
+    toast.success(`تم إضافة ${product.name} إلى السلة بنجاح ✨`, {
+      position: "bottom-right",
+      autoClose: 1500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
   };
 
   const handleBuyNow = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
-    // تشغيل الإضافة في الخلفية بدون انتظار الرد مع تمرير بيانات المنتج للتحديث اللحظي
+    // تشغيل الإضافة في الخلفية
     addToCart({ productId: product._id, quantity: 1, product: product });
-    // التحويل الفوري
+    
+    // التحويل اللحظي بما أن السلة ستتحدث تلقائياً بفضل الـ Optimistic updates
     router.push('/checkout');
   };
 
@@ -131,7 +135,6 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
                 size="icon"
                 className="rounded-xl w-10 h-10 border-store/20 text-store hover:bg-store/5"
                 onClick={handleAddToCart}
-                isLoading={isLoading}
                 aria-label={`إضافة ${product.name} إلى سلة المشتريات`}
               >
                 <ShoppingCart size={18} />
@@ -221,19 +224,13 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
                 <button
                   className="w-14 h-14 rounded-2xl flex items-center justify-center bg-gray-50 hover:bg-gray-100 text-gray-500 transition-all border border-gray-100"
                   onClick={handleAddToCart}
-                  disabled={isLoading}
                   title="أضيفي للسلة"
                 >
-                  {isLoading ? (
-                    <div className="w-5 h-5 border-2 border-store/30 border-t-store rounded-full animate-spin" />
-                  ) : (
-                    <ShoppingCart size={22} />
-                  )}
+                  <ShoppingCart size={22} />
                 </button>
                 <Button
                   className="flex-1 h-14 rounded-2xl bg-store hover:bg-store-dark text-white font-bold text-lg shadow-xl shadow-store/20"
                   onClick={handleBuyNow}
-                  isLoading={isLoading}
                 >
                   اشترِ الآن
                 </Button>
