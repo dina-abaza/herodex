@@ -16,11 +16,11 @@ export function Banner({ initialBanners = [] }: BannerProps) {
     skip: initialBanners.length > 0,
   });
   const apiBanners = response?.data || initialBanners;
-  
+
   // تجهيز القوائم مسبقاً بناءً على النوع
   const mobileBanners = apiBanners.filter((b: any) => b.type === 'mobile' || b.mobilePath);
   const laptopBanners = apiBanners.filter((b: any) => b.type === 'laptop' || b.laptopPath);
-  
+
   // نستخدم القائمة الأطول للتحكم في الترقيم لضمان عدم توقف السلايدر
   const displayBanners = laptopBanners.length >= mobileBanners.length ? laptopBanners : mobileBanners;
 
@@ -54,7 +54,7 @@ export function Banner({ initialBanners = [] }: BannerProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1] }}
+            transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
             className="relative col-start-1 row-start-1 w-full h-full cursor-pointer z-10"
           >
             {/* نسخة الموبايل - تعمل بـ CSS فوراً */}
@@ -67,10 +67,12 @@ export function Banner({ initialBanners = [] }: BannerProps) {
                   sizes="100vw"
                   style={{ objectFit: 'cover' }}
                   priority={current === 0}
+                  unoptimized={current === 0}
+                  loading="eager"
+                  fetchPriority="high"
                   placeholder="blur"
                   blurDataURL={blurDataURL}
-                  onLoad={(img) => (img.target as HTMLImageElement).classList.remove('opacity-0')}
-                  className="object-cover transition-opacity duration-1000 opacity-0"
+                  className="object-cover"
                 />
               </div>
             )}
@@ -85,10 +87,12 @@ export function Banner({ initialBanners = [] }: BannerProps) {
                   sizes="100vw"
                   style={{ objectFit: 'cover' }}
                   priority={current === 0}
+                  unoptimized={current === 0}
+                  loading="eager"
+                  fetchPriority="high"
                   placeholder="blur"
                   blurDataURL={blurDataURL}
-                  onLoad={(img) => (img.target as HTMLImageElement).classList.remove('opacity-0')}
-                  className="object-cover transition-opacity duration-1000 opacity-0"
+                  className="object-cover"
                 />
               </div>
             )}
@@ -99,13 +103,13 @@ export function Banner({ initialBanners = [] }: BannerProps) {
       {/* Navigation Arrows */}
       {displayBanners.length > 1 && (
         <>
-          <button 
+          <button
             onClick={prev}
             className="absolute left-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-store hover:border-store-gold/60 transition-all opacity-0 group-hover:opacity-100 hidden md:block"
           >
             <ChevronLeft size={24} />
           </button>
-          <button 
+          <button
             onClick={next}
             className="absolute right-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-store hover:border-store-gold/60 transition-all opacity-0 group-hover:opacity-100 hidden md:block"
           >
@@ -121,9 +125,8 @@ export function Banner({ initialBanners = [] }: BannerProps) {
             <button
               key={i}
               onClick={() => setCurrent(i)}
-              className={`h-1.5 transition-all duration-300 rounded-full ${
-                current === i ? 'w-8 bg-store-gold' : 'w-1.5 bg-black/20 hover:bg-store-gold-light'
-              }`}
+              className={`h-1.5 transition-all duration-300 rounded-full ${current === i ? 'w-8 bg-store-gold' : 'w-1.5 bg-black/20 hover:bg-store-gold-light'
+                }`}
             />
           ))}
         </div>
