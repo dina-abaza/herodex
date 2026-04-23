@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
+import Image from 'next/image';
 import { useGetBannersQuery } from '@/store/api/bannerApiSlice';
 
 export function Banner() {
@@ -21,6 +22,8 @@ export function Banner() {
 
   // الاعتماد كلياً على الباك اند فقط
   const apiBanners = response?.data || [];
+//  console.log("apiBanners") 
+//  console.log(apiBanners) 
 
   // الفلترة لعرض الصور المناسبة لكل جهاز (بدون تكرار)
   const banners = apiBanners.filter((b: any) => {
@@ -40,14 +43,18 @@ export function Banner() {
   const next = () => setCurrent((prev) => (prev >= banners.length - 1 ? 0 : prev + 1));
   const prev = () => setCurrent((prev) => (prev <= 0 ? banners.length - 1 : prev - 1));
 
-  if (isLoading || banners.length === 0) return null;
+  if (isLoading) {
+    return (
+      <div className="w-full aspect-[16/9] md:aspect-[21/9] bg-slate-200 animate-pulse" />
+    );
+  }
+
+  if (banners.length === 0) return null;
 
   return (
-    <div className="relative w-full bg-transparent group overflow-hidden">
+    <div className="relative w-full bg-transparent aspect-[16/9] md:aspect-[21/9] group overflow-hidden">
       {/* ضبط الأبعاد بناءً على الوثيقة: 16:9 للموبايل و 21:9 للابتوب */}
-      <div className={`grid grid-cols-1 grid-rows-1 transition-all duration-500 ${
-        isMobile ? 'aspect-[16/9]' : 'aspect-[21/9]'
-      }`}>
+      <div className="grid grid-cols-1 grid-rows-1 transition-all duration-500 aspect-[16/9] md:aspect-[21/9]">
         <AnimatePresence initial={false}>
           <motion.div
             key={`${current}-${isMobile}`}
@@ -55,17 +62,18 @@ export function Banner() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1] }}
-            className="col-start-1 row-start-1 w-full h-full cursor-pointer z-10"
+            className="relative col-start-1 row-start-1 w-full h-full cursor-pointer z-10"
           >
             {/* استخدام object-fill لضمان ملء الأبعاد المحددة في الوثيقة تماماً */}
-            <img
-              src={isMobile 
-                ? (banners[current].mobilePath || banners[current].originalPath) 
-                : (banners[current].laptopPath || banners[current].originalPath)
+            <Image
+              src={isMobile
+                ? (banners[current].originalPath || banners[current].originalPath)
+                : (banners[current].originalPath || banners[current].originalPath)
               }
               alt={`Banner ${current + 1}`}
-              className="w-full h-full block object-fill"
-              loading="eager"
+              fill
+              style={{ objectFit: 'cover' }}
+              priority
             />
           </motion.div>
         </AnimatePresence>
