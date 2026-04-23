@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
 import { useCheckoutMutation } from '@/store/api/orderApiSlice';
 import { useGetCartQuery } from '@/store/api/cartApiSlice';
 import { Button } from '@/components/ui/Button';
@@ -19,9 +21,11 @@ interface ShippingAddress {
 }
 
 export function PaymentComponent() {
+  const { user } = useSelector((state: RootState) => state.auth);
   const { data: cartData, isLoading: cartLoading } = useGetCartQuery(undefined);
   const [checkout, { isLoading: isProcessing }] = useCheckoutMutation();
 
+  const [guestName, setGuestName] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'wallet' | 'COD'>('card');
   const [walletNumber, setWalletNumber] = useState('');
   const [shippingAddress, setShippingAddress] = useState<ShippingAddress>({
@@ -40,6 +44,11 @@ export function PaymentComponent() {
   const handleCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!user && !guestName) {
+      toast.error('يرجى إدخال اسمك بالكامل');
+      return;
+    }
+
     if (!shippingAddress.phone || shippingAddress.phone.length < 11) {
       toast.error('يرجى إدخال رقم هاتف صحيح');
       return;
@@ -55,6 +64,10 @@ export function PaymentComponent() {
         paymentMethod,
         shippingAddress,
       };
+
+      if (!user) {
+        payload.guestName = guestName;
+      }
 
       if (paymentMethod === 'wallet') {
         payload.walletNumber = walletNumber;
@@ -116,6 +129,16 @@ export function PaymentComponent() {
           </div>
 
           <form id="checkout-form" onSubmit={handleCheckout} className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {!user && (
+              <Input 
+                label="اسم العميل بالكامل"
+                placeholder="مثال: محمد أحمد علي"
+                required
+                value={guestName}
+                onChange={(e) => setGuestName(e.target.value)}
+                className="md:col-span-2"
+              />
+            )}
             <Input 
               label="العنوان بالتفصيل"
               placeholder="مثال: 123 شارع التحرير، الدقي"
