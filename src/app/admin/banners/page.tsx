@@ -95,6 +95,26 @@ export default function AdminBannersPage() {
           <Plus className="text-store" size={24} />
           إضافة بانر جديد
         </h2>
+
+        {/* Info Alert for Dimensions */}
+        <div className="mb-8 p-4 bg-amber-50 border border-amber-200 rounded-2xl flex items-start gap-4">
+          <div className="p-2 bg-amber-100 rounded-xl text-amber-600">
+            <AlertCircle size={24} />
+          </div>
+          <div className="space-y-1">
+            <p className="text-base font-black text-gray-900">تنبيه للأبعاد المطلوبة لضمان أفضل ظهور:</p>
+            <div className="flex flex-wrap gap-x-8 gap-y-2">
+              <div className="flex items-center gap-2">
+                <Monitor size={18} className="text-store" />
+                <span className="text-sm font-bold text-gray-700">لابتوب (Laptop): <span className="text-store font-black">21:9</span></span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Smartphone size={18} className="text-store" />
+                <span className="text-sm font-bold text-gray-700">موبايل (Mobile): <span className="text-store font-black">16:9</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
         
         <form onSubmit={handleUpload} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -102,8 +122,8 @@ export default function AdminBannersPage() {
               <label className="text-sm font-black text-gray-700 mr-2">نوع البانر</label>
               <div className="grid grid-cols-2 gap-3">
                 {[
-                  { id: 'laptop', label: 'لابتوب', icon: Monitor },
-                  { id: 'mobile', label: 'موبايل', icon: Smartphone },
+                  { id: 'laptop', label: 'لابتوب (21:9)', icon: Monitor },
+                  { id: 'mobile', label: 'موبايل (16:9)', icon: Smartphone },
                 ].map((type) => (
                   <button
                     key={type.id}
