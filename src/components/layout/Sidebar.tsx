@@ -17,7 +17,8 @@ import {
   X,
   Sparkles,
   ChevronLeft,
-  ShoppingBag
+  ShoppingBag,
+  Image as ImageIcon
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
@@ -26,6 +27,7 @@ const navigation = [
   { name: 'الطلبات', href: '/admin/orders', icon: ShoppingBag },
   { name: 'المنتجات', href: '/admin/products', icon: Package },
   { name: 'الأقسام', href: '/admin/categories', icon: Tags },
+  { name: 'البانرات', href: '/admin/banners', icon: ImageIcon },
   { name: 'المراجعات', href: '/admin/reviews', icon: Star },
 ];
 

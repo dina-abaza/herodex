@@ -38,7 +38,6 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
 
     try {
       const response = await addToCart({ productId: product._id, quantity: 1 }).unwrap();
-      console.log('🛒 Add to cart response:', response);
       if (response?.success) {
         toast.success(`تم إضافة ${product.name} إلى السلة بنجاح ✨`);
       }

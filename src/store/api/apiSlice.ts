@@ -13,7 +13,6 @@ const baseQuery = fetchBaseQuery({
     if (typeof window !== 'undefined') {
       const guestId = localStorage.getItem('guestId');
       if (guestId) {
-        console.log('📡 Sending guestId in header:', guestId);
         headers.set('x-guest-id', guestId);
       }
     }
@@ -38,7 +37,6 @@ const baseQueryWithGuestId: typeof baseQuery = async (args, api, extraOptions) =
     if (finalGuestId) {
       const currentGuestId = localStorage.getItem('guestId');
       if (currentGuestId !== finalGuestId) {
-        console.log('✅ Saving guestId to localStorage:', finalGuestId);
         localStorage.setItem('guestId', finalGuestId);
       }
     }
@@ -49,6 +47,6 @@ const baseQueryWithGuestId: typeof baseQuery = async (args, api, extraOptions) =
 
 export const apiSlice = createApi({
   baseQuery: baseQueryWithGuestId,
-  tagTypes: ['Product', 'Category', 'User', 'Review', 'Stats', 'Cart', 'Order'],
+  tagTypes: ['Product', 'Category', 'User', 'Review', 'Stats', 'Cart', 'Order', 'Banner'],
   endpoints: (builder) => ({}),
 });

@@ -49,6 +49,7 @@ export function AboutSection() {
                 src="/aboutimage.webp"
                 alt="Herodex Products Flyer"
                 fill
+                sizes="(max-width: 1024px) 100vw, 1024px"
                 className="object-contain md:object-cover p-4 md:p-0"
                 priority
               />

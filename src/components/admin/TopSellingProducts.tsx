@@ -52,6 +52,7 @@ export const TopSellingProducts = () => {
                       src={product?.image} 
                       alt={product.name} 
                       fill 
+                      sizes="64px"
                       className="object-cover"
                     />
                   ) : (
