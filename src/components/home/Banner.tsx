@@ -72,6 +72,7 @@ export function Banner() {
               }
               alt={`Banner ${current + 1}`}
               fill
+              sizes="100vw"
               style={{ objectFit: 'cover' }}
               priority
             />
