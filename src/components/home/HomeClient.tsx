@@ -41,6 +41,7 @@ interface HomeClientProps {
       products: any[];
       pages: number;
     };
+    initialBanners: any[];
   };
 }
 
@@ -57,7 +58,7 @@ export function HomeClient({ initialData }: HomeClientProps) {
 
       <main className="flex-1">
         {/* فوق الفولد — يُحمَّل مباشرة */}
-        <Banner />
+        <Banner initialBanners={initialData.initialBanners} />
 
         {/* Categories and Products are now part of the initial HTML */}
         <CategoryFilter

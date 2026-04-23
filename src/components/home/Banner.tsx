@@ -6,9 +6,15 @@ import { ChevronRight, ChevronLeft } from 'lucide-react';
 import Image from 'next/image';
 import { useGetBannersQuery } from '@/store/api/bannerApiSlice';
 
-export function Banner() {
+interface BannerProps {
+  initialBanners?: any[];
+}
+
+export function Banner({ initialBanners = [] }: BannerProps) {
   const [current, setCurrent] = useState(0);
-  const { data: response, isLoading } = useGetBannersQuery(undefined);
+  const { data: response, isLoading } = useGetBannersQuery(undefined, {
+    skip: initialBanners.length > 0,
+  });
   const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -21,7 +27,7 @@ export function Banner() {
   }, []);
 
   // الاعتماد كلياً على الباك اند فقط
-  const apiBanners = response?.data || [];
+  const apiBanners = response?.data || initialBanners;
 //  console.log("apiBanners") 
 //  console.log(apiBanners) 
 
