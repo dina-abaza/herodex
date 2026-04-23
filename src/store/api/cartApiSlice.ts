@@ -10,8 +10,31 @@ export const cartApiSlice = apiSlice.injectEndpoints({
       query: (data) => ({
         url: '/cart',
         method: 'POST',
-        body: data,
+        body: { productId: data.productId, quantity: data.quantity },
       }),
+      async onQueryStarted({ product, quantity }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          cartApiSlice.util.updateQueryData('getCart', undefined, (draft) => {
+            if (!draft.data) draft.data = { items: [] };
+            const existingItem = draft.data.items?.find((item: any) => item.product?._id === product._id);
+            if (existingItem) {
+              existingItem.quantity += quantity;
+            } else {
+              if (!draft.data.items) draft.data.items = [];
+              draft.data.items.push({
+                _id: 'temp-id-' + Date.now(),
+                product: product,
+                quantity: quantity
+              });
+            }
+          })
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
       invalidatesTags: ['Cart' as any],
     }),
     updateCartItem: builder.mutation({
@@ -20,6 +43,21 @@ export const cartApiSlice = apiSlice.injectEndpoints({
         method: 'PUT',
         body: data,
       }),
+      async onQueryStarted({ productId, quantity }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          cartApiSlice.util.updateQueryData('getCart', undefined, (draft) => {
+            const item = draft?.data?.items?.find((i: any) => i.product._id === productId);
+            if (item) {
+              item.quantity = quantity;
+            }
+          })
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
       invalidatesTags: ['Cart' as any],
     }),
     removeFromCart: builder.mutation({
@@ -27,6 +65,20 @@ export const cartApiSlice = apiSlice.injectEndpoints({
         url: `/cart/${productId}`,
         method: 'DELETE',
       }),
+      async onQueryStarted(productId, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          cartApiSlice.util.updateQueryData('getCart', undefined, (draft) => {
+            if (draft?.data?.items) {
+              draft.data.items = draft.data.items.filter((item: any) => item.product._id !== productId);
+            }
+          })
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
       invalidatesTags: ['Cart' as any],
     }),
     clearCart: builder.mutation({

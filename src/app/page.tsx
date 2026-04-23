@@ -9,7 +9,7 @@ async function getInitialData() {
     const [categoriesRes, productsRes, bannersRes] = await Promise.all([
       fetch(`${baseUrl}/categories`, { next: { revalidate: 60 } }),
       fetch(`${baseUrl}/products?pageNumber=1&limit=8`, { next: { revalidate: 60 } }),
-      fetch(`${baseUrl}/banners`, { next: { revalidate: 60 } })
+      fetch(`${baseUrl}/banners`, { next: { revalidate: 3600 } })
     ]);
 
     const categories = await categoriesRes.json();

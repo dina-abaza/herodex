@@ -37,7 +37,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
     e.stopPropagation();
 
     try {
-      const response = await addToCart({ productId: product._id, quantity: 1 }).unwrap();
+      const response = await addToCart({ productId: product._id, quantity: 1, product: product }).unwrap();
       if (response?.success) {
         toast.success(`تم إضافة ${product.name} إلى السلة بنجاح ✨`);
       }
@@ -49,6 +49,16 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
         toast.error('عذراً، حدث خطأ أثناء الإضافة. يرجى المحاولة مرة أخرى.');
       }
     }
+  };
+
+  const handleBuyNow = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // تشغيل الإضافة في الخلفية بدون انتظار الرد مع تمرير بيانات المنتج للتحديث اللحظي
+    addToCart({ productId: product._id, quantity: 1, product: product });
+    // التحويل الفوري
+    router.push('/checkout');
   };
 
   return (
@@ -115,15 +125,25 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
               </span>
             </div>
 
-            <Button
-              size="icon"
-              className="rounded-2xl w-12 h-12 shadow-lg shadow-store/10"
-              onClick={handleAddToCart}
-              isLoading={isLoading}
-              aria-label={`إضافة ${product.name} إلى سلة المشتريات`}
-            >
-              <ShoppingCart size={20} />
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-xl w-10 h-10 border-store/20 text-store hover:bg-store/5"
+                onClick={handleAddToCart}
+                isLoading={isLoading}
+                aria-label={`إضافة ${product.name} إلى سلة المشتريات`}
+              >
+                <ShoppingCart size={18} />
+              </Button>
+              <Button
+                size="sm"
+                className="rounded-xl px-4 h-10 bg-store hover:bg-store-dark text-white border-0 shadow-sm text-xs font-bold"
+                onClick={handleBuyNow}
+              >
+                اشترِ الآن
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -197,18 +217,27 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
                 </div>
               </div>
 
-              <button
-                className="group/modal-cart relative w-16 h-16 rounded-2xl flex items-center justify-center bg-store hover:bg-store-dark text-white shadow-xl shadow-store/20 transition-all active:scale-95"
-                onClick={handleAddToCart}
-                disabled={isLoading}
-                title="أضيفي للسلة"
-              >
-                {isLoading ? (
-                  <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                ) : (
-                  <ShoppingCart size={28} className="transition-transform duration-300 group-hover/modal-cart:scale-110" />
-                )}
-              </button>
+              <div className="flex items-center gap-3">
+                <button
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center bg-gray-50 hover:bg-gray-100 text-gray-500 transition-all border border-gray-100"
+                  onClick={handleAddToCart}
+                  disabled={isLoading}
+                  title="أضيفي للسلة"
+                >
+                  {isLoading ? (
+                    <div className="w-5 h-5 border-2 border-store/30 border-t-store rounded-full animate-spin" />
+                  ) : (
+                    <ShoppingCart size={22} />
+                  )}
+                </button>
+                <Button
+                  className="flex-1 h-14 rounded-2xl bg-store hover:bg-store-dark text-white font-bold text-lg shadow-xl shadow-store/20"
+                  onClick={handleBuyNow}
+                  isLoading={isLoading}
+                >
+                  اشترِ الآن
+                </Button>
+              </div>
             </div>
           </div>
         </div>
