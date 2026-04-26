@@ -9,7 +9,7 @@ import { RootState } from '@/store';
 import { useRouter } from 'next/navigation';
 import { Modal } from '@/components/ui/Modal';
 import { toast } from 'react-toastify';
-import { trackViewContent, trackAddToCart } from '@/lib/meta-pixel';
+import * as analytics from '@/lib/analytics';
 
 import Image from 'next/image';
 
@@ -29,8 +29,8 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
   const handleOpenModal = (e: React.MouseEvent) => {
     e.preventDefault();
     setIsModalOpen(true);
-    // Meta Pixel: track product detail view
-    trackViewContent({
+    // Track product detail view (Meta Pixel + GA4)
+    analytics.trackViewContent({
       id: product._id,
       name: product.name,
       price: product.price,
@@ -49,8 +49,8 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
     // تشغيل الإضافة في الخلفية بدون انتظار الرد (Optimistic UI)
     addToCart({ productId: product._id, quantity: 1, product: product });
 
-    // Meta Pixel: track add to cart
-    trackAddToCart({
+    // Track add to cart (Meta Pixel + GA4)
+    analytics.trackAddToCart({
       id: product._id,
       name: product.name,
       price: product.price,

@@ -9,7 +9,7 @@ import { Footer } from '@/components/layout/Footer';
 import { PaymentComponent } from '@/components/checkout/PaymentComponent';
 import { motion } from 'framer-motion';
 import { useGetCartQuery } from '@/store/api/cartApiSlice';
-import { trackInitiateCheckout } from '@/lib/meta-pixel';
+import * as analytics from '@/lib/analytics';
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -22,7 +22,7 @@ export default function CheckoutPage() {
     setMounted(true);
   }, []);
 
-  // Meta Pixel: track InitiateCheckout once when cart data is available
+  // Track InitiateCheckout / begin_checkout once when cart data is available
   useEffect(() => {
     if (!mounted || hasTrackedCheckout.current || !cartData?.data?.items?.length) return;
     hasTrackedCheckout.current = true;
@@ -31,11 +31,7 @@ export default function CheckoutPage() {
     const contentIds = cart.items.map((item: any) => item.product?._id).filter(Boolean);
     const value = cart.items.reduce((acc: number, item: any) => acc + (item.product?.price * item.quantity), 0);
 
-    trackInitiateCheckout({
-      contentIds,
-      value,
-      numItems: cart.items.length,
-    });
+    analytics.trackInitiateCheckout({ contentIds, value, numItems: cart.items.length });
   }, [mounted, cartData]);
 
   if (!mounted) {

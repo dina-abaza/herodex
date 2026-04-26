@@ -11,7 +11,7 @@ import { CreditCard, Wallet, MapPin, Phone, User, CheckCircle2, AlertCircle, Arr
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
 import { cn } from '@/utils/cn';
-import { storeCheckoutData } from '@/lib/meta-pixel';
+import * as analytics from '@/lib/analytics';
 
 interface ShippingAddress {
   address: string;
@@ -74,8 +74,8 @@ export function PaymentComponent() {
         payload.walletNumber = walletNumber;
       }
 
-      // Meta Pixel: store checkout data for Purchase event on success page
-      storeCheckoutData({
+      // Store checkout data for Purchase event on success page
+      analytics.storeCheckoutData({
         contentIds: cart.items.map((item: any) => item.product?._id).filter(Boolean),
         value: total,
         numItems: cart.items.length,

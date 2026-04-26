@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
@@ -9,7 +9,7 @@ import { CheckCircle, ArrowLeft, Package, Home } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useDispatch } from 'react-redux';
 import { apiSlice } from '@/store/api/apiSlice';
-import { trackPurchase, getCheckoutData } from '@/lib/meta-pixel';
+import * as analytics from '@/lib/analytics';
 
 import { Suspense } from 'react';
 
@@ -19,22 +19,24 @@ function SuccessContent() {
   const dispatch = useDispatch();
   const transactionId = searchParams.get('transaction_id');
   const orderId = searchParams.get('order_id');
+  const hasFiredPurchase = useRef(false);
 
   useEffect(() => {
     // تفريغ السلة في الواجهة الأمامية
     dispatch(apiSlice.util.invalidateTags(['Cart' as any]));
 
-    // Meta Pixel: track Purchase event
+    // Track Purchase — guarded by ref to prevent double firing
     const ordIdentifier = transactionId || orderId;
-    if (ordIdentifier) {
-      const checkoutData = getCheckoutData();
-      trackPurchase({
-        contentIds: checkoutData?.contentIds || [],
-        value: checkoutData?.value || 0,
-        orderId: ordIdentifier,
-        numItems: checkoutData?.numItems,
-      });
-    }
+    if (!ordIdentifier || hasFiredPurchase.current) return;
+    hasFiredPurchase.current = true;
+
+    const checkoutData = analytics.getCheckoutData();
+    analytics.trackPurchase({
+      contentIds: checkoutData?.contentIds || [],
+      value: checkoutData?.value || 0,
+      orderId: ordIdentifier,
+      numItems: checkoutData?.numItems,
+    });
   }, [dispatch, transactionId, orderId]);
 
   return (
