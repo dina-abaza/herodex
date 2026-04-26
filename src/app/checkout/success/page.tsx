@@ -9,6 +9,7 @@ import { CheckCircle, ArrowLeft, Package, Home } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useDispatch } from 'react-redux';
 import { apiSlice } from '@/store/api/apiSlice';
+import { trackPurchase, getCheckoutData } from '@/lib/meta-pixel';
 
 import { Suspense } from 'react';
 
@@ -22,7 +23,19 @@ function SuccessContent() {
   useEffect(() => {
     // تفريغ السلة في الواجهة الأمامية
     dispatch(apiSlice.util.invalidateTags(['Cart' as any]));
-  }, [dispatch]);
+
+    // Meta Pixel: track Purchase event
+    const ordIdentifier = transactionId || orderId;
+    if (ordIdentifier) {
+      const checkoutData = getCheckoutData();
+      trackPurchase({
+        contentIds: checkoutData?.contentIds || [],
+        value: checkoutData?.value || 0,
+        orderId: ordIdentifier,
+        numItems: checkoutData?.numItems,
+      });
+    }
+  }, [dispatch, transactionId, orderId]);
 
   return (
     <div className="min-h-screen flex flex-col bg-white">

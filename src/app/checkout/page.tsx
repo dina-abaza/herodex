@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
@@ -8,15 +8,35 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { PaymentComponent } from '@/components/checkout/PaymentComponent';
 import { motion } from 'framer-motion';
+import { useGetCartQuery } from '@/store/api/cartApiSlice';
+import { trackInitiateCheckout } from '@/lib/meta-pixel';
 
 export default function CheckoutPage() {
   const router = useRouter();
   const [mounted, setMounted] = React.useState(false);
   const { user, token } = useSelector((state: RootState) => state.auth);
+  const { data: cartData } = useGetCartQuery(undefined);
+  const hasTrackedCheckout = useRef(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Meta Pixel: track InitiateCheckout once when cart data is available
+  useEffect(() => {
+    if (!mounted || hasTrackedCheckout.current || !cartData?.data?.items?.length) return;
+    hasTrackedCheckout.current = true;
+
+    const cart = cartData.data;
+    const contentIds = cart.items.map((item: any) => item.product?._id).filter(Boolean);
+    const value = cart.items.reduce((acc: number, item: any) => acc + (item.product?.price * item.quantity), 0);
+
+    trackInitiateCheckout({
+      contentIds,
+      value,
+      numItems: cart.items.length,
+    });
+  }, [mounted, cartData]);
 
   if (!mounted) {
     return (
@@ -53,3 +73,4 @@ export default function CheckoutPage() {
     </div>
   );
 }
+

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
+import Script from "next/script";
 import { Cairo, Tajawal } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/providers";
@@ -64,6 +65,37 @@ export default function RootLayout({
       className={`${cairo.variable} ${tajawal.variable} h-full antialiased`}
       // data-scroll-behavior="smooth"
     >
+      <head>
+        {/* Meta Pixel Code — only render if pixel ID is configured */}
+        {process.env.NEXT_PUBLIC_META_PIXEL_ID && (
+          <>
+            <Script id="meta-pixel" strategy="afterInteractive">
+              {`
+                !function(f,b,e,v,n,t,s)
+                {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+                if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+                n.queue=[];t=b.createElement(e);t.async=!0;
+                t.src=v;s=b.getElementsByTagName(e)[0];
+                s.parentNode.insertBefore(t,s)}(window, document,'script',
+                'https://connect.facebook.net/en_US/fbevents.js');
+                fbq('init', '${process.env.NEXT_PUBLIC_META_PIXEL_ID}');
+                fbq('track', 'PageView');
+              `}
+            </Script>
+            <noscript>
+              <img
+                height="1"
+                width="1"
+                style={{ display: "none" }}
+                src={`https://www.facebook.com/tr?id=${process.env.NEXT_PUBLIC_META_PIXEL_ID}&ev=PageView&noscript=1`}
+                alt=""
+              />
+            </noscript>
+          </>
+        )}
+        {/* End Meta Pixel Code */}
+      </head>
       <body className="min-h-full flex flex-col font-cairo text-[115%] leading-[1.6]">
         <Suspense fallback={null}>
           <Providers>{children}

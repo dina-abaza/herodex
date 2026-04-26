@@ -9,6 +9,7 @@ import { RootState } from '@/store';
 import { useRouter } from 'next/navigation';
 import { Modal } from '@/components/ui/Modal';
 import { toast } from 'react-toastify';
+import { trackViewContent, trackAddToCart } from '@/lib/meta-pixel';
 
 import Image from 'next/image';
 
@@ -28,6 +29,13 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
   const handleOpenModal = (e: React.MouseEvent) => {
     e.preventDefault();
     setIsModalOpen(true);
+    // Meta Pixel: track product detail view
+    trackViewContent({
+      id: product._id,
+      name: product.name,
+      price: product.price,
+      category: product.category?.name,
+    });
   };
 
   const handleCloseModal = () => {
@@ -40,6 +48,14 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
 
     // تشغيل الإضافة في الخلفية بدون انتظار الرد (Optimistic UI)
     addToCart({ productId: product._id, quantity: 1, product: product });
+
+    // Meta Pixel: track add to cart
+    trackAddToCart({
+      id: product._id,
+      name: product.name,
+      price: product.price,
+      category: product.category?.name,
+    });
     
     // إظهار رسالة النجاح فوراً لتجربة سريعة جداً
     toast.success(`تم إضافة ${product.name} إلى السلة بنجاح ✨`, {
