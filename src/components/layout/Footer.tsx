@@ -72,7 +72,7 @@ export function Footer() {
                 <FaShareAlt size={20} />
               </a>
               <a 
-                href="https://wa.me/201101546900" 
+                href="https://wa.me/201211215315" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 aria-label="تواصل معنا عبر واتساب"
@@ -113,7 +113,7 @@ export function Footer() {
               </li>
               <li className="flex items-center text-neutral-600 text-sm text-left font-bold" dir="ltr">
                 <FaPhoneAlt size={18} className="ml-3 text-store shrink-0" />
-                +20 110 154 6900
+                +20 121 121 5315
               </li>
             </ul>
           </div>
