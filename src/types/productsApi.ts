@@ -23,3 +23,9 @@ export type GetProductsArg = {
   limit?: number;
   category?: string;
 };
+
+export type GetProductByIdResponse = {
+  success: boolean;
+  message?: string;
+  data: ProductListItem;
+};
