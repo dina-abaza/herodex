@@ -18,6 +18,7 @@ interface ProductCardProps {
   priority?: boolean;
 }
 
+
 export function ProductCard({ product, priority = false }: ProductCardProps) {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
