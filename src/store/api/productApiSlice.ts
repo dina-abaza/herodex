@@ -1,5 +1,5 @@
 import { apiSlice } from './apiSlice';
-import type { GetProductsArg, GetProductsResponse, GetProductByIdResponse } from '@/types/productsApi';
+import type { GetProductsArg, GetProductsResponse } from '@/types/productsApi';
 
 export const productApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -16,7 +16,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
       },
       providesTags: ['Product'],
     }),
-    getProductById: builder.query<GetProductByIdResponse, string>({
+    getProductById: builder.query<any, string>({
       query: (id) => `/products/${id}`,
       providesTags: (result, error, id) => [{ type: 'Product', id }],
     }),
