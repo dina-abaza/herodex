@@ -9,12 +9,23 @@ async function getInitialData() {
     const [categoriesRes, productsRes, bannersRes] = await Promise.all([
       fetch(`${baseUrl}/categories`, { next: { revalidate: 60 } }),
       fetch(`${baseUrl}/products?pageNumber=1&limit=8`, { next: { revalidate: 60 } }),
-      fetch(`${baseUrl}/banners`, { next: { revalidate: 60 } })
+      fetch(`${baseUrl}/images`, { next: { revalidate: 60 } })
     ]);
 
-    const categories = await categoriesRes.json();
-    const products = await productsRes.json();
-    const banners = await bannersRes.json();
+    // وظيفة مساعدة لتحويل الاستجابة لـ JSON بأمان
+    const safeJson = async (res: Response) => {
+      if (!res.ok) return null;
+      const text = await res.text();
+      try {
+        return JSON.parse(text);
+      } catch (e) {
+        return null;
+      }
+    };
+
+    const categories = await safeJson(categoriesRes);
+    const products = await safeJson(productsRes);
+    const banners = await safeJson(bannersRes);
 
     return {
       initialCategories: categories?.data || [],

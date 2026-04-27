@@ -28,8 +28,6 @@ export function Banner({ initialBanners = [] }: BannerProps) {
 
   // الاعتماد كلياً على الباك اند فقط
   const apiBanners = response?.data || initialBanners;
-//  console.log("apiBanners") 
-//  console.log(apiBanners) 
 
   // الفلترة لعرض الصور المناسبة لكل جهاز (بدون تكرار)
   const banners = apiBanners.filter((b: any) => {
@@ -49,7 +47,8 @@ export function Banner({ initialBanners = [] }: BannerProps) {
   const next = () => setCurrent((prev) => (prev >= banners.length - 1 ? 0 : prev + 1));
   const prev = () => setCurrent((prev) => (prev <= 0 ? banners.length - 1 : prev - 1));
 
-  if (isLoading) {
+  // إذا كان هناك بيانات أولية، لا نظهر الهيكل العظمي
+  if (isLoading && initialBanners.length === 0) {
     return (
       <div className="w-full aspect-[16/9] md:aspect-[21/9] bg-slate-200 animate-pulse" />
     );
@@ -73,8 +72,8 @@ export function Banner({ initialBanners = [] }: BannerProps) {
             {/* استخدام object-fill لضمان ملء الأبعاد المحددة في الوثيقة تماماً */}
             <Image
               src={isMobile
-                ? (banners[current].originalPath || banners[current].originalPath)
-                : (banners[current].originalPath || banners[current].originalPath)
+                ? (banners[current].mobilePath || banners[current].originalPath)
+                : (banners[current].laptopPath || banners[current].originalPath)
               }
               alt={`Banner ${current + 1}`}
               fill
