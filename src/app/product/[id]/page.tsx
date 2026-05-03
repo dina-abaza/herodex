@@ -17,6 +17,11 @@ export default function ProductPage() {
   const router = useRouter();
   const productId = typeof params.id === 'string' ? params.id : '';
 
+  React.useLayoutEffect(() => {
+    if (!productId) return;
+    window.scrollTo(0, 0);
+  }, [productId]);
+
   const {
     data: singleProductRes,
     isLoading: isLoadingSingle,
