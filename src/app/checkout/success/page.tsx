@@ -36,6 +36,7 @@ function SuccessContent() {
       value: checkoutData?.value || 0,
       orderId: ordIdentifier,
       numItems: checkoutData?.numItems,
+      contents: checkoutData?.contents,
     });
   }, [dispatch, transactionId, orderId]);
 

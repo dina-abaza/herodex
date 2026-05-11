@@ -9,12 +9,13 @@
  *   analytics.trackViewContent(product);
  */
 
-import { trackViewContent as fbViewContent, trackAddToCart as fbAddToCart, trackInitiateCheckout as fbInitiateCheckout, trackPurchase as fbPurchase, trackLead as fbLead, storeCheckoutData as fbStoreCheckoutData, getCheckoutData as fbGetCheckoutData } from '@/lib/meta-pixel';
+import { trackViewContent as fbViewContent, trackAddToCart as fbAddToCart, trackInitiateCheckout as fbInitiateCheckout, trackAddPaymentInfo as fbAddPaymentInfo, trackPurchase as fbPurchase, trackLead as fbLead, storeCheckoutData as fbStoreCheckoutData, getCheckoutData as fbGetCheckoutData } from '@/lib/meta-pixel';
 import { trackGaViewItem, trackGaAddToCart, trackGaBeginCheckout, trackGaPurchase } from '@/lib/google-analytics';
 import {
   trackViewContent as ttqViewContent,
   trackAddToCart as ttqAddToCart,
   trackInitiateCheckout as ttqInitiateCheckout,
+  trackAddPaymentInfo as ttqAddPaymentInfo,
   trackCompletePayment as ttqCompletePayment,
   identifyUser as ttqIdentifyUser,
 } from '@/lib/tiktok-pixel';
@@ -32,6 +33,7 @@ export interface CheckoutParams {
   contentIds: string[];
   value: number;
   numItems: number;
+  contents?: { id: string; quantity: number; price: number }[];
 }
 
 export interface PurchaseParams {
@@ -39,6 +41,7 @@ export interface PurchaseParams {
   value: number;
   orderId: string;
   numItems?: number;
+  contents?: { id: string; quantity: number; price: number }[];
 }
 
 // ─── Unified Event Functions ─────────────────────────────────────────
@@ -71,6 +74,15 @@ export function trackInitiateCheckout(params: CheckoutParams): void {
   fbInitiateCheckout(params);
   trackGaBeginCheckout(params);
   ttqInitiateCheckout(params);
+}
+
+/**
+ * Track adding payment info.
+ * Fires: Meta Pixel AddPaymentInfo + TikTok AddPaymentInfo
+ */
+export function trackAddPaymentInfo(params: CheckoutParams): void {
+  fbAddPaymentInfo(params);
+  ttqAddPaymentInfo(params);
 }
 
 /**

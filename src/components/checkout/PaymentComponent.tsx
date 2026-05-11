@@ -109,6 +109,11 @@ export function PaymentComponent() {
         contentIds: cart.items.map((item: any) => item.product?._id).filter(Boolean),
         value: total,
         numItems: cart.items.length,
+        contents: cart.items.map((item: any) => ({
+          id: item.product?._id,
+          quantity: item.quantity,
+          price: item.product?.price
+        })).filter((c: any) => c.id)
       });
 
       const result: any = await checkout(payload).unwrap();
@@ -260,8 +265,15 @@ export function PaymentComponent() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-            {/* <button
-              onClick={() => setPaymentMethod('card')}
+            <button
+              onClick={() => {
+                setPaymentMethod('card');
+                analytics.trackAddPaymentInfo({
+                  contentIds: cart.items.map((item: any) => item.product?._id).filter(Boolean),
+                  value: total,
+                  numItems: cart.items.length,
+                });
+              }}
               className={cn(
                 "flex flex-col items-center gap-3 p-6 rounded-2xl border-2 transition-all",
                 paymentMethod === 'card' 
@@ -271,9 +283,16 @@ export function PaymentComponent() {
             >
               <CreditCard size={32} />
               <span className="font-bold">بطاقة بنكية</span>
-            </button> */}
+            </button>
             <button
-              onClick={() => setPaymentMethod('wallet')}
+              onClick={() => {
+                setPaymentMethod('wallet');
+                analytics.trackAddPaymentInfo({
+                  contentIds: cart.items.map((item: any) => item.product?._id).filter(Boolean),
+                  value: total,
+                  numItems: cart.items.length,
+                });
+              }}
               className={cn(
                 "flex flex-col items-center gap-3 p-6 rounded-2xl border-2 transition-all",
                 paymentMethod === 'wallet' 
@@ -285,7 +304,14 @@ export function PaymentComponent() {
               <span className="font-bold">محفظة ذكية <span className='text-red-500'>(فودافون كاش)</span></span>
             </button>
             <button
-              onClick={() => setPaymentMethod('COD')}
+              onClick={() => {
+                setPaymentMethod('COD');
+                analytics.trackAddPaymentInfo({
+                  contentIds: cart.items.map((item: any) => item.product?._id).filter(Boolean),
+                  value: total,
+                  numItems: cart.items.length,
+                });
+              }}
               className={cn(
                 "flex flex-col items-center gap-3 p-6 rounded-2xl border-2 transition-all",
                 paymentMethod === 'COD' 
@@ -299,7 +325,7 @@ export function PaymentComponent() {
           </div>
 
           <AnimatePresence mode="wait">
-            {/* {paymentMethod === 'card' && (
+            {paymentMethod === 'card' && (
               <motion.div
                 key="card"
                 initial={{ opacity: 0, y: 10 }}
@@ -320,7 +346,7 @@ export function PaymentComponent() {
                   سيتم توجيهك إلى صفحة Paymob الآمنة لإتمام عملية الدفع باستخدام بيانات بطاقتك.
                 </p>
               </motion.div>
-            )} */}
+            )}
 
             {paymentMethod === 'wallet' && (
               <motion.div

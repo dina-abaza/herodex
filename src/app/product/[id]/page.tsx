@@ -11,6 +11,7 @@ import { useAddToCartMutation } from '@/store/api/cartApiSlice';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
 import Link from 'next/link';
+import * as analytics from '@/lib/analytics';
 
 export default function ProductPage() {
   const params = useParams();
@@ -33,6 +34,18 @@ export default function ProductPage() {
     refetchOnReconnect: true,
   });
   const product = singleProductRes?.data || (singleProductRes?._id ? singleProductRes : null);
+
+  // Track ViewContent when product loads
+  React.useEffect(() => {
+    if (product) {
+      analytics.trackViewContent({
+        id: product._id,
+        name: product.name,
+        price: product.price,
+        category: product.category?.name,
+      });
+    }
+  }, [product]);
   // Avoid flashing "not found" before the query runs (skip / uninitialized) or while fetching.
   const isLoading =
     !productId ||

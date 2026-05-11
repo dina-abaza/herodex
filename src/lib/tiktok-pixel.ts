@@ -23,6 +23,7 @@ interface TikTokProductParams {
   id: string;
   name: string;
   price: number;
+  category?: string;
 }
 
 interface TikTokCheckoutParams {
@@ -36,6 +37,7 @@ interface TikTokPurchaseParams {
   value: number;
   orderId: string;
   numItems?: number;
+  contents?: { id: string; quantity: number; price: number }[];
 }
 
 const CURRENCY: Currency = 'EGP';
@@ -54,7 +56,14 @@ function normalizeEmail(email: string): string {
 }
 
 function normalizePhone(phone: string): string {
-  return phone.replace(/[^\d]/g, '');
+  // TikTok expects phone number with country code, but usually just digits is fine.
+  // We'll strip everything but digits.
+  let p = phone.replace(/[^\d]/g, '');
+  // If it starts with 0 and is Egyptian, add 2
+  if (p.startsWith('01') && p.length === 11) {
+    p = '2' + p;
+  }
+  return p;
 }
 
 async function sha256Hex(input: string): Promise<string> {
@@ -83,9 +92,9 @@ function canIdentify(): boolean {
 
 function contentsFromIds(ids: string[], quantity = 1) {
   return ids.map((content_id) => ({
-    content_id,
+    content_id: content_id.toString(),
     content_type: 'product',
-    quantity,
+    quantity: quantity,
   }));
 }
 
@@ -116,15 +125,20 @@ export function trackViewContent(product: TikTokProductParams): void {
   const dedupeKey = `ttq_ViewContent_${product.id}`;
   if (isDuplicate(dedupeKey)) return;
 
+  // Force number conversion for price/value to avoid TikTok string errors
+  const price = Number(product.price);
+
   window.ttq!.track('ViewContent', {
     contents: [
       {
-        content_id: product.id,
+        content_id: product.id.toString(),
         content_type: 'product',
         content_name: product.name,
+        price: price,
+        quantity: 1,
       },
     ],
-    value: product.price,
+    value: price,
     currency: CURRENCY,
   });
 }
@@ -135,15 +149,20 @@ export function trackAddToCart(product: TikTokProductParams): void {
   if (isDuplicate(dedupeKey)) return;
   setTimeout(() => firedEvents.delete(dedupeKey), 2000);
 
+  // Force number conversion
+  const price = Number(product.price);
+
   window.ttq!.track('AddToCart', {
     contents: [
       {
-        content_id: product.id,
+        content_id: product.id.toString(),
         content_type: 'product',
         content_name: product.name,
+        price: price,
+        quantity: 1,
       },
     ],
-    value: product.price,
+    value: price,
     currency: CURRENCY,
   });
 }
@@ -155,7 +174,19 @@ export function trackInitiateCheckout(params: TikTokCheckoutParams): void {
 
   window.ttq!.track('InitiateCheckout', {
     contents: contentsFromIds(params.contentIds),
-    value: params.value,
+    value: Number(params.value),
+    currency: CURRENCY,
+  });
+}
+
+export function trackAddPaymentInfo(params: TikTokCheckoutParams): void {
+  if (!canTrack()) return;
+  const dedupeKey = 'ttq_AddPaymentInfo';
+  if (isDuplicate(dedupeKey)) return;
+
+  window.ttq!.track('AddPaymentInfo', {
+    contents: contentsFromIds(params.contentIds),
+    value: Number(params.value),
     currency: CURRENCY,
   });
 }
@@ -163,14 +194,30 @@ export function trackInitiateCheckout(params: TikTokCheckoutParams): void {
 /** TikTok standard event for completed purchase */
 export function trackCompletePayment(params: TikTokPurchaseParams): void {
   if (!canTrack()) return;
-  const dedupeKey = `ttq_CompletePayment_${params.orderId}`;
+  const dedupeKey = `ttq_Purchase_${params.orderId}`;
   if (isDuplicate(dedupeKey)) return;
 
-  window.ttq!.track('CompletePayment', {
-    contents: contentsFromIds(params.contentIds, 1),
-    value: params.value,
+  const value = Number(params.value);
+
+  // Use 'Purchase' as the primary event name to match marketing manager expectations
+  // but keep parameters robust.
+  const eventPayload = {
+    contents: params.contents 
+      ? params.contents.map(c => ({
+          content_id: c.id.toString(),
+          content_type: 'product',
+          quantity: Number(c.quantity) || 1,
+          price: Number(c.price)
+        }))
+      : contentsFromIds(params.contentIds, 1),
+    value: value,
     currency: CURRENCY,
-  });
+  };
+
+  window.ttq!.track('Purchase', eventPayload);
+  
+  // Also fire CompletePayment for redundancy as it's the TikTok standard
+  window.ttq!.track('CompletePayment', eventPayload);
 }
 
 export function getTikTokPixelId(): string {

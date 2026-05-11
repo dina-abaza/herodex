@@ -28,6 +28,7 @@ interface PixelCheckoutParams {
   contentIds: string[];
   value: number;
   numItems: number;
+  contents?: { id: string; quantity: number; price: number }[];
 }
 
 interface PixelPurchaseParams {
@@ -35,6 +36,7 @@ interface PixelPurchaseParams {
   value: number;
   orderId: string;
   numItems?: number;
+  contents?: { id: string; quantity: number; price: number }[];
 }
 
 // ─── Constants ───────────────────────────────────────────────────────
@@ -133,6 +135,23 @@ export function trackInitiateCheckout(params: PixelCheckoutParams): void {
   if (isDuplicate(dedupeKey)) return;
 
   window.fbq('track', 'InitiateCheckout', {
+    content_ids: params.contentIds,
+    content_type: 'product',
+    value: params.value,
+    currency: CURRENCY,
+    num_items: params.numItems,
+  });
+}
+
+/**
+ * Track when the user adds payment information.
+ */
+export function trackAddPaymentInfo(params: PixelCheckoutParams): void {
+  if (!canTrack()) return;
+  const dedupeKey = `AddPaymentInfo`;
+  if (isDuplicate(dedupeKey)) return;
+
+  window.fbq('track', 'AddPaymentInfo', {
     content_ids: params.contentIds,
     content_type: 'product',
     value: params.value,
